@@ -85,11 +85,7 @@ dependencies {
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
-    //rx
-    implementation 'io.reactivex.rxjava2:rxjava:' + versions.rxjava
-    implementation 'io.reactivex.rxjava2:rxandroid:' + versions.rxandroid
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:' + versions.rxjava_adapter
-
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:' + versions.couroutinesAdapter
 
     //test
     testImplementation 'junit:junit:4.12'
@@ -99,6 +95,7 @@ dependencies {
     testImplementation 'org.powermock:powermock-module-junit4:'+ versions.powerMockModuleJunit4
     testImplementation 'org.powermock:powermock-module-junit4-rule:'+ versions.powerMockModuleJunit4Rule
     testImplementation 'org.powermock:powermock-api-mockito2:'+ versions.powerMockApiMockito
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
