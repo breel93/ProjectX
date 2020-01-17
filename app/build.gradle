@@ -2,7 +2,7 @@ apply from: '../dependencies.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: "kotlin-kapt"
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -21,14 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-
     android {
         lintOptions {
             abortOnError false
         }
     }
-
     androidExtensions {
         experimental = true
     }
@@ -57,6 +54,7 @@ dependencies {
 
     //arch component
     implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.arch
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.arch
 
     //room
@@ -77,6 +75,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:' + versions.glide
     kapt 'com.github.bumptech.glide:compiler:' + versions.glide
 
+    //google
+    implementation 'com.google.android.gms:play-services-maps:' + versions.playservice_version
+    implementation 'com.google.android.gms:play-services-location:' + versions.playservice_version
+    implementation 'com.google.android.libraries.places:places:2.1.0'
+
     //okhttp
     implementation 'com.squareup.okhttp3:logging-interceptor:' + versions.okhttp
     implementation 'com.squareup.okhttp3:okhttp:' + versions.okhttp
@@ -90,11 +93,11 @@ dependencies {
     //test
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:' + versions.mockitoVersion
-    testImplementation 'org.robolectric:robolectric:'+ versions.robolectric
-    testImplementation 'org.powermock:powermock-core:'+ versions.powerMock
-    testImplementation 'org.powermock:powermock-module-junit4:'+ versions.powerMockModuleJunit4
-    testImplementation 'org.powermock:powermock-module-junit4-rule:'+ versions.powerMockModuleJunit4Rule
-    testImplementation 'org.powermock:powermock-api-mockito2:'+ versions.powerMockApiMockito
+    testImplementation 'org.robolectric:robolectric:' + versions.robolectric
+    testImplementation 'org.powermock:powermock-core:' + versions.powerMock
+    testImplementation 'org.powermock:powermock-module-junit4:' + versions.powerMockModuleJunit4
+    testImplementation 'org.powermock:powermock-module-junit4-rule:' + versions.powerMockModuleJunit4Rule
+    testImplementation 'org.powermock:powermock-api-mockito2:' + versions.powerMockApiMockito
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

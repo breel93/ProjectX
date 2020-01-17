@@ -14,6 +14,7 @@ buildscript {
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:' + versions.kotlin
         classpath 'com.diffplug.spotless:spotless-plugin-gradle:' + versions.spotlessPlugin
         classpath 'com.github.ben-manes:gradle-versions-plugin:' + versions.versionPlugin
+        classpath 'com.google.gms:google-services:' + versions.google_services
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
