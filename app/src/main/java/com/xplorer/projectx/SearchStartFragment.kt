@@ -37,7 +37,7 @@ class SearchStartFragment : Fragment() {
 
     private fun getPlaceAutocomplete() {
         if (!Places.isInitialized()) {
-            Places.initialize(context!!, GOOGLE_API_KEY)
+            Places.initialize(context!!, getString(R.string.google_api_key))
         }
         placesClients = Places.createClient(context!!)
         // Initialize the AutocompleteSupportFragment.
