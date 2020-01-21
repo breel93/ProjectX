@@ -14,7 +14,6 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
-import com.xplorer.projectx.BuildConfig.GOOGLE_API_KEY
 
 /**
  * A simple [Fragment] subclass.
