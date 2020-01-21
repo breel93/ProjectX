@@ -15,21 +15,15 @@
 */
 package com.xplorer.projectx.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.ActivityMainBinding
 import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
-import javax.inject.Inject
+import dagger.android.support.DaggerAppCompatActivity
 
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+class MainActivity : DaggerAppCompatActivity() {
+
 
     private lateinit var binding: ActivityMainBinding
 
@@ -49,7 +43,5 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
             .commit()
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-        return dispatchingAndroidInjector
-    }
+
 }

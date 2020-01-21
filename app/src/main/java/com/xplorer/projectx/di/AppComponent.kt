@@ -22,13 +22,14 @@ import com.xplorer.projectx.di.modules.MainActivityModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
+import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AndroidInjectionModule::class,
     AppModule::class,
     MainActivityModule::class])
-interface AppComponent {
+interface AppComponent : AndroidInjector<ProjectX> {
     @Component.Builder
     interface Builder {
         @BindsInstance
@@ -37,5 +38,4 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun inject(projectx: ProjectX)
 }
