@@ -1,5 +1,21 @@
-package com.xplorer.projectx
+/**
+ *  Designed and developed by ProjectX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+package com.xplorer.projectx.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,14 +30,21 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.xplorer.projectx.R
+import dagger.android.support.AndroidSupportInjection
 
 /**
  * A simple [Fragment] subclass.
  */
 class SearchStartFragment : Fragment() {
 
-    lateinit var binding: FragmentSearchStartBinding
+    private lateinit var binding: FragmentSearchStartBinding
     private lateinit var placesClients: PlacesClient
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -29,7 +52,8 @@ class SearchStartFragment : Fragment() {
       savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search_start, container, false)
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_search_start, container, false)
         getPlaceAutocomplete()
         return binding.root
     }
@@ -40,8 +64,8 @@ class SearchStartFragment : Fragment() {
         }
         placesClients = Places.createClient(context!!)
         // Initialize the AutocompleteSupportFragment.
-        val autocompleteFragment = childFragmentManager.
-            findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        val autocompleteFragment = childFragmentManager
+            .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
         autocompleteFragment.setTypeFilter(TypeFilter.CITIES)
