@@ -32,19 +32,16 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
 import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerFragment
 
 /**
  * A simple [Fragment] subclass.
  */
-class SearchStartFragment : Fragment() {
+class SearchStartFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentSearchStartBinding
     private lateinit var placesClients: PlacesClient
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
       inflater: LayoutInflater,
