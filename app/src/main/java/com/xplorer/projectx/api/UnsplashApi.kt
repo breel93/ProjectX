@@ -13,4 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.model
+package com.xplorer.projectx.api
+
+import com.xplorer.projectx.BuildConfig.UNSPLASH_API_KEY
+import com.xplorer.projectx.model.ImagesResult
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Query
+
+interface UnpslashAPi{
+
+    @GET("/search/photos")
+    suspend fun getImages(
+        @Header("Authorization") auth: String? = " Client-ID $UNSPLASH_API_KEY",
+        @Query("query") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Response<ImagesResult>
+}
+
