@@ -26,7 +26,6 @@ import timber.log.Timber
 
 class MainActivity : DaggerAppCompatActivity() {
 
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +33,6 @@ class MainActivity : DaggerAppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         showChooseDestinationFragment()
-
 
         val logging = HttpLoggingInterceptor { message -> Timber.tag(getString(R.string.okhttp)).d(message) }
         logging.redactHeader(getString(R.string.authorization))
@@ -48,6 +46,4 @@ class MainActivity : DaggerAppCompatActivity() {
             .add(R.id.mainFragment, searchFragment)
             .commit()
     }
-
-
 }

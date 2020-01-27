@@ -39,5 +39,4 @@ interface AppComponent : AndroidInjector<ProjectX> {
 
         fun build(): AppComponent
     }
-
 }

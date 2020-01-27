@@ -35,7 +35,6 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
 import dagger.android.support.DaggerFragment
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -48,7 +47,6 @@ class SearchStartFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: SearchViewModel
-
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -85,11 +83,10 @@ class SearchStartFragment : DaggerFragment() {
         })
     }
 
-    private fun getUnsplashCall(){
-        viewModel = ViewModelProviders.of(this,viewModelFactory).get(SearchViewModel::class.java)
+    private fun getUnsplashCall() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
         viewModel.getPhotos("lagos").observe(this, Observer {
-            Toast.makeText(context, it.size.toString(),Toast.LENGTH_LONG).show()
+            Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
         })
-
     }
 }
