@@ -17,6 +17,8 @@ android {
 
         buildConfigField("String", "GOOGLE_API_KEY", GOOGLE_API_KEY)
         resValue "string", "google_api_key", GOOGLE_API_KEY
+
+        buildConfigField("String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY)
     }
     buildTypes {
         release {
@@ -91,7 +93,8 @@ dependencies {
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:' + versions.couroutinesAdapter
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines_android
+
 
     //test
     testImplementation 'junit:junit:4.12'
