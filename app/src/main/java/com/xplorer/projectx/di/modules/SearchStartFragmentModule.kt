@@ -15,7 +15,7 @@
 */
 package com.xplorer.projectx.di.modules
 
-import com.xplorer.projectx.ui.SearchStartFragment
+import com.xplorer.projectx.ui.search.SearchStartFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
