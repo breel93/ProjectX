@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.di.modules
+package com.xplorer.projectx.model
 
-import com.xplorer.projectx.ui.search.SearchStartFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import com.google.gson.annotations.SerializedName
+import com.xplorer.projectx.networkin_exp.Mappable
 
-@Module
-abstract class SearchStartFragmentModule {
-    @ContributesAndroidInjector
-    internal abstract fun contributeSearchStartFragment(): SearchStartFragment
-}
+data class PhotoResult(
+  @SerializedName("total") val total: Int,
+  @SerializedName("total_pages") val total_pages: Int,
+  @SerializedName("results") val photo: List<Photo>
+):Mappable<PhotoResult> {
+  override fun mapToData(): PhotoResult{
+    return this
+    }
+  }
+

@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.di.modules
+package com.xplorer.projectx.api
 
-import com.xplorer.projectx.ui.search.SearchStartFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import com.xplorer.projectx.model.PhotoResult
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-@Module
-abstract class SearchStartFragmentModule {
-    @ContributesAndroidInjector
-    internal abstract fun contributeSearchStartFragment(): SearchStartFragment
+interface UnsplashApi {
+
+    @GET("search/photos")
+    fun getPhotos(
+      @Query("client_id") client_id: String,
+      @Query("query") query: String,
+      @Query("page") page: Int,
+      @Query("per_page") perPage: Int
+    ): Call<PhotoResult>
 }

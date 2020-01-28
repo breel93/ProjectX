@@ -1,3 +1,5 @@
+package com.xplorer.projectx.networkin_exp
+
 /**
  *  Designed and developed by ProjectX
  *
@@ -12,15 +14,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
-package com.xplorer.projectx.di.modules
+ */
 
-import com.xplorer.projectx.ui.search.SearchStartFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+sealed class Result<out T: Any>
+data class Success<out T: Any>(val data: T): Result<T>()
+data class Failure(val error: Throwable): Result<Nothing>()
 
-@Module
-abstract class SearchStartFragmentModule {
-    @ContributesAndroidInjector
-    internal abstract fun contributeSearchStartFragment(): SearchStartFragment
+
+interface Mappable<out T: Any> {
+    fun mapToData(): T
 }

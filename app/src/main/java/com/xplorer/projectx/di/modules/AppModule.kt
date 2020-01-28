@@ -16,13 +16,16 @@
 package com.xplorer.projectx.di.modules
 
 import com.google.gson.Gson
+import com.xplorer.projectx.api.OkHttp
+import com.xplorer.projectx.api.UnsplashApi
+import com.xplorer.projectx.networking.CoroutineContextProvider
+import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.utils.Constants
 import dagger.Module
 import dagger.Provides
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -39,12 +42,18 @@ class AppModule {
 
     @Provides
     @Singleton
+    fun provideCoroutineContextProvidern(provider: CoroutineContextProviderImpl): CoroutineContextProvider {
+        return provider
+    }
+
+    @Provides
+    @Singleton
     fun provideGsonConverterFactory(gson: Gson): Converter.Factory {
         return GsonConverterFactory.create(gson)
     }
 
+    @Singleton
     @Provides
-    @Named(Constants.WIKIPEDIA_RETROFIT_KEY)
     fun provideWikipediaRetrofit(gsonConverter: Converter.Factory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constants.WIKIPEDIA_API_BASE_URL)
@@ -52,17 +61,20 @@ class AppModule {
             .build()
     }
 
+    @Singleton
     @Provides
-    @Named(Constants.UNSPLASH_RETROFIT_KEY)
-    fun provideUnsplashAPIRetrofit(gsonConverter: Converter.Factory): Retrofit {
+    fun provideUnsplashAPIRetrofit(): UnsplashApi {
+        val okHttp = OkHttp()
         return Retrofit.Builder()
             .baseUrl(Constants.UNSPLASH_API_BASE_URL)
-            .addConverterFactory(gsonConverter)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttp.client)
             .build()
+            .create(UnsplashApi::class.java)
     }
 
+    @Singleton
     @Provides
-    @Named(Constants.GOOGLE_RETROFIT_KEY)
     fun provideGoogleAPIRetrofit(gsonConverter: Converter.Factory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constants.GOOGLE_API_BASE_URL)
@@ -70,8 +82,8 @@ class AppModule {
             .build()
     }
 
+    @Singleton
     @Provides
-    @Named(Constants.FOURSQUARE_RETROFIT_KEY)
     fun provideFoursquareAPIRetrofit(gsonConverter: Converter.Factory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constants.FOURSQUARE_API_BASE_URL)

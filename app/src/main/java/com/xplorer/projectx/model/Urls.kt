@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.di.modules
+package com.xplorer.projectx.model
 
-import com.xplorer.projectx.ui.search.SearchStartFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import com.google.gson.annotations.SerializedName
 
-@Module
-abstract class SearchStartFragmentModule {
-    @ContributesAndroidInjector
-    internal abstract fun contributeSearchStartFragment(): SearchStartFragment
-}
+data class Urls(
+  @SerializedName("raw") val raw: String,
+  @SerializedName("full") val full: String,
+  @SerializedName("regular") val regular: String,
+  @SerializedName("small") val small: String,
+  @SerializedName("thumb") val thumb: String
+)

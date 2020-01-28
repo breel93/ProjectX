@@ -19,6 +19,7 @@ import android.app.Application
 import com.xplorer.projectx.ProjectX
 import com.xplorer.projectx.di.modules.AppModule
 import com.xplorer.projectx.di.modules.MainActivityModule
+import com.xplorer.projectx.di.modules.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -28,7 +29,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [AndroidInjectionModule::class,
     AppModule::class,
-    MainActivityModule::class])
+    MainActivityModule::class,
+    ViewModelModule::class])
 interface AppComponent : AndroidInjector<ProjectX> {
     @Component.Builder
     interface Builder {
@@ -37,5 +39,4 @@ interface AppComponent : AndroidInjector<ProjectX> {
 
         fun build(): AppComponent
     }
-
 }
