@@ -26,6 +26,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.xplorer.projectx.databinding.FragmentSearchStartBinding
 import com.google.android.libraries.places.api.model.Place
@@ -34,6 +35,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
+import com.xplorer.projectx.api.foursquare.model.Venue
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -56,9 +58,18 @@ class SearchStartFragment : DaggerFragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_search_start, container, false)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
+        observeViewState()
         getPlaceAutocomplete()
         getUnsplashCall()
+        getFourSquareCall()
+
         return binding.root
+    }
+
+    private fun getFourSquareCall() {
+        val coordinates = LatLng(6.5243793, 3.3792057) // coordinates for lagos, nigeria
+        viewModel.getVenueData("restaurants", coordinates)
     }
 
     private fun getPlaceAutocomplete() {
@@ -70,6 +81,8 @@ class SearchStartFragment : DaggerFragment() {
         val autocompleteFragment = childFragmentManager
             .findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
         // Specify the types of place data to return.
+        // Missing autocomplete Place field = Place.Field.LAT_LNG
+        // getting places from autocomplete returns null values for latlong without this field
         autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
         autocompleteFragment.setTypeFilter(TypeFilter.CITIES)
 
@@ -84,14 +97,26 @@ class SearchStartFragment : DaggerFragment() {
     }
 
     private fun getUnsplashCall() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
         viewModel.getPhotoData("lagos")
+    }
 
+    private fun observeViewState() {
+
+        // photo state observers
         viewModel.successPhotoLiveData.observe(this, Observer {
             Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
         })
 
         viewModel.errorPhotoLiveData.observe(this, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        // venue state observers
+        viewModel.successVenueLiveData.observe(this, Observer<List<Venue>> { venues ->
+            Toast.makeText(activity, "Total places found: ${venues.size}", Toast.LENGTH_SHORT).show()
+        })
+
+        viewModel.errorVenueLiveData.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
     }

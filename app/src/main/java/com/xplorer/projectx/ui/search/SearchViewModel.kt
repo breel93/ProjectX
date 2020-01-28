@@ -19,11 +19,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
+import com.xplorer.projectx.api.foursquare.model.Venue
 import com.xplorer.projectx.model.Photo
 import com.xplorer.projectx.model.PhotoResult
 import com.xplorer.projectx.networkin_exp.Failure
 import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.repository.FoursquareRepository
 import com.xplorer.projectx.repository.UnsplashRepository
 import kotlinx.coroutines.Job
 import javax.inject.Inject
@@ -31,10 +34,12 @@ import javax.inject.Inject
 class SearchViewModel@Inject
 constructor(
   private val unsplashRepository: UnsplashRepository,
+  private val foursquareRepository: FoursquareRepository,
   application: Application
 ) : AndroidViewModel(application) {
 
     private lateinit var job: Job
+    // Photos
     private val _successPhotoLiveData = MutableLiveData<List<Photo>>()
     val successPhotoLiveData: LiveData<List<Photo>>
         get() = _successPhotoLiveData
@@ -58,8 +63,38 @@ constructor(
         _errorPhotoLiveData.value = error.localizedMessage
     }
 
+    // Venues / foursquare
+
+    private val _successVenueLiveData = MutableLiveData<List<Venue>>()
+    val successVenueLiveData: LiveData<List<Venue>>
+        get() = _successVenueLiveData
+    private val _errorVenueLiveData = MutableLiveData<String>()
+    val errorVenueLiveData: LiveData<String>
+        get() = _errorVenueLiveData
+
+    fun getVenueData(query: String,
+                     latLong: LatLng) {
+        val coordinates = "${latLong.latitude},${latLong.longitude}"
+       foursquareRepository.getVenueData(query,
+           coordinates,
+           0) { result: Result<List<Venue>> ->
+            when (result) {
+                is Success -> processVenueSuccess(result.data)
+                is Failure -> processVenueError(result.error)
+            }
+        }
+    }
+
+    private fun processVenueSuccess(venues: List<Venue>) {
+        _successVenueLiveData.value = venues
+    }
+    private fun processVenueError(error: Throwable) {
+        _errorVenueLiveData.value = error.localizedMessage
+    }
+
     override fun onCleared() {
         super.onCleared()
         if (::job.isInitialized) job.cancel()
+        foursquareRepository.cancelRequests() // cancel requests in foursquare
     }
 }
