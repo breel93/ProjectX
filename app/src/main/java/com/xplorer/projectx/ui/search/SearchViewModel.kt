@@ -24,8 +24,6 @@ import com.xplorer.projectx.model.PhotoResult
 import com.xplorer.projectx.networkin_exp.Failure
 import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networkin_exp.Success
-import com.xplorer.projectx.networking.CoroutineContextProvider
-import com.xplorer.projectx.networking.CoroutineExecutor
 import com.xplorer.projectx.repository.UnsplashRepository
 import kotlinx.coroutines.Job
 import javax.inject.Inject
@@ -36,7 +34,6 @@ constructor(
   application: Application
 ) : AndroidViewModel(application) {
 
-
     private lateinit var job: Job
     private val _successPhotoLiveData = MutableLiveData<List<Photo>>()
     val successPhotoLiveData: LiveData<List<Photo>>
@@ -45,11 +42,9 @@ constructor(
     val errorPhotoLiveData: LiveData<String>
         get() = _errorPhotoLiveData
 
-
-
     fun getPhotoData(query: String) {
         unsplashRepository.getPhotoData(query) { result: Result<PhotoResult> ->
-            when(result) {
+            when (result) {
                 is Success -> processSuccess(result.data.photo)
                 is Failure -> processError(result.error)
             }
@@ -63,10 +58,8 @@ constructor(
         _errorPhotoLiveData.value = error.localizedMessage
     }
 
-
     override fun onCleared() {
         super.onCleared()
-        if(::job.isInitialized) job.cancel()
+        if (::job.isInitialized) job.cancel()
     }
-
 }

@@ -94,7 +94,5 @@ class SearchStartFragment : DaggerFragment() {
         viewModel.errorPhotoLiveData.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
-
-
     }
 }
