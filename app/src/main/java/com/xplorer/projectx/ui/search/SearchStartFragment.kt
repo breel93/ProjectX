@@ -85,8 +85,16 @@ class SearchStartFragment : DaggerFragment() {
 
     private fun getUnsplashCall() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
-        viewModel.getPhotos("lagos").observe(this, Observer {
+        viewModel.getPhotoData("lagos")
+
+        viewModel.successPhotoLiveData.observe(this, Observer {
             Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
         })
+
+        viewModel.errorPhotoLiveData.observe(this, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+
     }
 }

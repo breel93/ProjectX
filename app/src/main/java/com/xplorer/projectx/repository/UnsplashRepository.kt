@@ -15,44 +15,35 @@
 */
 package com.xplorer.projectx.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.xplorer.projectx.BuildConfig.UNSPLASH_API_KEY
 import com.xplorer.projectx.api.UnsplashApi
-import com.xplorer.projectx.model.Photo
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import com.xplorer.projectx.model.PhotoResult
+import com.xplorer.projectx.networkin_exp.Result
+import com.xplorer.projectx.extentions.getResult
+import com.xplorer.projectx.networkin_exp.Failure
+import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.networking.CoroutineContextProvider
+import com.xplorer.projectx.networking.CoroutineExecutor
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UnsplashRepository @Inject
-internal constructor(private val unsplashApi: UnsplashApi) {
+internal constructor(
+    private val unsplashApi: UnsplashApi,
+    private val coroutineContextProvider: CoroutineContextProvider ) {
+    private lateinit var job: Job
 
-    var job: CompletableJob? = null
-
-    fun fetchPhotos(query: String): MutableLiveData<List<Photo>> {
-        job = Job()
-        return object : MutableLiveData<List<Photo>>() {
-            override fun onActive() {
-                super.onActive()
-                job?.let { completableJob ->
-                    CoroutineScope(IO + completableJob).launch {
-                        val result = unsplashApi.getPhotos(UNSPLASH_API_KEY, query, 1, 5)
-                        withContext(Main) {
-                            value = result.body()!!.photo
-                            completableJob.complete()
-                        }
-                    }
-                }
+    fun getPhotoData(query: String, onComplete: ((Result<PhotoResult>) -> Unit)) {
+        job = CoroutineExecutor.ioToMain(
+            { fetchPhotos(query) },
+            {photoResult ->
+                onComplete(photoResult!!)
             }
-        }
+            , coroutineContextProvider)
     }
-    fun cancelJobs() {
-        job?.cancel()
-    }
+
+   private fun fetchPhotos(query: String) =
+        unsplashApi.getPhotos(UNSPLASH_API_KEY, query, 1, 5).getResult()
 }

@@ -17,9 +17,17 @@ package com.xplorer.projectx.ui.search
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.xplorer.projectx.model.Photo
+import com.xplorer.projectx.model.PhotoResult
+import com.xplorer.projectx.networkin_exp.Failure
+import com.xplorer.projectx.networkin_exp.Result
+import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.networking.CoroutineContextProvider
+import com.xplorer.projectx.networking.CoroutineExecutor
 import com.xplorer.projectx.repository.UnsplashRepository
+import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class SearchViewModel@Inject
@@ -28,11 +36,37 @@ constructor(
   application: Application
 ) : AndroidViewModel(application) {
 
-    fun getPhotos(query: String): MutableLiveData<List<Photo>> {
-        return unsplashRepository.fetchPhotos(query)
+
+    private lateinit var job: Job
+    private val _successPhotoLiveData = MutableLiveData<List<Photo>>()
+    val successPhotoLiveData: LiveData<List<Photo>>
+        get() = _successPhotoLiveData
+    private val _errorPhotoLiveData = MutableLiveData<String>()
+    val errorPhotoLiveData: LiveData<String>
+        get() = _errorPhotoLiveData
+
+
+
+    fun getPhotoData(query: String) {
+        unsplashRepository.getPhotoData(query) { result: Result<PhotoResult> ->
+            when(result) {
+                is Success -> processSuccess(result.data.photo)
+                is Failure -> processError(result.error)
+            }
+        }
     }
 
-    fun cancelJobs() {
-        unsplashRepository.cancelJobs()
+    private fun processSuccess(photos: List<Photo>) {
+        _successPhotoLiveData.value = photos
     }
+    private fun processError(error: Throwable) {
+        _errorPhotoLiveData.value = error.localizedMessage
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        if(::job.isInitialized) job.cancel()
+    }
+
 }

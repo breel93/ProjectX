@@ -18,6 +18,8 @@ package com.xplorer.projectx.di.modules
 import com.google.gson.Gson
 import com.xplorer.projectx.api.OkHttp
 import com.xplorer.projectx.api.UnsplashApi
+import com.xplorer.projectx.networking.CoroutineContextProvider
+import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -36,6 +38,12 @@ class AppModule {
     @Singleton
     fun provideGson(): Gson {
         return Gson()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoroutineContextProvidern(provider: CoroutineContextProviderImpl): CoroutineContextProvider {
+        return provider
     }
 
     @Provides

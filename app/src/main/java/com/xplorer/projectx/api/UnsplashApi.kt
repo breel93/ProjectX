@@ -16,6 +16,7 @@
 package com.xplorer.projectx.api
 
 import com.xplorer.projectx.model.PhotoResult
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -23,10 +24,10 @@ import retrofit2.http.Query
 interface UnsplashApi {
 
     @GET("search/photos")
-    suspend fun getPhotos(
+    fun getPhotos(
       @Query("client_id") client_id: String,
       @Query("query") query: String,
       @Query("page") page: Int,
       @Query("per_page") perPage: Int
-    ): Response<PhotoResult>
+    ): Call<PhotoResult>
 }
