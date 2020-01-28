@@ -61,7 +61,7 @@ class SearchStartFragment : DaggerFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
         observeViewState()
         getPlaceAutocomplete()
-        getUnsplashCall()
+//        getUnsplashCall()
         getFourSquareCall()
 
         return binding.root

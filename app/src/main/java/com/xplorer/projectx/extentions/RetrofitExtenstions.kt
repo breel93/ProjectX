@@ -27,21 +27,18 @@ import retrofit2.HttpException
 // T is the response from the network call, R is the data to return to the viewModel
 fun <T: Mappable<R>, R: Any> Call<T>.getResult(): Result<R> {
     val call = clone()
-    Log.e("Example repository", "Call url: ${call.request().url()}")
     return try {
         val response = call.execute()
-        val result = response?.body()?.run { Success(mapToData()) }
-        val errorResult = response?.errorBody()?.run { Failure(HttpException(response)) }
+        val result = response.body()?.run { Success(mapToData()) }
+        val errorResult = response.errorBody()?.run { Failure(HttpException(response)) }
 
-        return result ?: errorResult!!
+        result ?: errorResult!!
 //
 //            Timber.e("Error getting data:..${response.body(}")
 //            Failure(Throwable("Error with network call"))
 
     } catch (error: Throwable) {
         error.printStackTrace()
-        Log.e("Example repository", "Error msg: ${error.message}")
-
-        return Failure(error)
+        Failure(error)
     }
 }
