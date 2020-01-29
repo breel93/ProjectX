@@ -1,3 +1,7 @@
+package com.xplorer.projectx.model.foursquare
+
+import com.google.gson.annotations.SerializedName
+
 /**
  *  Designed and developed by ProjectX
  *
@@ -12,21 +16,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
-package com.xplorer.projectx.api
-
-import com.xplorer.projectx.model.unsplash.PhotoResult
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
-
-interface UnsplashApi {
-
-    @GET("search/photos")
-    fun getPhotos(
-      @Query("client_id") client_id: String,
-      @Query("query") query: String,
-      @Query("page") page: Int,
-      @Query("per_page") perPage: Int
-    ): Call<PhotoResult>
-}
+ */
+data class Venue(@SerializedName("id") val venueId: String,
+                 @SerializedName("name") val venueName: String,
+                 @SerializedName("location") val venueLocation: VenueLocation
+)

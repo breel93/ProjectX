@@ -19,6 +19,10 @@ android {
         resValue "string", "google_api_key", GOOGLE_API_KEY
 
         buildConfigField("String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY)
+
+        buildConfigField("String", "FOURSQUARE_API_KEY", FOURSQUARE_API_KEY)
+        buildConfigField("String", "FOURSQUARE_SECRET", FOURSQUARE_SECRET)
+
     }
     buildTypes {
         release {

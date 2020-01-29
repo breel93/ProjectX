@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.api
+package com.xplorer.projectx.model.unsplash
 
-import com.xplorer.projectx.model.unsplash.PhotoResult
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.google.gson.annotations.SerializedName
 
-interface UnsplashApi {
-
-    @GET("search/photos")
-    fun getPhotos(
-      @Query("client_id") client_id: String,
-      @Query("query") query: String,
-      @Query("page") page: Int,
-      @Query("per_page") perPage: Int
-    ): Call<PhotoResult>
-}
+data class Urls(
+  @SerializedName("raw") val raw: String,
+  @SerializedName("full") val full: String,
+  @SerializedName("regular") val regular: String,
+  @SerializedName("small") val small: String,
+  @SerializedName("thumb") val thumb: String
+)

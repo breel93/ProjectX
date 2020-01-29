@@ -16,13 +16,15 @@
 package com.xplorer.projectx.di.modules
 
 import com.google.gson.Gson
-import com.xplorer.projectx.api.OkHttp
 import com.xplorer.projectx.api.UnsplashApi
+import com.xplorer.projectx.api.FoursquareAPI
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.utils.Constants
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -38,6 +40,16 @@ class AppModule {
     @Singleton
     fun provideGson(): Gson {
         return Gson()
+    }
+
+    @Provides
+    fun provideOkHTTPClient(): OkHttpClient {
+
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BASIC
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
     }
 
     @Provides
@@ -63,12 +75,11 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideUnsplashAPIRetrofit(): UnsplashApi {
-        val okHttp = OkHttp()
+    fun provideUnsplashAPIRetrofit(okHttpClient: OkHttpClient): UnsplashApi {
         return Retrofit.Builder()
             .baseUrl(Constants.UNSPLASH_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttp.client)
+            .client(okHttpClient)
             .build()
             .create(UnsplashApi::class.java)
     }
@@ -84,10 +95,12 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideFoursquareAPIRetrofit(gsonConverter: Converter.Factory): Retrofit {
+    fun provideFoursquareAPI(okHttpClient: OkHttpClient): FoursquareAPI {
         return Retrofit.Builder()
             .baseUrl(Constants.FOURSQUARE_API_BASE_URL)
-            .addConverterFactory(gsonConverter)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
+            .create(FoursquareAPI::class.java)
     }
 }

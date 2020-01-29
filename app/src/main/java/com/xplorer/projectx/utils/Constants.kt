@@ -32,5 +32,8 @@ class Constants {
         const val UNSPLASH_API_BASE_URL = "https://api.unsplash.com/"
         const val FOURSQUARE_API_BASE_URL = "https://api.foursquare.com/"
         const val GOOGLE_API_BASE_URL = "https://maps.googleapis.com/"
+
+        // FOURSQUARE API
+        const val FOURSQUARE_API_VERSION = "20180323"
     }
 }

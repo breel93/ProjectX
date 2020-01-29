@@ -1,3 +1,7 @@
+package com.xplorer.projectx.model.foursquare
+
+import com.google.gson.annotations.SerializedName
+
 /**
  *  Designed and developed by ProjectX
  *
@@ -12,19 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
-package com.xplorer.projectx.model
-
-import com.google.gson.annotations.SerializedName
-import com.xplorer.projectx.networkin_exp.Mappable
-
-data class PhotoResult(
-  @SerializedName("total") val total: Int,
-  @SerializedName("total_pages") val total_pages: Int,
-  @SerializedName("results") val photo: List<Photo>
-):Mappable<PhotoResult> {
-  override fun mapToData(): PhotoResult{
-    return this
-    }
-  }
-
+ */
+data class VenueLocation(@SerializedName("address") val address: String,
+                         @SerializedName("lat") val lat: Float,
+                         @SerializedName("lng") val lon: Float)

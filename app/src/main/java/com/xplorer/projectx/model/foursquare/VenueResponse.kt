@@ -1,3 +1,7 @@
+package com.xplorer.projectx.model.foursquare
+
+import com.google.gson.annotations.SerializedName
+
 /**
  *  Designed and developed by ProjectX
  *
@@ -12,19 +16,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
-package com.xplorer.projectx.api
-
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-
-class OkHttp {
-    val client: OkHttpClient
-        get() {
-            val logging = HttpLoggingInterceptor()
-            logging.level = HttpLoggingInterceptor.Level.BASIC
-            return OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build()
-        }
-}
+ */
+data class VenueResponse(@SerializedName("groups") val venueGroups: List<VenueGroup>,
+                         @SerializedName("totalResults") val totalVenues: Int)
