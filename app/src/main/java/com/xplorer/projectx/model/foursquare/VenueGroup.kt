@@ -1,4 +1,4 @@
-package com.xplorer.projectx.api.foursquare.model
+package com.xplorer.projectx.model.foursquare
 
 import com.google.gson.annotations.SerializedName
 
@@ -17,6 +17,5 @@ import com.google.gson.annotations.SerializedName
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-data class VenueLocation(@SerializedName("address") val address: String,
-                         @SerializedName("lat") val lat: Float,
-                         @SerializedName("lng") val lon: Float)
+data class VenueGroup(@SerializedName("name") val venueType: String,
+                      @SerializedName("items") val venueItemList: List<VenueItem>)

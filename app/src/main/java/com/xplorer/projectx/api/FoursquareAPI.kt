@@ -1,6 +1,6 @@
-package com.xplorer.projectx.api.foursquare
+package com.xplorer.projectx.api
 
-import com.xplorer.projectx.api.foursquare.model.FoursquareResponse
+import com.xplorer.projectx.model.foursquare.FoursquareResponse
 import com.xplorer.projectx.utils.Constants
 import retrofit2.Call
 import retrofit2.http.GET

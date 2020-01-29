@@ -1,7 +1,6 @@
-package com.xplorer.projectx.api.foursquare.model
+package com.xplorer.projectx.model.foursquare
 
 import com.google.gson.annotations.SerializedName
-import com.xplorer.projectx.networkin_exp.Mappable
 
 /**
  *  Designed and developed by ProjectX
@@ -18,20 +17,6 @@ import com.xplorer.projectx.networkin_exp.Mappable
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-data class FoursquareResponse(@SerializedName("response") val venueResponse: VenueResponse)
-    : Mappable<List<Venue>> {
-
-    override fun mapToData(): List<Venue> {
-        val recommendedGroup = this.venueResponse.venueGroups[0] // recommended places group
-        val venueList = ArrayList<Venue>()
-
-        if(recommendedGroup.venueItemList.isNotEmpty()) {
-            for(venueItem in recommendedGroup.venueItemList) {
-                venueList.add(venueItem.venue)
-            }
-        }
-
-        return venueList
-    }
-}
+data class VenueLocation(@SerializedName("address") val address: String,
+                         @SerializedName("lat") val lat: Float,
+                         @SerializedName("lng") val lon: Float)

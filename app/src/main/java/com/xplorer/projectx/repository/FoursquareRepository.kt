@@ -2,14 +2,13 @@ package com.xplorer.projectx.repository
 
 import com.xplorer.projectx.BuildConfig.FOURSQUARE_API_KEY
 import com.xplorer.projectx.BuildConfig.FOURSQUARE_SECRET
-import com.xplorer.projectx.api.foursquare.FoursquareAPI
-import com.xplorer.projectx.api.foursquare.model.Venue
+import com.xplorer.projectx.api.FoursquareAPI
+import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.extentions.getResult
 import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineExecutor
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 /**
