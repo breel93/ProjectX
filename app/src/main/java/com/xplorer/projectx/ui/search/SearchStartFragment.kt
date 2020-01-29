@@ -35,7 +35,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
-import com.xplorer.projectx.api.foursquare.model.Venue
+import com.xplorer.projectx.model.foursquare.Venue
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 

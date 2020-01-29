@@ -20,9 +20,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
-import com.xplorer.projectx.api.foursquare.model.Venue
-import com.xplorer.projectx.model.Photo
-import com.xplorer.projectx.model.PhotoResult
+import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.networkin_exp.Failure
 import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networkin_exp.Success
