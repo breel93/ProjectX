@@ -15,9 +15,8 @@
 */
 package com.xplorer.projectx.api
 
-import com.xplorer.projectx.model.PhotoResult
+import com.xplorer.projectx.model.unsplash.PhotoResult
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
