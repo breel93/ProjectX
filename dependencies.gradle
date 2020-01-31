@@ -42,6 +42,9 @@ ext.versions = [
         playservice_version         : '17.0.0',
         google_services             : '4.3.3',
 
+        // jsoup
+        jsoup                       : '1.9.1',
+
         //test
         junit                       : '4.12',
         espresso                    : '3.2.0',
