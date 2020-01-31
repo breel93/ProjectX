@@ -61,10 +61,10 @@ class WikipediaRepository @Inject
     // find a match for Lagos, Portugal in wikipedia, and make a confirmation request if a match is found
     fun getAlternateConfirmation(query: String,
                                  cityCoordinates: String,
-                                   onComplete: ((Result<Boolean>) -> Unit)) {
+                                   onComplete: (Result<Boolean>) -> Unit) {
 
         CoroutineExecutor.ioToMain(
-            { getAlternateWikiTitle(query) },
+            { wikipediaAPI.getWikiTitle(query).getResult() },
             { redirectResult ->
                 when(redirectResult) {
                     // If there is a redirect
@@ -77,5 +77,17 @@ class WikipediaRepository @Inject
 
     }
 
-    private fun getAlternateWikiTitle(query: String) = wikipediaAPI.getWikiTitle(query).getResult()
+    // If all fails, and a wikipedia title cannot be found for a city, get a list of possible lists
+    fun getRelevantPosts(cityCoordinates: String,
+                         onComplete: (Result<List<String>>) -> Unit) {
+        CoroutineExecutor.ioToMain(
+            { wikipediaAPI.getNearbyWikiTitles(cityCoordinates, 20).getResult() },
+            { postTitles ->
+                onComplete(postTitles!!)
+            },
+            coroutineContextProvider
+        )
+    }
+
+
 }
