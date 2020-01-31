@@ -28,7 +28,7 @@ class Constants {
         const val GOOGLE_RETROFIT_KEY = "google"
 
         // Base URLS
-        const val WIKIPEDIA_API_BASE_URL = "https://en.wikipedia.org/w/api.php"
+        const val WIKIPEDIA_API_BASE_URL = "https://en.wikipedia.org/"
         const val UNSPLASH_API_BASE_URL = "https://api.unsplash.com/"
         const val FOURSQUARE_API_BASE_URL = "https://api.foursquare.com/"
         const val GOOGLE_API_BASE_URL = "https://maps.googleapis.com/"

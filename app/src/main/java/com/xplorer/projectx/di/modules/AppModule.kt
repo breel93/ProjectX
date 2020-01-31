@@ -18,6 +18,7 @@ package com.xplorer.projectx.di.modules
 import com.google.gson.Gson
 import com.xplorer.projectx.api.UnsplashApi
 import com.xplorer.projectx.api.FoursquareAPI
+import com.xplorer.projectx.api.WikipediaAPI
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.utils.Constants
@@ -66,11 +67,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideWikipediaRetrofit(gsonConverter: Converter.Factory): Retrofit {
+    fun provideWikipediaRetrofit(okHttpClient: OkHttpClient): WikipediaAPI {
         return Retrofit.Builder()
             .baseUrl(Constants.WIKIPEDIA_API_BASE_URL)
-            .addConverterFactory(gsonConverter)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
+            .create(WikipediaAPI::class.java)
     }
 
     @Singleton
