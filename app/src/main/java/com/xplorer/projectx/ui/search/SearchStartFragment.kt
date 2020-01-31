@@ -16,7 +16,6 @@
 package com.xplorer.projectx.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +39,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.xplorer.projectx.R
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.utils.convertToString
+import com.xplorer.projectx.utils.convertToStringForNearbyPosts
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -97,8 +97,14 @@ class SearchStartFragment : DaggerFragment() {
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-//                viewModel.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString()) // used to confirm city post on wikipedia
-                getAlternateConfirmation(place)
+                // used to confirm city post on wikipedia via coordinates
+//                viewModel.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
+
+                // used to get an alternative city post confirmation should the first confirmation step fails
+//                getAlternateConfirmation(place) // uncomment this line for testing, comment the first and third lines
+
+                // Used to get relevant post titles based on the city location if no city results are found on wikipedia
+                viewModel.getRelevantPostTitlesForCity(place.latLng!!.convertToStringForNearbyPosts())
             }
 
             override fun onError(status: Status) {
@@ -178,6 +184,14 @@ class SearchStartFragment : DaggerFragment() {
         })
 
         viewModel.errorCoordConfirmationLiveData.observe(this, Observer { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        })
+
+        viewModel.successRelatedTitlesLiveData.observe(this, Observer {
+            Toast.makeText(context, "Total number of relevant posts for this city: ${it.size}", Toast.LENGTH_LONG).show()
+        })
+
+        viewModel.errorRelatedTitlesLiveData.observe(this, Observer {error ->
             Toast.makeText(context, error, Toast.LENGTH_LONG).show()
         })
     }

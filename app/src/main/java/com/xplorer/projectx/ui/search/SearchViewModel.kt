@@ -123,6 +123,23 @@ constructor(
         }
     }
 
+    private val _relatedTitlesLiveData = MutableLiveData<List<String>>()
+    val successRelatedTitlesLiveData: LiveData<List<String>>
+        get() = _relatedTitlesLiveData
+
+    private val _errorRelatedTitlesLiveData = MutableLiveData<String>()
+    val errorRelatedTitlesLiveData: LiveData<String>
+        get() = _errorCoordConfirmationLiveData
+
+    fun getRelevantPostTitlesForCity(cityCoordinates: String) {
+        wikipediaRepository.getRelevantPosts(cityCoordinates) { result ->
+            when(result) {
+                is Success -> _relatedTitlesLiveData.value = result.data
+                is Failure -> _errorRelatedTitlesLiveData.value = result.error.localizedMessage
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         if (::job.isInitialized) job.cancel()
