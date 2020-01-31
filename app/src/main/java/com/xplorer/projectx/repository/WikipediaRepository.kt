@@ -59,13 +59,12 @@ class WikipediaRepository @Inject
     // alternative fallback for incorrect query title due to city name inconsistencies
     // i.e. Lagos, Nigeria has different coordinates from Lagos, Portugal
     // find a match for Lagos, Portugal in wikipedia, and make a confirmation request if a match is found
-    fun getAlternateConfirmation(cityName: String,
-                                 countryName: String,
+    fun getAlternateConfirmation(query: String,
                                  cityCoordinates: String,
                                    onComplete: ((Result<Boolean>) -> Unit)) {
 
         CoroutineExecutor.ioToMain(
-            { getAlternateWikiTitle("$cityName, $countryName") },
+            { getAlternateWikiTitle(query) },
             { redirectResult ->
                 when(redirectResult) {
                     // If there is a redirect

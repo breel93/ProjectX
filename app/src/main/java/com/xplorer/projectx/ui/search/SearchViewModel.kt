@@ -114,6 +114,15 @@ constructor(
         }
     }
 
+    fun altConfirmCoordinatesForCity(cityName: String, areaName: String, cityCoordinates: String) {
+        wikipediaRepository.getAlternateConfirmation("$cityName, $areaName", cityCoordinates) { confirmedResult ->
+            when(confirmedResult) {
+                is Success -> _coordConfirmationLiveData.value = confirmedResult.data
+                is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         if (::job.isInitialized) job.cancel()
