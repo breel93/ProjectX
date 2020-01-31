@@ -36,6 +36,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
 import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.utils.convertToString
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -83,12 +84,13 @@ class SearchStartFragment : DaggerFragment() {
         // Specify the types of place data to return.
         // Missing autocomplete Place field = Place.Field.LAT_LNG
         // getting places from autocomplete returns null values for latlong without this field
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG))
         autocompleteFragment.setTypeFilter(TypeFilter.CITIES)
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
+                viewModel.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
             }
 
             override fun onError(status: Status) {
@@ -118,6 +120,18 @@ class SearchStartFragment : DaggerFragment() {
 
         viewModel.errorVenueLiveData.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        // wikipedia state observer
+        viewModel.coordConfirmationLiveData.observe(this, Observer { confirmed ->
+            when(confirmed) {
+                true -> Toast.makeText(activity, "Location confirmed. Load wiki page in chrome tab.", Toast.LENGTH_SHORT).show()
+                false -> Toast.makeText(activity, "Location cannot be confirmed. Use alternative confirmation", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.errorCoordConfirmationLiveData.observe(this, Observer { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
         })
     }
 }

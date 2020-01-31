@@ -28,6 +28,7 @@ import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networkin_exp.Success
 import com.xplorer.projectx.repository.FoursquareRepository
 import com.xplorer.projectx.repository.UnsplashRepository
+import com.xplorer.projectx.repository.WikipediaRepository
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
@@ -35,6 +36,7 @@ class SearchViewModel@Inject
 constructor(
   private val unsplashRepository: UnsplashRepository,
   private val foursquareRepository: FoursquareRepository,
+  private val wikipediaRepository: WikipediaRepository,
   application: Application
 ) : AndroidViewModel(application) {
 
@@ -90,6 +92,26 @@ constructor(
     }
     private fun processVenueError(error: Throwable) {
         _errorVenueLiveData.value = error.localizedMessage
+    }
+
+    // Location confirmation from Wikipedia
+
+    private val _coordConfirmationLiveData = MutableLiveData<Boolean>()
+    val coordConfirmationLiveData: LiveData<Boolean>
+        get() = _coordConfirmationLiveData
+
+    private val _errorCoordConfirmationLiveData = MutableLiveData<String>()
+    val errorCoordConfirmationLiveData: LiveData<String>
+        get() = _errorCoordConfirmationLiveData
+
+    fun confirmCoordinatesForCity(cityName: String, cityCoordinates: String) {
+        wikipediaRepository.confirmCityCoordinates(cityName, cityCoordinates) { confirmedResult ->
+
+            when(confirmedResult) {
+                is Success -> _coordConfirmationLiveData.value = confirmedResult.data
+                is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
+            }
+        }
     }
 
     override fun onCleared() {
