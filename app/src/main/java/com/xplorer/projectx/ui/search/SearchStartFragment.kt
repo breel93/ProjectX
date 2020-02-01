@@ -28,6 +28,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AddressComponent
+import com.google.android.libraries.places.api.model.AddressComponents
 import com.xplorer.projectx.databinding.FragmentSearchStartBinding
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
@@ -36,6 +38,8 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
 import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.utils.convertToString
+import com.xplorer.projectx.utils.convertToStringForNearbyPosts
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -62,7 +66,7 @@ class SearchStartFragment : DaggerFragment() {
         observeViewState()
         getPlaceAutocomplete()
 //        getUnsplashCall()
-        getFourSquareCall()
+//        getFourSquareCall()
 
         return binding.root
     }
@@ -83,17 +87,68 @@ class SearchStartFragment : DaggerFragment() {
         // Specify the types of place data to return.
         // Missing autocomplete Place field = Place.Field.LAT_LNG
         // getting places from autocomplete returns null values for latlong without this field
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS))
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID,
+            Place.Field.NAME,
+            Place.Field.ADDRESS,
+            Place.Field.LAT_LNG,
+            Place.Field.ADDRESS_COMPONENTS))
         autocompleteFragment.setTypeFilter(TypeFilter.CITIES)
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
+                // used to confirm city post on wikipedia via coordinates
+//                viewModel.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
+
+                // used to get an alternative city post confirmation should the first confirmation step fails
+//                getAlternateConfirmation(place) // uncomment this line for testing, comment the first and third lines
+
+                // Used to get relevant post titles based on the city location if no city results are found on wikipedia
+                viewModel.getRelevantPostTitlesForCity(place.latLng!!.convertToStringForNearbyPosts())
             }
 
             override fun onError(status: Status) {
             }
         })
+    }
+
+    private fun getAlternateConfirmation(place: Place) {
+        val addressComponents = place.addressComponents
+        val countryComponent = getAddressComponent(addressComponents!!, "country")
+        if(countryComponent == null) {
+            Toast.makeText(activity, "Location cannot be confirmed. No country available for this city", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        var areaName = "n/a"
+        if(countryComponent.shortName == "US" || countryComponent.shortName == "CA") {
+            val stateComponent = getAddressComponent(addressComponents, "administrative_area_level_1")
+            if(stateComponent != null) {
+                areaName = stateComponent.name
+            }
+        } else {
+            areaName = countryComponent.name
+        }
+
+        if(areaName == "n/a") {
+            Toast.makeText(activity, "Location cannot be confirmed. No area name could be confirmed", Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.altConfirmCoordinatesForCity(place.name!!, areaName, place.latLng!!.convertToString())
+        //viewModel.confirmCoordinatesForCity(place.name!!,  place.latLng!!.convertToString())
+    }
+
+    private fun getAddressComponent(addressComponents: AddressComponents,
+                                    componentName: String) : AddressComponent? {
+
+        val components = addressComponents.asList()
+        for(x in 0 until components.size) {
+            if(components[x].types[0] == componentName) {
+               return components[x]
+            }
+        }
+
+        return null
     }
 
     private fun getUnsplashCall() {
@@ -118,6 +173,26 @@ class SearchStartFragment : DaggerFragment() {
 
         viewModel.errorVenueLiveData.observe(this, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+
+        // wikipedia state observer
+        viewModel.coordConfirmationLiveData.observe(this, Observer { confirmed ->
+            when(confirmed) {
+                true -> Toast.makeText(activity, "Location confirmed. Load wiki page in chrome tab.", Toast.LENGTH_SHORT).show()
+                false -> Toast.makeText(activity, "Location cannot be confirmed. Use alternative confirmation", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.errorCoordConfirmationLiveData.observe(this, Observer { error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+        })
+
+        viewModel.successRelatedTitlesLiveData.observe(this, Observer {
+            Toast.makeText(context, "Total number of relevant posts for this city: ${it.size}", Toast.LENGTH_LONG).show()
+        })
+
+        viewModel.errorRelatedTitlesLiveData.observe(this, Observer {error ->
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
         })
     }
 }
