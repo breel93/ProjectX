@@ -21,6 +21,6 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class MainActivityModule {
-    @ContributesAndroidInjector(modules = [SearchStartFragmentModule::class])
+    @ContributesAndroidInjector(modules = [SearchStartFragmentModule::class, CityFragmentModule::class])
     internal abstract fun contributeMainActivity(): MainActivity
 }
