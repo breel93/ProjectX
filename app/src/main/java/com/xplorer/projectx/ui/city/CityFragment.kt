@@ -1,5 +1,19 @@
+/**
+ *  Designed and developed by ProjectX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
 package com.xplorer.projectx.ui.city
-
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -36,8 +50,9 @@ class CityFragment : DaggerFragment() {
     lateinit var place: Place
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+      inflater: LayoutInflater,
+      container: ViewGroup?,
+      savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,
@@ -66,35 +81,37 @@ class CityFragment : DaggerFragment() {
     private fun getAlternateConfirmation(place: Place) {
         val addressComponents = place.addressComponents
         val countryComponent = getAddressComponent(addressComponents!!, "country")
-        if(countryComponent == null) {
+        if (countryComponent == null) {
             Toast.makeText(activity, "Location cannot be confirmed. No country available for this city", Toast.LENGTH_SHORT).show()
             return
         }
 
         var areaName = "n/a"
-        if(countryComponent.shortName == "US" || countryComponent.shortName == "CA") {
+        if (countryComponent.shortName == "US" || countryComponent.shortName == "CA") {
             val stateComponent = getAddressComponent(addressComponents, "administrative_area_level_1")
-            if(stateComponent != null) {
+            if (stateComponent != null) {
                 areaName = stateComponent.name
             }
         } else {
             areaName = countryComponent.name
         }
 
-        if(areaName == "n/a") {
+        if (areaName == "n/a") {
             Toast.makeText(activity, "Location cannot be confirmed. No area name could be confirmed", Toast.LENGTH_SHORT).show()
         }
 
         viewModelCity.altConfirmCoordinatesForCity(place.name!!, areaName, place.latLng!!.convertToString())
-        //viewModelCity.confirmCoordinatesForCity(place.name!!,  place.latLng!!.convertToString())
+        // viewModelCity.confirmCoordinatesForCity(place.name!!,  place.latLng!!.convertToString())
     }
 
-    private fun getAddressComponent(addressComponents: AddressComponents,
-                                    componentName: String) : AddressComponent? {
+    private fun getAddressComponent(
+      addressComponents: AddressComponents,
+      componentName: String
+    ): AddressComponent? {
 
         val components = addressComponents.asList()
-        for(x in 0 until components.size) {
-            if(components[x].types[0] == componentName) {
+        for (x in 0 until components.size) {
+            if (components[x].types[0] == componentName) {
                 return components[x]
             }
         }
@@ -128,7 +145,7 @@ class CityFragment : DaggerFragment() {
 
         // wikipedia state observer
         viewModelCity.coordConfirmationLiveData.observe(viewLifecycleOwner, Observer { confirmed ->
-            when(confirmed) {
+            when (confirmed) {
                 true -> Toast.makeText(activity, "Location confirmed. Load wiki page in chrome tab.", Toast.LENGTH_SHORT).show()
                 false -> Toast.makeText(activity, "Location cannot be confirmed. Use alternative confirmation", Toast.LENGTH_SHORT).show()
             }
@@ -146,5 +163,4 @@ class CityFragment : DaggerFragment() {
             Toast.makeText(context, error, Toast.LENGTH_LONG).show()
         })
     }
-
 }

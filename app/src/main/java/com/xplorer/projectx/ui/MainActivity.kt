@@ -19,7 +19,6 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.ActivityMainBinding
-import com.xplorer.projectx.ui.search.SearchStartFragment
 import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -36,5 +35,4 @@ class MainActivity : DaggerAppCompatActivity() {
         logging.redactHeader(getString(R.string.authorization))
         logging.redactHeader(getString(R.string.cookie))
     }
-
 }

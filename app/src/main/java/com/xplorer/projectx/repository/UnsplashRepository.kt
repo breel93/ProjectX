@@ -38,8 +38,9 @@ internal constructor(
             { fetchPhotos(query) },
             {photoResult ->
                 onComplete(photoResult!!)
-            }
-            , coroutineContextProvider)
+            },
+            coroutineContextProvider
+        )
     }
 
    private fun fetchPhotos(query: String) =

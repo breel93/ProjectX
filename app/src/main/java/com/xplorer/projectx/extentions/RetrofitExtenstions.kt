@@ -1,6 +1,5 @@
 package com.xplorer.projectx.extentions
 
-import android.util.Log
 import com.xplorer.projectx.networkin_exp.Failure
 import com.xplorer.projectx.networkin_exp.Mappable
 import com.xplorer.projectx.networkin_exp.Result
@@ -23,8 +22,7 @@ import retrofit2.HttpException
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-// T is the response from the network call, R is the data to return to the viewModel
+// T is the response from the network call, R is the data to return to the viewModelCity
 fun <T: Mappable<R>, R: Any> Call<T>.getResult(): Result<R> {
     val call = clone()
     return try {

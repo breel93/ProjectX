@@ -20,19 +20,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AddressComponent
-import com.google.android.libraries.places.api.model.AddressComponents
 import com.xplorer.projectx.databinding.FragmentSearchStartBinding
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
@@ -40,12 +33,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
-import com.xplorer.projectx.model.foursquare.Venue
-import com.xplorer.projectx.ui.city.CitySearchViewModel
-import com.xplorer.projectx.utils.convertToString
-import com.xplorer.projectx.utils.convertToStringForNearbyPosts
 import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -77,7 +65,6 @@ class SearchStartFragment : DaggerFragment() {
         navController = Navigation.findNavController(view)
     }
 
-
     private fun getPlaceAutocomplete() {
         if (!Places.isInitialized()) {
             Places.initialize(context!!, getString(R.string.google_api_key))
@@ -102,11 +89,10 @@ class SearchStartFragment : DaggerFragment() {
                 val bundle = bundleOf(
                     "place" to place
                 )
-                navController.navigate(R.id.cityFragment,bundle)
+                navController.navigate(R.id.cityFragment, bundle)
             }
             override fun onError(status: Status) {
             }
         })
     }
-
 }
