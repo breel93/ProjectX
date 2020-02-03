@@ -32,18 +32,9 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        showChooseDestinationFragment()
-
         val logging = HttpLoggingInterceptor { message -> Timber.tag(getString(R.string.okhttp)).d(message) }
         logging.redactHeader(getString(R.string.authorization))
         logging.redactHeader(getString(R.string.cookie))
     }
 
-    private fun showChooseDestinationFragment() {
-        val searchFragment = SearchStartFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.mainFragment, searchFragment)
-            .commit()
-    }
 }

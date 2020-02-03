@@ -21,10 +21,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
@@ -38,6 +41,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
 import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.ui.city.CitySearchViewModel
 import com.xplorer.projectx.utils.convertToString
 import com.xplorer.projectx.utils.convertToStringForNearbyPosts
 import dagger.android.support.DaggerFragment
@@ -50,9 +54,8 @@ class SearchStartFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentSearchStartBinding
     private lateinit var placesClients: PlacesClient
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var viewModel: SearchViewModel
+
+    lateinit var navController: NavController
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -62,19 +65,18 @@ class SearchStartFragment : DaggerFragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_search_start, container, false)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel::class.java)
-        observeViewState()
+
         getPlaceAutocomplete()
-//        getUnsplashCall()
-//        getFourSquareCall()
 
         return binding.root
     }
 
-    private fun getFourSquareCall() {
-        val coordinates = LatLng(6.5243793, 3.3792057) // coordinates for lagos, nigeria
-        viewModel.getVenueData("restaurants", coordinates)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        navController = Navigation.findNavController(view)
     }
+
 
     private fun getPlaceAutocomplete() {
         if (!Places.isInitialized()) {
@@ -97,102 +99,14 @@ class SearchStartFragment : DaggerFragment() {
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                // used to confirm city post on wikipedia via coordinates
-//                viewModel.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
-
-                // used to get an alternative city post confirmation should the first confirmation step fails
-//                getAlternateConfirmation(place) // uncomment this line for testing, comment the first and third lines
-
-                // Used to get relevant post titles based on the city location if no city results are found on wikipedia
-                viewModel.getRelevantPostTitlesForCity(place.latLng!!.convertToStringForNearbyPosts())
+                val bundle = bundleOf(
+                    "place" to place
+                )
+                navController.navigate(R.id.cityFragment,bundle)
             }
-
             override fun onError(status: Status) {
             }
         })
     }
 
-    private fun getAlternateConfirmation(place: Place) {
-        val addressComponents = place.addressComponents
-        val countryComponent = getAddressComponent(addressComponents!!, "country")
-        if(countryComponent == null) {
-            Toast.makeText(activity, "Location cannot be confirmed. No country available for this city", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        var areaName = "n/a"
-        if(countryComponent.shortName == "US" || countryComponent.shortName == "CA") {
-            val stateComponent = getAddressComponent(addressComponents, "administrative_area_level_1")
-            if(stateComponent != null) {
-                areaName = stateComponent.name
-            }
-        } else {
-            areaName = countryComponent.name
-        }
-
-        if(areaName == "n/a") {
-            Toast.makeText(activity, "Location cannot be confirmed. No area name could be confirmed", Toast.LENGTH_SHORT).show()
-        }
-
-        viewModel.altConfirmCoordinatesForCity(place.name!!, areaName, place.latLng!!.convertToString())
-        //viewModel.confirmCoordinatesForCity(place.name!!,  place.latLng!!.convertToString())
-    }
-
-    private fun getAddressComponent(addressComponents: AddressComponents,
-                                    componentName: String) : AddressComponent? {
-
-        val components = addressComponents.asList()
-        for(x in 0 until components.size) {
-            if(components[x].types[0] == componentName) {
-               return components[x]
-            }
-        }
-
-        return null
-    }
-
-    private fun getUnsplashCall() {
-        viewModel.getPhotoData("lagos")
-    }
-
-    private fun observeViewState() {
-
-        // photo state observers
-        viewModel.successPhotoLiveData.observe(this, Observer {
-            Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
-        })
-
-        viewModel.errorPhotoLiveData.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        // venue state observers
-        viewModel.successVenueLiveData.observe(this, Observer<List<Venue>> { venues ->
-            Toast.makeText(activity, "Total places found: ${venues.size}", Toast.LENGTH_SHORT).show()
-        })
-
-        viewModel.errorVenueLiveData.observe(this, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
-        // wikipedia state observer
-        viewModel.coordConfirmationLiveData.observe(this, Observer { confirmed ->
-            when(confirmed) {
-                true -> Toast.makeText(activity, "Location confirmed. Load wiki page in chrome tab.", Toast.LENGTH_SHORT).show()
-                false -> Toast.makeText(activity, "Location cannot be confirmed. Use alternative confirmation", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        viewModel.errorCoordConfirmationLiveData.observe(this, Observer { error ->
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
-        })
-
-        viewModel.successRelatedTitlesLiveData.observe(this, Observer {
-            Toast.makeText(context, "Total number of relevant posts for this city: ${it.size}", Toast.LENGTH_LONG).show()
-        })
-
-        viewModel.errorRelatedTitlesLiveData.observe(this, Observer {error ->
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
-        })
-    }
 }
