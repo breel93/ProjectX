@@ -38,6 +38,9 @@ ext.versions = [
         //gson
         gson                        : '2.8.6',
 
+        //navigation
+        navigation                  : '2.2.0',
+
         //google
         playservice_version         : '17.0.0',
         google_services             : '4.3.3',

@@ -99,6 +99,10 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + versions.coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines_android
 
+    //navigation
+    implementation 'androidx.navigation:navigation-fragment:' + versions.navigation
+    implementation 'androidx.navigation:navigation-ui:' + versions.navigation
+
 
     //test
     testImplementation 'junit:junit:4.12'
@@ -114,7 +118,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // jsoup
-    implementation 'org.jsoup:jsoup:'+ versions.jsoup
+    implementation 'org.jsoup:jsoup:' + versions.jsoup
 }
 
 apply from: '../spotless.gradle'
