@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/searchStartFragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/searchStartFragment"
+        android:name="com.xplorer.projectx.ui.search.SearchStartFragment"
+        android:label="SearchStartFragment" >
+        <action
+            android:id="@+id/action_searchStartFragment_to_cityFragment"
+            app:destination="@id/cityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityFragment"
+        android:name="com.xplorer.projectx.ui.city.CityFragment"
+        android:label="fragment_cities"
+        tools:layout="@layout/fragment_city" >
+        <action
+            android:id="@+id/action_cityFragment_to_cityPhotoFragment"
+            app:destination="@id/cityPhotoFragment" />
+        <action
+            android:id="@+id/action_cityFragment_to_cityDescription"
+            app:destination="@id/cityDescription" />
+        <action
+            android:id="@+id/action_cityFragment_to_cityMapFragment"
+            app:destination="@id/cityMapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityPhotoFragment"
+        android:name="com.xplorer.projectx.ui.city.CityPhotoFragment"
+        android:label="fragment_city_photo"
+        tools:layout="@layout/fragment_city_photo" />
+    <fragment
+        android:id="@+id/cityDescription"
+        android:name="com.xplorer.projectx.ui.city.CityDescriptionFragment"
+        android:label="fragment_city_description"
+        tools:layout="@layout/fragment_city_description" />
+    <fragment
+        android:id="@+id/cityMapFragment"
+        android:name="com.xplorer.projectx.ui.city.CityMapFragment"
+        android:label="fragment_city_map"
+        tools:layout="@layout/fragment_city_map" />
+</navigation>

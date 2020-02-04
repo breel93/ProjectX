@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.ui.search
+package com.xplorer.projectx.ui.city
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -32,7 +32,7 @@ import com.xplorer.projectx.repository.WikipediaRepository
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-class SearchViewModel@Inject
+class CitySearchViewModel@Inject
 constructor(
   private val unsplashRepository: UnsplashRepository,
   private val foursquareRepository: FoursquareRepository,
@@ -74,12 +74,9 @@ constructor(
     val errorVenueLiveData: LiveData<String>
         get() = _errorVenueLiveData
 
-    fun getVenueData(query: String,
-                     latLong: LatLng) {
+    fun getVenueData(query: String, latLong: LatLng) {
         val coordinates = "${latLong.latitude},${latLong.longitude}"
-       foursquareRepository.getVenueData(query,
-           coordinates,
-           0) { result: Result<List<Venue>> ->
+        foursquareRepository.getVenueData(query, coordinates, 0) { result: Result<List<Venue>> ->
             when (result) {
                 is Success -> processVenueSuccess(result.data)
                 is Failure -> processVenueError(result.error)
@@ -107,7 +104,7 @@ constructor(
     fun confirmCoordinatesForCity(cityName: String, cityCoordinates: String) {
         wikipediaRepository.confirmCityCoordinates(cityName, cityCoordinates) { confirmedResult ->
 
-            when(confirmedResult) {
+            when (confirmedResult) {
                 is Success -> _coordConfirmationLiveData.value = confirmedResult.data
                 is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
             }
@@ -116,7 +113,7 @@ constructor(
 
     fun altConfirmCoordinatesForCity(cityName: String, areaName: String, cityCoordinates: String) {
         wikipediaRepository.getAlternateConfirmation("$cityName, $areaName", cityCoordinates) { confirmedResult ->
-            when(confirmedResult) {
+            when (confirmedResult) {
                 is Success -> _coordConfirmationLiveData.value = confirmedResult.data
                 is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
             }
@@ -133,7 +130,7 @@ constructor(
 
     fun getRelevantPostTitlesForCity(cityCoordinates: String) {
         wikipediaRepository.getRelevantPosts(cityCoordinates) { result ->
-            when(result) {
+            when (result) {
                 is Success -> _relatedTitlesLiveData.value = result.data
                 is Failure -> _errorRelatedTitlesLiveData.value = result.error.localizedMessage
             }

@@ -19,7 +19,6 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.ActivityMainBinding
-import com.xplorer.projectx.ui.search.SearchStartFragment
 import dagger.android.support.DaggerAppCompatActivity
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -32,18 +31,8 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        showChooseDestinationFragment()
-
         val logging = HttpLoggingInterceptor { message -> Timber.tag(getString(R.string.okhttp)).d(message) }
         logging.redactHeader(getString(R.string.authorization))
         logging.redactHeader(getString(R.string.cookie))
-    }
-
-    private fun showChooseDestinationFragment() {
-        val searchFragment = SearchStartFragment()
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.mainFragment, searchFragment)
-            .commit()
     }
 }
