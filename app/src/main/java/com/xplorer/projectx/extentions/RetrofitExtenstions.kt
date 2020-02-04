@@ -1,11 +1,19 @@
 package com.xplorer.projectx.extentions
 
+import com.google.gson.JsonParseException
+import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.networkin_exp.Failure
 import com.xplorer.projectx.networkin_exp.Mappable
 import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.networking.error.ApiDataTransformException
+import com.xplorer.projectx.networking.error.AuthError
+import com.xplorer.projectx.networking.error.NetworkException
+import com.xplorer.projectx.networking.error.ServerError
 import retrofit2.Call
 import retrofit2.HttpException
+import java.io.IOException
+import java.net.ConnectException
 
 /**
  *  Designed and developed by ProjectX
@@ -28,15 +36,26 @@ fun <T: Mappable<R>, R: Any> Call<T>.getResult(): Result<R> {
     return try {
         val response = call.execute()
         val result = response.body()?.run { Success(mapToData()) }
-        val errorResult = response.errorBody()?.run { Failure(HttpException(response)) }
+        val errorResult = response.errorBody()?.run { Failure(mapError(HttpException(response))!!) }
 
         result ?: errorResult!!
-//
-//            Timber.e("Error getting data:..${response.body(}")
-//            Failure(Throwable("Error with network call"))
 
     } catch (error: Throwable) {
-        error.printStackTrace()
-        Failure(error)
+        if(BuildConfig.DEBUG) {
+            error.printStackTrace()
+        }
+        Failure(mapError(error)!!)
     }
+
+}
+
+private val serverErrorCodes = 500..600
+private val authErrorCodes = 400..499
+
+private fun mapError(error: Throwable?): Throwable? = when {
+    error is JsonParseException -> ApiDataTransformException
+    error is IOException|| error is ConnectException -> NetworkException
+    error is HttpException && error.code() in serverErrorCodes -> ServerError
+    error is HttpException&& error.code() in authErrorCodes -> AuthError
+    else -> error
 }
