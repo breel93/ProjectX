@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.repository
+package com.xplorer.projectx.repository.unsplash
 
 import com.xplorer.projectx.BuildConfig.UNSPLASH_API_KEY
 import com.xplorer.projectx.api.UnsplashApi
@@ -30,10 +30,10 @@ import javax.inject.Singleton
 class UnsplashRepository @Inject
 internal constructor(
     private val unsplashApi: UnsplashApi,
-    private val coroutineContextProvider: CoroutineContextProvider ) {
+    private val coroutineContextProvider: CoroutineContextProvider ): UnsplashRepo {
     private lateinit var job: Job
 
-    fun getPhotoData(query: String, onComplete: ((Result<PhotoResult>) -> Unit)) {
+    override fun getPhotoData(query: String, onComplete: ((Result<PhotoResult>) -> Unit)) {
         job = CoroutineExecutor.ioToMain(
             { fetchPhotos(query) },
             {photoResult ->
