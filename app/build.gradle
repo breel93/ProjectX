@@ -55,6 +55,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:' + versions.androidxCore
     implementation 'androidx.recyclerview:recyclerview:' + versions.androidxRecyclerView
     implementation 'com.google.android.material:material:' + versions.androidxMaterial
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:' + versions.retrofit
@@ -62,16 +63,15 @@ dependencies {
     implementation 'com.google.code.gson:gson:' + versions.gson
 
     //arch component
-    implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.arch
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.arch
+    implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
+    kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
 
     //room
-    implementation 'androidx.room:room-runtime:' + versions.arch
-    kapt 'androidx.room:room-compiler:' + versions.arch
+    implementation 'androidx.room:room-runtime:' + versions.room
+    kapt 'androidx.room:room-compiler:' + versions.room
 
     //paging Library
-    implementation 'androidx.paging:paging-runtime:' + versions.arch
+    implementation 'androidx.paging:paging-runtime:' + versions.paging
 
     //dagger
     implementation 'com.google.dagger:dagger:' + versions.dagger
@@ -87,7 +87,7 @@ dependencies {
     //google
     implementation 'com.google.android.gms:play-services-maps:' + versions.playservice_version
     implementation 'com.google.android.gms:play-services-location:' + versions.playservice_version
-    implementation 'com.google.android.libraries.places:places:2.1.0'
+    implementation 'com.google.android.libraries.places:places:' + versions.places
 
     //okhttp
     implementation 'com.squareup.okhttp3:logging-interceptor:' + versions.okhttp
@@ -105,7 +105,7 @@ dependencies {
 
 
     //test
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:' + versions.junit
     testImplementation 'org.mockito:mockito-core:' + versions.mockitoVersion
     testImplementation 'org.robolectric:robolectric:' + versions.robolectric
     testImplementation 'org.powermock:powermock-core:' + versions.powerMock
