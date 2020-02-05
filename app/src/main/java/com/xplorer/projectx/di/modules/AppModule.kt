@@ -21,6 +21,8 @@ import com.xplorer.projectx.api.FoursquareAPI
 import com.xplorer.projectx.api.WikipediaAPI
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
+import com.xplorer.projectx.repository.unsplash.UnsplashRepo
+import com.xplorer.projectx.repository.unsplash.UnsplashRepository
 import com.xplorer.projectx.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -105,5 +107,10 @@ class AppModule {
             .client(okHttpClient)
             .build()
             .create(FoursquareAPI::class.java)
+    }
+
+    @Provides
+    fun provideUnsplashRepository(unsplashRepository: UnsplashRepository): UnsplashRepo {
+        return unsplashRepository
     }
 }
