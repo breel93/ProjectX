@@ -27,14 +27,14 @@ import com.xplorer.projectx.networkin_exp.Failure
 import com.xplorer.projectx.networkin_exp.Result
 import com.xplorer.projectx.networkin_exp.Success
 import com.xplorer.projectx.repository.FoursquareRepository
-import com.xplorer.projectx.repository.UnsplashRepository
 import com.xplorer.projectx.repository.WikipediaRepository
+import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class CitySearchViewModel@Inject
 constructor(
-  private val unsplashRepository: UnsplashRepository,
+  private val unsplashRepository: UnsplashRepo,
   private val foursquareRepository: FoursquareRepository,
   private val wikipediaRepository: WikipediaRepository,
   application: Application
