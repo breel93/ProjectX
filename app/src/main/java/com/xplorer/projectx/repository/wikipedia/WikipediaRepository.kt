@@ -1,3 +1,18 @@
+/**
+ *  Designed and developed by ProjectX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
 package com.xplorer.projectx.repository.wikipedia
 
 import com.xplorer.projectx.BuildConfig
@@ -13,21 +28,22 @@ import org.jsoup.Jsoup
 import javax.inject.Inject
 
 class WikipediaRepository @Inject
-    internal constructor(private val wikipediaAPI: WikipediaAPI,
-                         private val coroutineContextProvider: CoroutineContextProvider): WikipediaRepo {
-
-
-
+    internal constructor(
+      private val wikipediaAPI: WikipediaAPI,
+      private val coroutineContextProvider: CoroutineContextProvider
+    ) : WikipediaRepo {
 
     // Coordinates confirmation
-    override fun confirmCityCoordinates(cityName: String,
-                                        cityCoordinates: String,
-                                        onComplete: ((Result<Boolean>) -> Unit)) {
+    override fun confirmCityCoordinates(
+      cityName: String,
+      cityCoordinates: String,
+      onComplete: ((Result<Boolean>) -> Unit)
+    ) {
 
         CoroutineExecutor.ioToMain(
-            {getWikiCoordinates(cityName) },
+            { getWikiCoordinates(cityName) },
             { coordString ->
-                if(coordString == "n/a") {
+                if (coordString == "n/a") {
                     val error = Failure(Throwable("No coordinates found for this location. Please try a different location."))
                     onComplete(error)
                 } else {
@@ -57,7 +73,7 @@ class WikipediaRepository @Inject
 
                 val coordinatesString = coordinateElement.text()
 
-                if(coordinatesString.isEmpty()) {
+                if (coordinatesString.isEmpty()) {
                     return "n/a"
                 }
 
@@ -67,28 +83,28 @@ class WikipediaRepository @Inject
             val errorResult = response.errorBody()?.run { "n/a" }
 
             result ?: errorResult!!
-
         } catch (error: Throwable) {
-            if(BuildConfig.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 error.printStackTrace()
             }
 
             "n/a"
         }
-
     }
 
     // alternative fallback for incorrect query title due to city name inconsistencies
     // i.e. Lagos, Nigeria has different coordinates from Lagos, Portugal
     // find a match for Lagos, Portugal in wikipedia, and make a confirmation request if a match is found
-    override fun getAlternateConfirmation(query: String,
-                                 cityCoordinates: String,
-                                   onComplete: (Result<Boolean>) -> Unit) {
+    override fun getAlternateConfirmation(
+      query: String,
+      cityCoordinates: String,
+      onComplete: (Result<Boolean>) -> Unit
+    ) {
 
         CoroutineExecutor.ioToMain(
             { wikipediaAPI.getWikiTitle(query).getResult() },
             { redirectResult ->
-                when(redirectResult) {
+                when (redirectResult) {
                     // If there is a redirect
                     is Success -> confirmCityCoordinates(redirectResult.data, cityCoordinates, onComplete)
                     is Failure -> onComplete(Failure(Throwable("No alternative titles found. Please use list of articles fallback")))
@@ -96,12 +112,13 @@ class WikipediaRepository @Inject
             },
             coroutineContextProvider
         )
-
     }
 
     // If all fails, and a wikipedia title cannot be found for a city, get a list of possible lists
-    override fun getRelevantPosts(cityCoordinates: String,
-                         onComplete: (Result<List<String>>) -> Unit) {
+    override fun getRelevantPosts(
+      cityCoordinates: String,
+      onComplete: (Result<List<String>>) -> Unit
+    ) {
         CoroutineExecutor.ioToMain(
             { wikipediaAPI.getNearbyWikiTitles(cityCoordinates, 20).getResult() },
             { postTitles ->
@@ -110,6 +127,4 @@ class WikipediaRepository @Inject
             coroutineContextProvider
         )
     }
-
-
 }
