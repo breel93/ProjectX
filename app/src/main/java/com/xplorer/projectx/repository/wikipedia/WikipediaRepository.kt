@@ -1,6 +1,6 @@
 package com.xplorer.projectx.repository.wikipedia
 
-import android.util.Log
+import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.api.WikipediaAPI
 import com.xplorer.projectx.extentions.getResult
 import com.xplorer.projectx.networkin_exp.Failure
@@ -43,21 +43,39 @@ class WikipediaRepository @Inject
     }
 
     private fun getWikiCoordinates(cityName: String): String {
-        val pageDocument = Jsoup
-            .connect("https://en.wikipedia.org/wiki/$cityName")
-            .followRedirects(true)
-            .get()
 
-        val coordinateElements = pageDocument.getElementsByClass("geo")
-        if(coordinateElements.size > 0) {
-            val coordinatesString = coordinateElements.first().text()
-            val coordinates = coordinatesString.replace("; ", ",")
-            Log.e("WikipediaRepository", "Coordinates found: $coordinates")
-            return coordinates
+        val call = wikipediaAPI.findCoordinates(cityName)
+
+        val callCloned = call.clone()
+        return try {
+            val response = callCloned.execute()
+            val result = response.body()?.run {
+
+                val pageDocument = Jsoup.parse(string())
+
+                val coordinateElement = pageDocument.getElementsByClass("geo").first() ?: return "n/a"
+
+                val coordinatesString = coordinateElement.text()
+
+                if(coordinatesString.isEmpty()) {
+                    return "n/a"
+                }
+
+                coordinatesString.replace("; ", ",")
+            }
+
+            val errorResult = response.errorBody()?.run { "n/a" }
+
+            result ?: errorResult!!
+
+        } catch (error: Throwable) {
+            if(BuildConfig.DEBUG) {
+                error.printStackTrace()
+            }
+
+            "n/a"
         }
 
-        Log.e("WikipediaRepository", "No coordinates found for this city within Wikipedia")
-        return "n/a"
     }
 
     // alternative fallback for incorrect query title due to city name inconsistencies
