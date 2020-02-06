@@ -13,6 +13,9 @@ interface WikipediaAPI {
     @GET("w/api.php?action=query&redirects=1&format=json")
     fun getWikiTitle(@Query("titles") title: String): Call<WikiQueryTitleResponse>
 
+    @GET("wiki/{city_name}")
+    fun findCoordinates(@Path("city_name") cityName: String): Call<ResponseBody>
+
     @GET("w/api.php?action=query&action=query&format=json&list=geosearch")
     fun getNearbyWikiTitles(@Query("gscoord") coordinates: String,
                             @Query("gslimit") titleCount: Int,
