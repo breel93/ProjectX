@@ -48,7 +48,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/cityPhotoRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
