@@ -7,33 +7,39 @@ ext.versions = [
         // Plugins
         gradlePlugin                : '3.5.3',
         spotlessPlugin              : '3.24.2',
-        versionPlugin               : '0.24.0',
+        versionPlugin               : '0.27.0',
 
         // AndroidX
         androidxCore                : '1.1.0',
         androidxAnnotation          : '1.1.0',
-        androidxRecyclerView        : '1.0.0',
+        androidxRecyclerView        : '1.1.0',
         androidxMaterial            : '1.0.0',
-        lifecycle                   : '2.1.0',
+        lifecycle                   : '2.2.0',
 
         // kotlin
-        kotlin                      : '1.3.50',
+        kotlin                      : '1.3.61',
         coroutines                  : '1.3.1',
         coroutines_android          : '1.3.2',
 
         //dagger2
-        dagger                      : '2.25.4',
+        dagger                      : '2.26',
 
         //glide
-        glide                       : '4.9.0',
+        glide                       : '4.11.0',
 
         //arch
         arch                        : '2.1.0',
 
+        //paging
+        paging                      : '2.1.1',
+
+        //room
+        room                        : '2.2.3',
+
         //square
         retrofit                    : '2.7.1',
         timber                      : '4.7.1',
-        okhttp                      : '3.12.0',
+        okhttp                      : '4.3.1',
 
         //gson
         gson                        : '2.8.6',
@@ -45,18 +51,21 @@ ext.versions = [
         playservice_version         : '17.0.0',
         google_services             : '4.3.3',
 
+        //places
+        places                      : '2.2.0',
+
         // jsoup
-        jsoup                       : '1.9.1',
+        jsoup                       : '1.12.1',
 
         //test
         junit                       : '4.12',
         espresso                    : '3.2.0',
-        mockitoVersion              : '3.1.0',
+        mockitoVersion              : '3.2.4',
         mockitoKotlin               : '2.2.0',
         robolectric                 : '4.3.1',
-        powerMock                   : '2.0.4',
-        powerMockModuleJunit4       : '2.0.4',
-        powerMockModuleJunit4Rule   : '2.0.4',
-        powerMockApiMockito         : '2.0.4',
-        powerMockClassLoadingXstream : '2.0.4',
+        powerMock                   : '2.0.5',
+        powerMockModuleJunit4       : '2.0.5',
+        powerMockModuleJunit4Rule   : '2.0.5',
+        powerMockApiMockito         : '2.0.5',
+        powerMockClassLoadingXstream : '2.0.5',
 ]

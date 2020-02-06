@@ -24,7 +24,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AddressComponent
 import com.google.android.libraries.places.api.model.AddressComponents
@@ -33,6 +33,8 @@ import com.google.android.libraries.places.api.model.Place
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
 import com.xplorer.projectx.utils.convertToString
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -46,7 +48,6 @@ class CityFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModelCity: CitySearchViewModel
     private lateinit var binding: FragmentCityBinding
-
     lateinit var place: Place
 
     override fun onCreateView(
@@ -57,20 +58,17 @@ class CityFragment : DaggerFragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_city, container, false)
-        viewModelCity = ViewModelProviders.of(this, viewModelFactory)
+        viewModelCity = ViewModelProvider(this, viewModelFactory)
             .get(CitySearchViewModel::class.java)
-
         observeViewState()
-//        getUnsplashCall()
-//        getFourSquareCall()
+        viewModelCity.getPhotoData(place.name!!)
+        displaceCityPhotos()
         return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         place = arguments!!.getParcelable("place")!!
-
-        Toast.makeText(activity, place.name, Toast.LENGTH_SHORT).show()
     }
 
     private fun getFourSquareCall() {
@@ -101,7 +99,6 @@ class CityFragment : DaggerFragment() {
         }
 
         viewModelCity.altConfirmCoordinatesForCity(place.name!!, areaName, place.latLng!!.convertToString())
-        // viewModelCity.confirmCoordinatesForCity(place.name!!,  place.latLng!!.convertToString())
     }
 
     private fun getAddressComponent(
@@ -117,10 +114,6 @@ class CityFragment : DaggerFragment() {
         }
 
         return null
-    }
-
-    private fun getUnsplashCall() {
-        viewModelCity.getPhotoData("lagos")
     }
 
     private fun observeViewState() {
@@ -162,5 +155,18 @@ class CityFragment : DaggerFragment() {
         viewModelCity.errorRelatedTitlesLiveData.observe(viewLifecycleOwner, Observer { error ->
             Toast.makeText(context, error, Toast.LENGTH_LONG).show()
         })
+    }
+
+    private fun displaceCityPhotos() {
+        val photoList = listOf<Photo>()
+        binding.cityPhotoRecyclerView.hasFixedSize()
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        binding.cityPhotoRecyclerView.layoutManager = layoutManager
+        val cityPhotoRecyclerAdapter = CityPhotoRecyclerAdapter(photoList, context!!)
+        binding.cityPhotoRecyclerView.adapter = cityPhotoRecyclerAdapter
+        viewModelCity.successPhotoLiveData.observe(viewLifecycleOwner, Observer {
+            cityPhotoRecyclerAdapter.setList(it)
+        })
+        binding.cityPhotoTitle.text = place.name + "'s" + " photos"
     }
 }

@@ -44,5 +44,5 @@ internal constructor(
     }
 
    private fun fetchPhotos(query: String) =
-        unsplashApi.getPhotos(UNSPLASH_API_KEY, query, 1, 5).getResult()
+        unsplashApi.getPhotos(UNSPLASH_API_KEY, query, 1, 10).getResult()
 }
