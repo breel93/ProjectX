@@ -1,4 +1,4 @@
-package com.xplorer.projectx.repository
+package com.xplorer.projectx.repository.wikipedia
 
 import android.util.Log
 import com.xplorer.projectx.api.WikipediaAPI
@@ -14,11 +14,15 @@ import javax.inject.Inject
 
 class WikipediaRepository @Inject
     internal constructor(private val wikipediaAPI: WikipediaAPI,
-                         private val coroutineContextProvider: CoroutineContextProvider) {
+                         private val coroutineContextProvider: CoroutineContextProvider): WikipediaRepo {
+
+
 
 
     // Coordinates confirmation
-    fun confirmCityCoordinates(cityName: String, cityCoordinates: String, onComplete: ((Result<Boolean>) -> Unit)) {
+    override fun confirmCityCoordinates(cityName: String,
+                                        cityCoordinates: String,
+                                        onComplete: ((Result<Boolean>) -> Unit)) {
 
         CoroutineExecutor.ioToMain(
             {getWikiCoordinates(cityName) },
@@ -59,7 +63,7 @@ class WikipediaRepository @Inject
     // alternative fallback for incorrect query title due to city name inconsistencies
     // i.e. Lagos, Nigeria has different coordinates from Lagos, Portugal
     // find a match for Lagos, Portugal in wikipedia, and make a confirmation request if a match is found
-    fun getAlternateConfirmation(query: String,
+    override fun getAlternateConfirmation(query: String,
                                  cityCoordinates: String,
                                    onComplete: (Result<Boolean>) -> Unit) {
 
@@ -78,7 +82,7 @@ class WikipediaRepository @Inject
     }
 
     // If all fails, and a wikipedia title cannot be found for a city, get a list of possible lists
-    fun getRelevantPosts(cityCoordinates: String,
+    override fun getRelevantPosts(cityCoordinates: String,
                          onComplete: (Result<List<String>>) -> Unit) {
         CoroutineExecutor.ioToMain(
             { wikipediaAPI.getNearbyWikiTitles(cityCoordinates, 20).getResult() },

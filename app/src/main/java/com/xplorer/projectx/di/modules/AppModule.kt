@@ -23,6 +23,8 @@ import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.unsplash.UnsplashRepository
+import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
+import com.xplorer.projectx.repository.wikipedia.WikipediaRepository
 import com.xplorer.projectx.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -112,5 +114,10 @@ class AppModule {
     @Provides
     fun provideUnsplashRepository(unsplashRepository: UnsplashRepository): UnsplashRepo {
         return unsplashRepository
+    }
+
+    @Provides
+    fun provideWikipediahRepository(wikipediaRepository: WikipediaRepository): WikipediaRepo {
+        return wikipediaRepository
     }
 }
