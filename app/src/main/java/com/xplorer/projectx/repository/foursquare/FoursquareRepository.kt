@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.repository
+package com.xplorer.projectx.repository.foursquare
 
 import com.xplorer.projectx.BuildConfig.FOURSQUARE_API_KEY
 import com.xplorer.projectx.BuildConfig.FOURSQUARE_SECRET
@@ -46,18 +46,18 @@ class FoursquareRepository @Inject
 internal constructor(
   private val foursquareAPI: FoursquareAPI,
   private val coroutineContextProvider: CoroutineContextProvider
-) {
+): FoursquareRepo {
     private lateinit var job: Job
 
-    fun cancelRequests() {
+    override fun cancelRequests() {
         if (::job.isInitialized) job.cancel()
     }
 
-    fun getVenueData(
+    override fun getVenueData(
       query: String,
       coordinates: String,
       offset: Int,
-      resultLimit: Int = 10,
+      resultLimit: Int,
       onComplete: (Result<List<Venue>>) -> Unit
     ) {
         job = CoroutineExecutor.ioToMain(

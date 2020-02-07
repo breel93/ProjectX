@@ -26,7 +26,7 @@ import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
-import com.xplorer.projectx.repository.FoursquareRepository
+import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
 import kotlinx.coroutines.Job
@@ -34,10 +34,10 @@ import javax.inject.Inject
 
 class CitySearchViewModel@Inject
 constructor(
-  private val unsplashRepository: UnsplashRepo,
-  private val foursquareRepository: FoursquareRepository,
-  private val wikipediaRepository: WikipediaRepo,
-  application: Application
+    private val unsplashRepository: UnsplashRepo,
+    private val foursquareRepository: FoursquareRepo,
+    private val wikipediaRepository: WikipediaRepo,
+    application: Application
 ) : AndroidViewModel(application) {
 
     private lateinit var job: Job
