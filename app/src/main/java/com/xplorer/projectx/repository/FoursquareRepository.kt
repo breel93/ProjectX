@@ -20,7 +20,7 @@ import com.xplorer.projectx.BuildConfig.FOURSQUARE_SECRET
 import com.xplorer.projectx.api.FoursquareAPI
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.extentions.getResult
-import com.xplorer.projectx.networkin_exp.Result
+import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineExecutor
 import kotlinx.coroutines.Job

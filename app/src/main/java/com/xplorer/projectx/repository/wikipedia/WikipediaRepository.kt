@@ -18,9 +18,9 @@ package com.xplorer.projectx.repository.wikipedia
 import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.api.WikipediaAPI
 import com.xplorer.projectx.extentions.getResult
-import com.xplorer.projectx.networkin_exp.Failure
-import com.xplorer.projectx.networkin_exp.Result
-import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.extentions.Failure
+import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineExecutor
 import com.xplorer.projectx.utils.CoordinatesUtils

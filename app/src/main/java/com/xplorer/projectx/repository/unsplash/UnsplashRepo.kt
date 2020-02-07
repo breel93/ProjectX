@@ -16,7 +16,7 @@
 package com.xplorer.projectx.repository.unsplash
 
 import com.xplorer.projectx.model.unsplash.PhotoResult
-import com.xplorer.projectx.networkin_exp.Result
+import com.xplorer.projectx.extentions.Result
 
 interface UnsplashRepo {
     fun getPhotoData(query: String, onComplete: ((Result<PhotoResult>) -> Unit))

@@ -15,7 +15,7 @@
 */
 package com.xplorer.projectx.repository.wikipedia
 
-import com.xplorer.projectx.networkin_exp.Result
+import com.xplorer.projectx.extentions.Result
 
 interface WikipediaRepo {
 
