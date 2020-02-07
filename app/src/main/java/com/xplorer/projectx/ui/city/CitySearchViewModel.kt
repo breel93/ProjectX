@@ -23,11 +23,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.model.unsplash.PhotoResult
-import com.xplorer.projectx.networkin_exp.Failure
-import com.xplorer.projectx.networkin_exp.Result
-import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.extentions.Failure
+import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.repository.FoursquareRepository
-import com.xplorer.projectx.repository.wikipedia.WikipediaRepository
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
 import kotlinx.coroutines.Job

@@ -1,7 +1,7 @@
 package com.xplorer.projectx.model.foursquare
 
 import com.google.gson.annotations.SerializedName
-import com.xplorer.projectx.networkin_exp.Mappable
+import com.xplorer.projectx.extentions.Mappable
 
 /**
  *  Designed and developed by ProjectX

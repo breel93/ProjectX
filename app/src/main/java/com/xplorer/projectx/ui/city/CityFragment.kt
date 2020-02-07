@@ -25,7 +25,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.AddressComponent
 import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
@@ -42,7 +47,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class CityFragment : DaggerFragment() {
+class CityFragment : DaggerFragment(), OnMapReadyCallback {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -63,6 +68,10 @@ class CityFragment : DaggerFragment() {
         observeViewState()
         viewModelCity.getPhotoData(place.name!!)
         displaceCityPhotos()
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.cityMap) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
         return binding.root
     }
 
@@ -118,15 +127,6 @@ class CityFragment : DaggerFragment() {
 
     private fun observeViewState() {
 
-        // photo state observers
-        viewModelCity.successPhotoLiveData.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
-        })
-
-        viewModelCity.errorPhotoLiveData.observe(viewLifecycleOwner, Observer {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-        })
-
         // venue state observers
         viewModelCity.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->
             Toast.makeText(activity, "Total places found: ${venues.size}", Toast.LENGTH_SHORT).show()
@@ -168,5 +168,13 @@ class CityFragment : DaggerFragment() {
             cityPhotoRecyclerAdapter.setList(it)
         })
         binding.cityPhotoTitle.text = place.name + "'s" + " photos"
+        viewModelCity.errorPhotoLiveData.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
+        googleMap.addMarker(MarkerOptions().position(place.latLng!!).title(place.name))
     }
 }

@@ -21,7 +21,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.xplorer.projectx.api.UnsplashApi
 import com.xplorer.projectx.model.unsplash.PhotoResult
-import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import org.junit.Assert.assertTrue
@@ -29,7 +29,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
-import com.xplorer.projectx.networkin_exp.Result
+import com.xplorer.projectx.extentions.Result
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`

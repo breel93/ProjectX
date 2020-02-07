@@ -2,10 +2,6 @@ package com.xplorer.projectx.extentions
 
 import com.google.gson.JsonParseException
 import com.xplorer.projectx.BuildConfig
-import com.xplorer.projectx.networkin_exp.Failure
-import com.xplorer.projectx.networkin_exp.Mappable
-import com.xplorer.projectx.networkin_exp.Result
-import com.xplorer.projectx.networkin_exp.Success
 import com.xplorer.projectx.networking.error.ApiDataTransformException
 import com.xplorer.projectx.networking.error.AuthError
 import com.xplorer.projectx.networking.error.NetworkException

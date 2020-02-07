@@ -26,9 +26,9 @@ import com.xplorer.projectx.model.wikipedia.WikiQuery
 import com.xplorer.projectx.model.wikipedia.WikiGeoQuery
 import com.xplorer.projectx.model.wikipedia.WikiPageResult
 import com.xplorer.projectx.model.wikipedia.WikiGeoSearchResponse
-import com.xplorer.projectx.networkin_exp.Failure
-import com.xplorer.projectx.networkin_exp.Result
-import com.xplorer.projectx.networkin_exp.Success
+import com.xplorer.projectx.extentions.Failure
+import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import okhttp3.ResponseBody
