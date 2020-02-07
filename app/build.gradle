@@ -17,6 +17,7 @@ android {
 
         buildConfigField("String", "GOOGLE_API_KEY", GOOGLE_API_KEY)
         resValue "string", "google_api_key", GOOGLE_API_KEY
+        resValue "string", "google_map_api_key", GOOGLE_MAP_API_KEY
 
         buildConfigField("String", "UNSPLASH_API_KEY", UNSPLASH_API_KEY)
 
@@ -64,6 +65,8 @@ dependencies {
 
     //arch component
     implementation 'androidx.lifecycle:lifecycle-extensions:' + versions.lifecycle
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:' + versions.lifecycle
 
     //room
