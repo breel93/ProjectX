@@ -57,8 +57,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentCityBinding
     lateinit var place: Place
 
-    var toolbar: Toolbar? = null
-
     override fun onCreateView(
       inflater: LayoutInflater,
       container: ViewGroup?,
