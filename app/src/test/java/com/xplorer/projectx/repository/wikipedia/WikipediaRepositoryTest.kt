@@ -26,6 +26,8 @@ import com.xplorer.projectx.model.wikipedia.WikiQuery
 import com.xplorer.projectx.model.wikipedia.WikiGeoQuery
 import com.xplorer.projectx.model.wikipedia.WikiPageResult
 import com.xplorer.projectx.model.wikipedia.WikiGeoSearchResponse
+import com.xplorer.projectx.model.wikipedia.WikiCitySummaryResponse
+import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
