@@ -16,6 +16,7 @@
 package com.xplorer.projectx.repository.wikipedia
 
 import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 
 interface WikipediaRepo {
 
@@ -34,5 +35,10 @@ interface WikipediaRepo {
   fun getRelevantPosts(
     cityCoordinates: String,
     onComplete: (Result<List<String>>) -> Unit
+  )
+
+  fun getCityInformation(
+    cityName: String,
+    onComplete: (Result<WikiCityInfo>) -> Unit
   )
 }
