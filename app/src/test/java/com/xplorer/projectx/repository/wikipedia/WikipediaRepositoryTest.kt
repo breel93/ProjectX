@@ -142,7 +142,7 @@ class WikipediaRepositoryTest {
 
     // arrange
     val pageQuery = HashMap<String, WikiPageResult>()
-    val title = WikiPageResult("Bamako")
+    val title = WikiPageResult("Bamako", "Summary about Bamako")
     pageQuery["1"] = title
 
     val pageQueryResult = WikiQuery(pageQuery)
@@ -230,5 +230,59 @@ class WikipediaRepositoryTest {
     // assert
     verify(onRelevantPostCompleteMock).invoke(relevantTitleListCaptor.capture())
     assertTrue((relevantTitleListCaptor.firstValue as Success).data.size == 2)
+  }
+
+  @Test
+  fun `test get city result passes city info result to city info onComplete listener`() {
+
+    // arrange
+    val pageQuery = HashMap<String, WikiPageResult>()
+    val title = WikiPageResult("Bamako", "Summary about Bamako")
+    pageQuery["1"] = title
+
+    val pageQueryResult = WikiQuery(pageQuery)
+    val successBody = WikiCitySummaryResponse(pageQueryResult)
+
+    // To mock the response when a call is made to the getWikiTitle function in the wikipedia repository
+    val mockCall: Call<WikiCitySummaryResponse> = mock()
+    whenever(mockCall.execute()).thenReturn(Response.success(successBody))
+    whenever(mockCall.clone()).thenReturn(mockCall)
+
+    whenever(wikipediaAPI.getCityInfo(anyString())).thenReturn(mockCall)
+
+    val onCompleteCityInfoMock: (Result<WikiCityInfo>) -> Unit = mock()
+    val cityInfoResultCaptor = argumentCaptor<Result<WikiCityInfo>>()
+
+    // act
+    wikiRepo.getCityInformation("Bamako", onCompleteCityInfoMock)
+
+    // assert
+    verify(onCompleteCityInfoMock).invoke(cityInfoResultCaptor.capture())
+    val cityResult = cityInfoResultCaptor.firstValue as Success
+    assertTrue(cityResult.data.cityName == "Bamako")
+    assertTrue(cityResult.data.citySummary == "Summary about Bamako")
+  }
+
+  @Test
+  fun `test get city result passes failure result to city info onComplete listener`() {
+
+    // arrange
+    val errorBody = "".toResponseBody()
+
+    val mockCall: Call<WikiCitySummaryResponse> = mock()
+    whenever(mockCall.execute()).thenReturn(Response.error(404, errorBody))
+    whenever(mockCall.clone()).thenReturn(mockCall)
+
+    whenever(wikipediaAPI.getCityInfo(anyString())).thenReturn(mockCall)
+
+    val onCompleteCityInfoMock: (Result<WikiCityInfo>) -> Unit = mock()
+    val cityInfoResultCaptor = argumentCaptor<Result<WikiCityInfo>>()
+
+    // act
+    wikiRepo.getCityInformation("Bamako", onCompleteCityInfoMock)
+
+    // assert
+    verify(onCompleteCityInfoMock).invoke(cityInfoResultCaptor.capture())
+    assertTrue(cityInfoResultCaptor.firstValue is Failure)
   }
 }
