@@ -17,4 +17,5 @@ import com.google.gson.annotations.SerializedName
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-data class WikiPageResult(@SerializedName("title") val title: String)
+data class WikiPageResult(@SerializedName("title") val title: String,
+                          @SerializedName("extract") val summary: String?)
