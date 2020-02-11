@@ -45,8 +45,7 @@ class WikipediaRepository @Inject
             { getWikiCoordinates(cityName) },
             { coordString ->
                 if (coordString == "n/a") {
-                    val error = Failure(Throwable("No coordinates found for this location. Please try a different location."))
-                    onComplete(error)
+                    onComplete(Success(false))
                 } else {
                     val autoCompleteCoordinates = CoordinatesUtils.convertToCoordinates(cityCoordinates)
                     val wikiCoordinates = CoordinatesUtils.convertToCoordinates(coordString!!)

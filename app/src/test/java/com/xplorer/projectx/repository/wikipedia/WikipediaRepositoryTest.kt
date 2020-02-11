@@ -82,7 +82,7 @@ class WikipediaRepositoryTest {
     // assert
     verify(onCompleteMock).invoke(jsoupResultCaptor.capture())
     val errorMsg = "No coordinates found for this location. Please try a different location."
-    assertTrue((jsoupResultCaptor.firstValue as Failure).error.localizedMessage == errorMsg)
+    assertTrue(!(jsoupResultCaptor.firstValue as Success).data)
   }
 
   @Test
