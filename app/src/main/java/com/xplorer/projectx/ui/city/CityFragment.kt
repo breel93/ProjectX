@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -75,6 +76,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
             viewModelCity.getPhotoData(place.name!!)
         }
 
+        binding.cityAboutTitle.text = "About ${place.name!!}"
+        binding.cityAboutLoadingBar.isVisible = true // make loading visible
+
         viewModelCity.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
         displaceCityPhotos()
 
@@ -123,11 +127,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelCity.coordConfirmationLiveData.observe(viewLifecycleOwner, Observer { confirmed ->
             when (confirmed) {
                 true -> {
-                    Toast.makeText(activity, "Location confirmed. Load wiki page in chrome tab.", Toast.LENGTH_SHORT).show()
                     viewModelCity.setCityInformationData(place.name!!)
                 }
                 false -> {
-                    Toast.makeText(activity, "Location cannot be confirmed. Using alternative confirmation", Toast.LENGTH_SHORT).show()
                     getAlternateConfirmation(place)
                 }
             }
@@ -141,19 +143,29 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelCity.altCoordConfirmationLiveData.observe(viewLifecycleOwner, Observer { altConfirmed ->
             when (altConfirmed) {
                 true -> {
-                    Toast.makeText(activity, "Alternative confirmation for Location worked. Load city data", Toast.LENGTH_SHORT).show()
                     viewModelCity.setCityInformationData("${place.name!!}, $areaName")
                 }
                 false -> {
-                    Toast.makeText(activity, "Location cannot be confirmed. Use relevant posts", Toast.LENGTH_SHORT).show()
+
+                    binding.cityAboutLoadingBar.isVisible = false // make loading visible
+                    binding.cityAboutText.apply {
+                        isVisible = true
+                        text = "Location cannot be confirmed. Use relevant posts about this city"
+                    }
                 }
             }
         })
 
         // set city information observers
         viewModelCity.cityInfoLiveData.observe(viewLifecycleOwner, Observer { cityInfo ->
+
             val shortenedSummary = "${cityInfo.citySummary.substring(0, Math.min(cityInfo.citySummary.length, 500))}..."
-            Toast.makeText(activity, "City summary: $shortenedSummary", Toast.LENGTH_LONG).show()
+
+            binding.cityAboutLoadingBar.isVisible = false // make loading visible
+            binding.cityAboutText.apply {
+                isVisible = true
+                text = shortenedSummary
+            }
 
         })
 
