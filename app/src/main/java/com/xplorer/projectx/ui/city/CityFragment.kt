@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -69,7 +68,15 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelCity = ViewModelProvider(this, viewModelFactory)
             .get(CitySearchViewModel::class.java)
         observeViewState()
-        viewModelCity.getPhotoData(place.name!!)
+
+        areaName = getAreaNameForCity(place)
+
+        if(areaName != "n/a") {
+            viewModelCity.getPhotoData("${place.name!!}, $areaName")
+        } else {
+            viewModelCity.getPhotoData(place.name!!)
+        }
+
         viewModelCity.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
         displaceCityPhotos()
 
@@ -93,28 +100,43 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
     }
 
     private fun getAlternateConfirmation(place: Place) {
+
+        if(areaName == "n/a") {
+            Toast.makeText(
+                activity,
+                "Location cannot be confirmed. No area name could be confirmed",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        viewModelCity.altConfirmCoordinatesForCity("${place.name!!}, $areaName",
+            place.latLng!!.convertToString())
+    }
+
+    private fun getAreaNameForCity(place: Place): String {
         val addressComponents = place.addressComponents
         val countryComponent = getAddressComponent(addressComponents!!, "country")
         if (countryComponent == null) {
-            Toast.makeText(activity, "Location cannot be confirmed. No country available for this city", Toast.LENGTH_SHORT).show()
-            return
+            Toast.makeText(
+                activity,
+                "Location cannot be confirmed. No country available for this city",
+                Toast.LENGTH_SHORT
+            ).show()
+            return "n/a"
         }
 
         if (countryComponent.shortName == "US" || countryComponent.shortName == "CA") {
-            val stateComponent = getAddressComponent(addressComponents, "administrative_area_level_1")
+            val stateComponent =
+                getAddressComponent(addressComponents, "administrative_area_level_1")
             if (stateComponent != null) {
-                areaName = stateComponent.name
+                return stateComponent.name
             }
         } else {
-            areaName = countryComponent.name
+            return countryComponent.name
         }
 
-        if (areaName == "n/a") {
-            Toast.makeText(activity, "Location cannot be confirmed. No area name could be confirmed", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        viewModelCity.altConfirmCoordinatesForCity(place.name!!, areaName, place.latLng!!.convertToString())
+        return "n/a"
     }
 
     private fun getAddressComponent(

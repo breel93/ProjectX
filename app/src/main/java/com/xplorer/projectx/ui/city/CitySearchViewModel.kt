@@ -116,8 +116,8 @@ constructor(
     val altCoordConfirmationLiveData: LiveData<Boolean>
         get() = _altCoordConfirmationLiveData
 
-    fun altConfirmCoordinatesForCity(cityName: String, areaName: String, cityCoordinates: String) {
-        wikipediaRepository.getAlternateConfirmation("$cityName, $areaName", cityCoordinates) { confirmedResult ->
+    fun altConfirmCoordinatesForCity(queryCityName: String, cityCoordinates: String) {
+        wikipediaRepository.getAlternateConfirmation(queryCityName, cityCoordinates) { confirmedResult ->
             when (confirmedResult) {
                 is Success -> _altCoordConfirmationLiveData.value = confirmedResult.data
                 is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
