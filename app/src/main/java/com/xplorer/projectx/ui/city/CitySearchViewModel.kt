@@ -26,6 +26,7 @@ import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
@@ -111,11 +112,32 @@ constructor(
         }
     }
 
-    fun altConfirmCoordinatesForCity(cityName: String, areaName: String, cityCoordinates: String) {
-        wikipediaRepository.getAlternateConfirmation("$cityName, $areaName", cityCoordinates) { confirmedResult ->
+    private val _altCoordConfirmationLiveData = MutableLiveData<Boolean>()
+    val altCoordConfirmationLiveData: LiveData<Boolean>
+        get() = _altCoordConfirmationLiveData
+
+    fun altConfirmCoordinatesForCity(queryCityName: String, cityCoordinates: String) {
+        wikipediaRepository.getAlternateConfirmation(queryCityName, cityCoordinates) { confirmedResult ->
             when (confirmedResult) {
-                is Success -> _coordConfirmationLiveData.value = confirmedResult.data
+                is Success -> _altCoordConfirmationLiveData.value = confirmedResult.data
                 is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
+            }
+        }
+    }
+
+    private val _cityInfoLiveData = MutableLiveData<WikiCityInfo>()
+    val cityInfoLiveData: LiveData<WikiCityInfo>
+        get() = _cityInfoLiveData
+
+    private val _errorCityInfoLiveData = MutableLiveData<String>()
+    val errorCityInfoLiveData: LiveData<String>
+        get() = _errorCityInfoLiveData
+
+    fun setCityInformationData(cityName: String) {
+        wikipediaRepository.getCityInformation(cityName) { result ->
+            when(result) {
+                is Success -> _cityInfoLiveData.value = result.data
+                is Failure -> _errorCityInfoLiveData.value = result.error.localizedMessage
             }
         }
     }

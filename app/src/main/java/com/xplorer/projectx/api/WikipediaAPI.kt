@@ -1,5 +1,6 @@
 package com.xplorer.projectx.api
 
+import com.xplorer.projectx.model.wikipedia.WikiCitySummaryResponse
 import com.xplorer.projectx.model.wikipedia.WikiGeoSearchResponse
 import com.xplorer.projectx.model.wikipedia.WikiQueryTitleResponse
 import okhttp3.ResponseBody
@@ -20,4 +21,7 @@ interface WikipediaAPI {
     fun getNearbyWikiTitles(@Query("gscoord") coordinates: String,
                             @Query("gslimit") titleCount: Int,
                             @Query("gsradius") radius: Int = 10000): Call<WikiGeoSearchResponse>
+
+  @GET("w/api.php/?action=query&redirects=1&format=json&prop=extracts&exintro&explaintext")
+  fun getCityInfo(@Query("titles") title: String): Call<WikiCitySummaryResponse>
 }

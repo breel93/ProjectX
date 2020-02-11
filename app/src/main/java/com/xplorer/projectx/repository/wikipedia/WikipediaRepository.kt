@@ -21,6 +21,7 @@ import com.xplorer.projectx.extentions.getResult
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineExecutor
 import com.xplorer.projectx.utils.CoordinatesUtils
@@ -44,8 +45,7 @@ class WikipediaRepository @Inject
             { getWikiCoordinates(cityName) },
             { coordString ->
                 if (coordString == "n/a") {
-                    val error = Failure(Throwable("No coordinates found for this location. Please try a different location."))
-                    onComplete(error)
+                    onComplete(Success(false))
                 } else {
                     val autoCompleteCoordinates = CoordinatesUtils.convertToCoordinates(cityCoordinates)
                     val wikiCoordinates = CoordinatesUtils.convertToCoordinates(coordString!!)
@@ -123,6 +123,16 @@ class WikipediaRepository @Inject
             { wikipediaAPI.getNearbyWikiTitles(cityCoordinates, 20).getResult() },
             { postTitles ->
                 onComplete(postTitles!!)
+            },
+            coroutineContextProvider
+        )
+    }
+
+    override fun getCityInformation(cityName: String, onComplete: (Result<WikiCityInfo>) -> Unit) {
+        CoroutineExecutor.ioToMain(
+            { wikipediaAPI.getCityInfo(cityName).getResult() },
+            { cityInfoResult ->
+                onComplete(cityInfoResult!!)
             },
             coroutineContextProvider
         )
