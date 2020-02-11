@@ -30,10 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.model.AddressComponent
-import com.google.android.libraries.places.api.model.AddressComponents
 import com.google.android.libraries.places.api.model.Place
 
 import com.xplorer.projectx.R
@@ -41,6 +38,7 @@ import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
+import com.xplorer.projectx.utils.PlaceUtils
 import com.xplorer.projectx.utils.convertToString
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -69,7 +67,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
             .get(CitySearchViewModel::class.java)
         observeViewState()
 
-        areaName = getAreaNameForCity(place)
+        areaName = PlaceUtils.getAreaNameForCity(place)
 
         if(areaName != "n/a") {
             viewModelCity.getPhotoData("${place.name!!}, $areaName")
@@ -94,11 +92,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         place = arguments!!.getParcelable("place")!!
     }
 
-    private fun getFourSquareCall() {
-        val coordinates = LatLng(6.5243793, 3.3792057) // coordinates for lagos, nigeria
-        viewModelCity.getVenueData("restaurants", coordinates)
-    }
-
     private fun getAlternateConfirmation(place: Place) {
 
         if(areaName == "n/a") {
@@ -112,46 +105,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
 
         viewModelCity.altConfirmCoordinatesForCity("${place.name!!}, $areaName",
             place.latLng!!.convertToString())
-    }
-
-    private fun getAreaNameForCity(place: Place): String {
-        val addressComponents = place.addressComponents
-        val countryComponent = getAddressComponent(addressComponents!!, "country")
-        if (countryComponent == null) {
-            Toast.makeText(
-                activity,
-                "Location cannot be confirmed. No country available for this city",
-                Toast.LENGTH_SHORT
-            ).show()
-            return "n/a"
-        }
-
-        if (countryComponent.shortName == "US" || countryComponent.shortName == "CA") {
-            val stateComponent =
-                getAddressComponent(addressComponents, "administrative_area_level_1")
-            if (stateComponent != null) {
-                return stateComponent.name
-            }
-        } else {
-            return countryComponent.name
-        }
-
-        return "n/a"
-    }
-
-    private fun getAddressComponent(
-      addressComponents: AddressComponents,
-      componentName: String
-    ): AddressComponent? {
-
-        val components = addressComponents.asList()
-        for (x in 0 until components.size) {
-            if (components[x].types[0] == componentName) {
-                return components[x]
-            }
-        }
-
-        return null
     }
 
     private fun observeViewState() {
