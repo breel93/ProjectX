@@ -136,7 +136,11 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         })
 
         viewModelCity.errorCoordConfirmationLiveData.observe(viewLifecycleOwner, Observer { error ->
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+          binding.cityAboutLoadingBar.isVisible = false // make loading visible
+          binding.cityAboutText.apply {
+            isVisible = true
+            text = "Location cannot be confirmed. Use relevant posts about this city"
+          }
         })
 
         // alternative location confirmation
