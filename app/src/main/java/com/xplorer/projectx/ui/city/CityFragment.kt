@@ -21,6 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -72,6 +74,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.cityMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        binding.cityFragmentToolBar!!.title = place.name!!
         return binding.root
     }
 
@@ -172,6 +177,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
     }
+
+
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
