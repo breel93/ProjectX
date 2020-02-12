@@ -57,6 +57,9 @@ ext.versions = [
         // jsoup
         jsoup                       : '1.12.1',
 
+        // chrome custom tabs
+        chromeTabs                  : '1.0.0',
+
         //test
         junit                       : '4.12',
         espresso                    : '3.2.0',

@@ -122,6 +122,9 @@ dependencies {
 
     // jsoup
     implementation 'org.jsoup:jsoup:' + versions.jsoup
+
+    // chrome custom tabs
+    implementation 'androidx.browser:browser:' + versions.chromeTabs
 }
 
 apply from: '../spotless.gradle'
