@@ -35,5 +35,8 @@ class Constants {
 
         // FOURSQUARE API
         const val FOURSQUARE_API_VERSION = "20180323"
+
+        //Wikipedia info link
+        const val WIKIPEDIA_INFO_URL = "$WIKIPEDIA_API_BASE_URL/wiki/"
     }
 }

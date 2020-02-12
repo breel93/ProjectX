@@ -109,16 +109,21 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/moreAboutCityText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <Button
+                            android:id="@+id/moreAboutCityButton"
+                            android:layout_width="60dp"
+                            android:layout_height="30dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="8dp"
+                            android:textSize="12sp"
+                            android:padding="5dp"
+                            android:gravity="end|center_vertical"
                             android:text="more"
+                            android:background="@android:color/transparent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:enabled="false"/>
 
                         <TextView
                             android:id="@+id/cityAboutText"

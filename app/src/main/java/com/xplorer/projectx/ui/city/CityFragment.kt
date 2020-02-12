@@ -15,6 +15,7 @@
 */
 package com.xplorer.projectx.ui.city
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -39,6 +41,7 @@ import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
+import com.xplorer.projectx.utils.Constants
 import com.xplorer.projectx.utils.PlaceUtils
 import com.xplorer.projectx.utils.convertToString
 import dagger.android.support.DaggerFragment
@@ -47,7 +50,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class CityFragment : DaggerFragment(), OnMapReadyCallback {
+class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -55,6 +58,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentCityBinding
     lateinit var place: Place
     private var areaName = "n/a"
+    private lateinit var wikiArticleName: String
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -88,6 +92,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         binding.cityFragmentToolBar!!.title = place.name!!
+
+        // set more city info click listener
+        binding.moreAboutCityButton.setOnClickListener(this)
         return binding.root
     }
 
@@ -127,7 +134,8 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelCity.coordConfirmationLiveData.observe(viewLifecycleOwner, Observer { confirmed ->
             when (confirmed) {
                 true -> {
-                    viewModelCity.setCityInformationData(place.name!!)
+                    wikiArticleName = place.name!!
+                    viewModelCity.setCityInformationData(wikiArticleName)
                 }
                 false -> {
                     getAlternateConfirmation(place)
@@ -147,7 +155,8 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
         viewModelCity.altCoordConfirmationLiveData.observe(viewLifecycleOwner, Observer { altConfirmed ->
             when (altConfirmed) {
                 true -> {
-                    viewModelCity.setCityInformationData("${place.name!!}, $areaName")
+                    wikiArticleName = "${place.name!!}, $areaName"
+                    viewModelCity.setCityInformationData(wikiArticleName)
                 }
                 false -> {
 
@@ -165,6 +174,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
 
             val shortenedSummary = "${cityInfo.citySummary.substring(0, Math.min(cityInfo.citySummary.length, 500))}..."
 
+            binding.moreAboutCityButton.isEnabled = true // enable the more button
             binding.cityAboutLoadingBar.isVisible = false // make loading visible
             binding.cityAboutText.apply {
                 isVisible = true
@@ -205,5 +215,27 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
         googleMap.addMarker(MarkerOptions().position(place.latLng!!).title(place.name))
+    }
+
+    override fun onClick(v: View?) {
+        when(v!!.id) {
+            R.id.moreAboutCityButton -> { // show the wikipedia article on the next page
+                val wikiTabIntent = CustomTabsIntent.Builder().apply {
+
+                    setShowTitle(true)
+
+                    context?.let {
+                        setExitAnimations(it,
+                            android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+                    }
+
+                }.build()
+
+                wikiTabIntent.launchUrl(context,
+                    Uri.parse(Constants.WIKIPEDIA_INFO_URL+wikiArticleName))
+
+            }
+        }
     }
 }
