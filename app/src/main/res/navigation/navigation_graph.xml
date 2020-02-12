@@ -24,7 +24,9 @@
             app:destination="@id/cityPhotoFragment" />
         <action
             android:id="@+id/action_cityFragment_to_cityDescription"
-            app:destination="@id/cityDescription" />
+            app:destination="@id/cityDescription"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"/>
         <action
             android:id="@+id/action_cityFragment_to_cityMapFragment"
             app:destination="@id/cityMapFragment" />
