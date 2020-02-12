@@ -20,14 +20,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.databinding.DataBindingUtil
 
 import com.xplorer.projectx.R
+import com.xplorer.projectx.databinding.FragmentCityDescriptionBinding
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.fragment_city_description.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class CityDescriptionFragment : DaggerFragment() {
+
+  private lateinit var binding: FragmentCityDescriptionBinding
+  private lateinit var wikiLink: String
+  private lateinit var articleTitle: String
+  private lateinit var parentActivity: AppCompatActivity
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -35,6 +47,36 @@ class CityDescriptionFragment : DaggerFragment() {
       savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_city_description, container, false)
+
+        binding = DataBindingUtil.inflate(inflater,
+          R.layout.fragment_city_description,
+          container,
+          false)
+
+      parentActivity = activity as AppCompatActivity
+
+      parentActivity.setSupportActionBar(binding.cityDescriptionToolBar)
+      parentActivity.supportActionBar!!.apply {
+        setDisplayHomeAsUpEnabled(true)
+        title = "About $articleTitle"
+      }
+
+      binding.wikiWebView.apply {
+        webViewClient = object : WebViewClient() {
+          override fun onPageFinished(view: WebView?, url: String?) {
+            binding.wikiProgressBar.isGone = true
+          }
+        }
+        loadUrl(wikiLink)
+      }
+
+      return binding.root
     }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    wikiLink = arguments!!.getString("wikilink")!!
+    articleTitle = arguments!!.getString("title")!!
+  }
 }
