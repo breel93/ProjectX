@@ -24,10 +24,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -41,6 +44,7 @@ import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
+import com.xplorer.projectx.utils.AppPackageUtils
 import com.xplorer.projectx.utils.Constants
 import com.xplorer.projectx.utils.PlaceUtils
 import com.xplorer.projectx.utils.convertToString
@@ -59,6 +63,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     lateinit var place: Place
     private var areaName = "n/a"
     private lateinit var wikiArticleName: String
+    private lateinit var navController: NavController
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -103,9 +108,14 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         place = arguments!!.getParcelable("place")!!
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+    }
+
     private fun getAlternateConfirmation(place: Place) {
 
-        if(areaName == "n/a") {
+        if (areaName == "n/a") {
             Toast.makeText(
                 activity,
                 "Location cannot be confirmed. No area name could be confirmed",
@@ -180,9 +190,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
                 isVisible = true
                 text = shortenedSummary
             }
-
         })
-
 
         viewModelCity.successRelatedTitlesLiveData.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, "Total number of relevant posts for this city: ${it.size}", Toast.LENGTH_LONG).show()
@@ -209,33 +217,49 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         })
     }
 
-
-
-
     override fun onMapReady(googleMap: GoogleMap) {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
         googleMap.addMarker(MarkerOptions().position(place.latLng!!).title(place.name))
     }
 
     override fun onClick(v: View?) {
-        when(v!!.id) {
-            R.id.moreAboutCityButton -> { // show the wikipedia article on the next page
-                val wikiTabIntent = CustomTabsIntent.Builder().apply {
-
-                    setShowTitle(true)
-
-                    context?.let {
-                        setExitAnimations(it,
-                            android.R.anim.fade_in,
-                            android.R.anim.fade_out)
-                    }
-
-                }.build()
-
-                wikiTabIntent.launchUrl(context,
-                    Uri.parse(Constants.WIKIPEDIA_INFO_URL+wikiArticleName))
-
+        when (v!!.id) {
+            R.id.moreAboutCityButton -> {
+                if (AppPackageUtils.appInstalled(context!!, "com.android.chrome")) {
+                    launchWikiChromeTab()
+                } else {
+                    launchWikiWebView()
+                }
             }
         }
+    }
+
+    private fun launchWikiWebView() {
+        val wikiBundle = bundleOf(
+            "wikilink" to Constants.WIKIPEDIA_INFO_URL + wikiArticleName,
+            "title" to wikiArticleName
+        )
+
+        navController.navigate(R.id.cityDescription, wikiBundle)
+    }
+
+    private fun launchWikiChromeTab() {
+        val wikiTabIntent = CustomTabsIntent.Builder().apply {
+
+            setShowTitle(true)
+
+            context?.let {
+                setExitAnimations(
+                    it,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+            }
+        }.build()
+
+        wikiTabIntent.launchUrl(
+            context,
+            Uri.parse(Constants.WIKIPEDIA_INFO_URL + wikiArticleName)
+        )
     }
 }
