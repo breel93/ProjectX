@@ -21,9 +21,12 @@ import com.google.gson.reflect.TypeToken
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.utils.Constants
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.collections.ArrayList
 
+@Singleton
 class RecentCitiesRepository @Inject constructor(
   private val gson: Gson,
   private val sharedPreferences: SharedPreferences
@@ -47,7 +50,7 @@ class RecentCitiesRepository @Inject constructor(
 
     val cityEditor = sharedPreferences.edit()
 
-    cityEditor.putString("", transformListToString(citiesList))
+    cityEditor.putString(Constants.RECENT_CITY_STRING_LIST_KEY, transformListToString(citiesList))
     return onComplete(cityEditor.commit())
   }
 
@@ -62,7 +65,7 @@ class RecentCitiesRepository @Inject constructor(
   }
 
   private fun getCitiesFromDataSource(): String? {
-    return sharedPreferences.getString("", null)
+    return sharedPreferences.getString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
   }
 
   private fun transformJsonToList(cityData: String): ArrayList<String> {

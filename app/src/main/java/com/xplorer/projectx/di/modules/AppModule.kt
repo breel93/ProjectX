@@ -26,6 +26,8 @@ import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepository
+import com.xplorer.projectx.repository.recentCities.RecentCitiesRepo
+import com.xplorer.projectx.repository.recentCities.RecentCitiesRepository
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.unsplash.UnsplashRepository
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
@@ -132,7 +134,15 @@ class AppModule {
     }
 
     @Provides
+    @Singleton
     fun providesSharedPreferences(application: Application): SharedPreferences {
         return application.getSharedPreferences(Constants.SHARED_PREF_KEY, Context.MODE_PRIVATE)
     }
+
+    @Provides
+    @Singleton
+    fun providesRecentCityRepository(recentCitiesRepo: RecentCitiesRepository): RecentCitiesRepo {
+        return recentCitiesRepo
+    }
+
 }
