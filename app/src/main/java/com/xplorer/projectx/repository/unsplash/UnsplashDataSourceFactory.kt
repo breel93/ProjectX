@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.model.wikipedia
+package com.xplorer.projectx.repository.unsplash
 
-import com.google.gson.annotations.SerializedName
-import com.xplorer.projectx.extentions.Mappable
+import androidx.paging.DataSource
+import com.xplorer.projectx.model.unsplash.Photo
+import javax.inject.Inject
 
-data class WikiCitySummaryResponse(@SerializedName("query") val query: WikiQuery) :
-        Mappable<WikiCityInfo> {
-
-  override fun mapToData(): WikiCityInfo {
-
-    val cityName = query.pageObject.entries.first().value.title
-    val summary = query.pageObject.entries.first().value.summary
-
-    return WikiCityInfo(cityName, summary!!)
-  }
+class UnsplashDataSourceFactory@Inject
+constructor(val unsplashDataSource: UnsplashDataSource) : DataSource.Factory<Int, Photo>() {
+    override fun create(): DataSource<Int, Photo> {
+        return unsplashDataSource
+    }
 }

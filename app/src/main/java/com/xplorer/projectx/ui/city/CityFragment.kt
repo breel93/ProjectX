@@ -79,7 +79,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
         areaName = PlaceUtils.getAreaNameForCity(place)
 
-        if(areaName != "n/a") {
+        if (areaName != "n/a") {
             viewModelCity.getPhotoData("${place.name!!}, $areaName")
         } else {
             viewModelCity.getPhotoData(place.name!!)
@@ -215,6 +215,12 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         viewModelCity.errorPhotoLiveData.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
+        binding.morePhotoText.setOnClickListener {
+            val bundle = bundleOf(
+                "place" to place
+            )
+            navController.navigate(R.id.cityPhotoFragment, bundle)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

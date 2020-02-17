@@ -75,7 +75,7 @@ class UnsplashRepositoryTest {
     ).thenReturn(mockCall)
 
     // act
-    unsplashRepository.getPhotoData("query", onCompleteListenerMock)
+    unsplashRepository.getPhotoData("query", 1, 10, onCompleteListenerMock)
     verify(onCompleteListenerMock).invoke(photoResultCaptor.capture())
     assertTrue((photoResultCaptor.firstValue as Success).data == result.data)
   }

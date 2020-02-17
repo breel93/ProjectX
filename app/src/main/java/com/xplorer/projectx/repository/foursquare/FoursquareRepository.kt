@@ -46,7 +46,7 @@ class FoursquareRepository @Inject
 internal constructor(
   private val foursquareAPI: FoursquareAPI,
   private val coroutineContextProvider: CoroutineContextProvider
-): FoursquareRepo {
+) : FoursquareRepo {
     private lateinit var job: Job
 
     override fun cancelRequests() {

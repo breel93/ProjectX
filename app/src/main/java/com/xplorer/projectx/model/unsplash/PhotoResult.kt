@@ -22,9 +22,8 @@ data class PhotoResult(
   @SerializedName("total") val total: Int,
   @SerializedName("total_pages") val total_pages: Int,
   @SerializedName("results") val photo: List<Photo>
-): Mappable<PhotoResult> {
+) : Mappable<PhotoResult> {
   override fun mapToData(): PhotoResult {
     return this
     }
   }
-
