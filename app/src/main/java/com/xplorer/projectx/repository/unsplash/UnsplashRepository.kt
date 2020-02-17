@@ -33,9 +33,14 @@ internal constructor(
     private val coroutineContextProvider: CoroutineContextProvider ): UnsplashRepo {
     private lateinit var job: Job
 
-    override fun getPhotoData(query: String, onComplete: ((Result<PhotoResult>) -> Unit)) {
+    override fun getPhotoData(
+        query: String,
+        page: Int,
+        perPage: Int,
+        onComplete: (Result<PhotoResult>) -> Unit
+    ) {
         job = CoroutineExecutor.ioToMain(
-            { fetchPhotos(query) },
+            { fetchPhotos(query,page,perPage) },
             {photoResult ->
                 onComplete(photoResult!!)
             },
@@ -43,6 +48,6 @@ internal constructor(
         )
     }
 
-   private fun fetchPhotos(query: String) =
-        unsplashApi.getPhotos(UNSPLASH_API_KEY, query, 1, 10).getResult()
+   private fun fetchPhotos(query: String, page:Int, perPage : Int) =
+        unsplashApi.getPhotos(UNSPLASH_API_KEY, query, page, perPage).getResult()
 }
