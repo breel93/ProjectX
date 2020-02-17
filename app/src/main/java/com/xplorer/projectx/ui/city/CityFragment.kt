@@ -215,6 +215,12 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         viewModelCity.errorPhotoLiveData.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
+        binding.morePhotoText.setOnClickListener{
+            val bundle = bundleOf(
+                "place" to place
+            )
+            navController.navigate(R.id.cityPhotoFragment, bundle)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
