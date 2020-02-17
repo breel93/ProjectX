@@ -17,9 +17,9 @@ package com.xplorer.projectx.repository.unsplash
 
 import com.xplorer.projectx.BuildConfig.UNSPLASH_API_KEY
 import com.xplorer.projectx.api.UnsplashApi
-import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.getResult
+import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineExecutor
 import kotlinx.coroutines.Job
@@ -29,25 +29,26 @@ import javax.inject.Singleton
 @Singleton
 class UnsplashRepository @Inject
 internal constructor(
-    private val unsplashApi: UnsplashApi,
-    private val coroutineContextProvider: CoroutineContextProvider ): UnsplashRepo {
+  private val unsplashApi: UnsplashApi,
+  private val coroutineContextProvider: CoroutineContextProvider
+) : UnsplashRepo {
     private lateinit var job: Job
 
     override fun getPhotoData(
-        query: String,
-        page: Int,
-        perPage: Int,
-        onComplete: (Result<PhotoResult>) -> Unit
+      query: String,
+      page: Int,
+      perPage: Int,
+      onComplete: (Result<PhotoResult>) -> Unit
     ) {
         job = CoroutineExecutor.ioToMain(
-            { fetchPhotos(query,page,perPage) },
-            {photoResult ->
+            { fetchPhotos(query, page, perPage) },
+            { photoResult ->
                 onComplete(photoResult!!)
             },
             coroutineContextProvider
         )
     }
 
-   private fun fetchPhotos(query: String, page:Int, perPage : Int) =
+    private fun fetchPhotos(query: String, page: Int, perPage: Int) =
         unsplashApi.getPhotos(UNSPLASH_API_KEY, query, page, perPage).getResult()
 }

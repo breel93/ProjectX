@@ -37,7 +37,6 @@ abstract class ViewModelModule {
     @ViewModelKey(CityPhotoViewModel::class)
     internal abstract fun bindCityPhotoViewModel(cityPhotoViewModel: CityPhotoViewModel): ViewModel
 
-
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }

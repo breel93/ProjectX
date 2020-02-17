@@ -22,27 +22,17 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.repository.unsplash.UnsplashDataSourceFactory
-import com.xplorer.projectx.networking.AppExecutors
 import javax.inject.Inject
 
 class CityPhotoViewModel @Inject
 constructor(
   private val unsplashDataSourceFactory: UnsplashDataSourceFactory,
-  private val appsExecutor: AppExecutors,
   application: Application
 ) : AndroidViewModel(application) {
     private var photoList: LiveData<PagedList<Photo>>
 
     init {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(true)
-            .setInitialLoadSizeHint(10)
-            .setPrefetchDistance(10)
-            .setPageSize(10)
-            .build()
-        photoList = LivePagedListBuilder(unsplashDataSourceFactory, config)
-            .setFetchExecutor(appsExecutor.networkIO())
-            .build()
+        photoList = createInitialPhotoList()
     }
 
     fun setSearchQuery(query: String) {
@@ -50,15 +40,19 @@ constructor(
     }
 
     fun refreshPhoto(): LiveData<PagedList<Photo>> {
-        val config = PagedList.Config.Builder()
+        photoList = createInitialPhotoList()
+        return photoList
+    }
+
+    private fun createInitialPhotoList() =
+        LivePagedListBuilder(unsplashDataSourceFactory, createPagingConfig())
+            .build()
+    private fun createPagingConfig(): PagedList.Config {
+        return PagedList.Config.Builder()
             .setEnablePlaceholders(true)
             .setInitialLoadSizeHint(10)
             .setPrefetchDistance(10)
             .setPageSize(10)
             .build()
-        photoList = LivePagedListBuilder(unsplashDataSourceFactory, config)
-            .setFetchExecutor(appsExecutor.networkIO())
-            .build()
-        return photoList
     }
 }
