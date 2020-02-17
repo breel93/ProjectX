@@ -50,12 +50,12 @@ class CityPhotoFragment : DaggerFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_city_photo, container, false)
-        viewModel = ViewModelProvider(this,viewModelFactory)
+        viewModel = ViewModelProvider(this, viewModelFactory)
             .get(CityPhotoViewModel::class.java)
         displayPictures()
         (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.cityFragmentToolBar!!.title =  place.name + "'s" + " photos"
+        binding.cityFragmentToolBar!!.title = place.name + "'s" + " photos"
         return binding.root
     }
 
@@ -64,8 +64,7 @@ class CityPhotoFragment : DaggerFragment() {
         place = arguments!!.getParcelable("place")!!
     }
 
-
-    private fun displayPictures(){
+    private fun displayPictures() {
         binding.photoList.hasFixedSize()
         ViewCompat.setNestedScrollingEnabled(binding.photoList, true)
         val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!)
@@ -74,6 +73,5 @@ class CityPhotoFragment : DaggerFragment() {
         viewModel.refreshPhoto().observe(viewLifecycleOwner, Observer {
             cityPhotoPagedRecyclerAdapter.submitList(it)
         })
-
     }
 }

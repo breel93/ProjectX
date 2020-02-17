@@ -35,10 +35,10 @@ import javax.inject.Inject
 
 class CitySearchViewModel@Inject
 constructor(
-    private val unsplashRepository: UnsplashRepo,
-    private val foursquareRepository: FoursquareRepo,
-    private val wikipediaRepository: WikipediaRepo,
-    application: Application
+  private val unsplashRepository: UnsplashRepo,
+  private val foursquareRepository: FoursquareRepo,
+  private val wikipediaRepository: WikipediaRepo,
+  application: Application
 ) : AndroidViewModel(application) {
 
     private lateinit var job: Job
@@ -51,7 +51,7 @@ constructor(
         get() = _errorPhotoLiveData
 
     fun getPhotoData(query: String) {
-        unsplashRepository.getPhotoData(query,1,10) { result: Result<PhotoResult> ->
+        unsplashRepository.getPhotoData(query, 1, 10) { result: Result<PhotoResult> ->
             when (result) {
                 is Success -> processSuccess(result.data.photo)
                 is Failure -> processError(result.error)
@@ -135,7 +135,7 @@ constructor(
 
     fun setCityInformationData(cityName: String) {
         wikipediaRepository.getCityInformation(cityName) { result ->
-            when(result) {
+            when (result) {
                 is Success -> _cityInfoLiveData.value = result.data
                 is Failure -> _errorCityInfoLiveData.value = result.error.localizedMessage
             }
