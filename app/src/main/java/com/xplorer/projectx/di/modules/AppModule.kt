@@ -15,6 +15,9 @@
 */
 package com.xplorer.projectx.di.modules
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.xplorer.projectx.api.UnsplashApi
 import com.xplorer.projectx.api.FoursquareAPI
@@ -126,5 +129,10 @@ class AppModule {
     @Provides
     fun providesFoursquareRepository(foursquareRepository: FoursquareRepository): FoursquareRepo {
         return foursquareRepository
+    }
+
+    @Provides
+    fun providesSharedPreferences(application: Application): SharedPreferences {
+        return application.getSharedPreferences(Constants.SHARED_PREF_KEY, Context.MODE_PRIVATE)
     }
 }
