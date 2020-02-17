@@ -55,7 +55,7 @@ class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private v
             val circularProgressDrawable = CircularProgressDrawable(context)
             circularProgressDrawable.strokeWidth = 12f
             circularProgressDrawable.centerRadius = 60f
-            circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorPrimary))
+            circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorAccent))
             circularProgressDrawable.start()
 
             Glide.with(context)

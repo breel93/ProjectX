@@ -51,7 +51,7 @@ constructor(
         get() = _errorPhotoLiveData
 
     fun getPhotoData(query: String) {
-        unsplashRepository.getPhotoData(query) { result: Result<PhotoResult> ->
+        unsplashRepository.getPhotoData(query,1,10) { result: Result<PhotoResult> ->
             when (result) {
                 is Success -> processSuccess(result.data.photo)
                 is Failure -> processError(result.error)

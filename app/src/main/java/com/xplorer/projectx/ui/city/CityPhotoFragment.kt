@@ -20,14 +20,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.libraries.places.api.model.Place
 
 import com.xplorer.projectx.R
+import com.xplorer.projectx.databinding.FragmentCityPhotoBinding
+import com.xplorer.projectx.ui.adapter.CityPhotoPagedRecyclerAdapter
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
 class CityPhotoFragment : DaggerFragment() {
+    internal lateinit var binding: FragmentCityPhotoBinding
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModel: CityPhotoViewModel
+    lateinit var place: Place
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -35,6 +49,31 @@ class CityPhotoFragment : DaggerFragment() {
       savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_city_photo, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_city_photo, container, false)
+        viewModel = ViewModelProvider(this,viewModelFactory)
+            .get(CityPhotoViewModel::class.java)
+        displayPictures()
+        (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
+        (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        binding.cityFragmentToolBar!!.title =  place.name + "'s" + " photos"
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        place = arguments!!.getParcelable("place")!!
+    }
+
+
+    private fun displayPictures(){
+        binding.photoList.hasFixedSize()
+        ViewCompat.setNestedScrollingEnabled(binding.photoList, true)
+        val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!)
+        binding.photoList.adapter = cityPhotoPagedRecyclerAdapter
+        viewModel.setSearchQuery(place.name!!)
+        viewModel.refreshPhoto().observe(viewLifecycleOwner, Observer {
+            cityPhotoPagedRecyclerAdapter.submitList(it)
+        })
+
     }
 }
