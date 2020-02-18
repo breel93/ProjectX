@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
 import com.xplorer.projectx.ProjectX
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.utils.Constants
 import org.junit.After
 import org.junit.Assert.*
@@ -65,7 +66,7 @@ class RecentCitiesRepositoryTest {
     fun test_updateRecentCities_returns_with_true_onComplete_response_on_first_city_name_update() {
 
         // arrange, act
-        recentCityRepo.updateRecentCities("Istanbul") { updateCompleted ->
+        recentCityRepo.updateRecentCities(CityModel()) { updateCompleted ->
 
             // assert
             assertTrue(updateCompleted)
@@ -76,26 +77,26 @@ class RecentCitiesRepositoryTest {
     fun test_updateRecentCities_pushes_city_to_first_on_list() {
 
         // arrange, act
-        recentCityRepo.updateRecentCities("Istanbul") {} // persist to shared preferences
-        recentCityRepo.updateRecentCities("Rabat") {}
-        recentCityRepo.updateRecentCities("Lagos") {}
-        recentCityRepo.updateRecentCities("Istanbul") {}
+        recentCityRepo.updateRecentCities(CityModel("", "Istanbul")) {} // persist to shared preferences
+        recentCityRepo.updateRecentCities(CityModel("", "Rabat")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Lagos")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Istanbul")) {}
         // act
         val cityListResult = recentCityRepo.getRecentCities()
 
         // assert
         val cityListData = (cityListResult as Success).data
-        assertTrue(cityListData[2] == "Rabat")
-        assertTrue(cityListData[0] == "Istanbul")
+        assertTrue(cityListData[2].cityName == "Rabat")
+        assertTrue(cityListData[0].cityName == "Istanbul")
     }
 
     @Test
     fun test_getRecentCities_returns_with_success_result_when_cities_exists_in_preferences() {
 
         // arrange
-        recentCityRepo.updateRecentCities("Istanbul") {}
-        recentCityRepo.updateRecentCities("Rabat") {}
-        recentCityRepo.updateRecentCities("Lagos") {}
+        recentCityRepo.updateRecentCities(CityModel("", "Istanbul")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Rabat")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Lagos")) {}
 
         // act
         val cityListResult = recentCityRepo.getRecentCities()
@@ -110,12 +111,12 @@ class RecentCitiesRepositoryTest {
     fun test_getRecentCities_always_returns_max_of_5_cities_in_success_result() {
 
         // arrange
-        recentCityRepo.updateRecentCities("Istanbul") {}
-        recentCityRepo.updateRecentCities("Rabat") {}
-        recentCityRepo.updateRecentCities("Lagos") {}
-        recentCityRepo.updateRecentCities("Accra") {}
-        recentCityRepo.updateRecentCities("Abuja") {}
-        recentCityRepo.updateRecentCities("Sokoto") {}
+        recentCityRepo.updateRecentCities(CityModel("", "Istanbul")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Rabat")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Lagos")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Accra")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Abuja")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Sokoto")) {}
 
         // act
         val cityListResult = recentCityRepo.getRecentCities()
@@ -129,18 +130,18 @@ class RecentCitiesRepositoryTest {
     fun test_updateRecentCities_removes_last_item_on_adding_new_city() {
 
         // arrange
-        recentCityRepo.updateRecentCities("Istanbul") {} // last city
-        recentCityRepo.updateRecentCities("Rabat") {}
-        recentCityRepo.updateRecentCities("Lagos") {}
-        recentCityRepo.updateRecentCities("Accra") {}
-        recentCityRepo.updateRecentCities("Abuja") {}
-        recentCityRepo.updateRecentCities("Sokoto") {} // latest city
+        recentCityRepo.updateRecentCities(CityModel("", "Istanbul")) {} // last city
+        recentCityRepo.updateRecentCities(CityModel("", "Rabat")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Lagos")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Accra")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Abuja")) {}
+        recentCityRepo.updateRecentCities(CityModel("", "Sokoto")) {} // latest city
 
         // act
         val cityListResult = recentCityRepo.getRecentCities()
 
         // assert
-        assertTrue((cityListResult as Success).data[4] == "Rabat")
+        assertTrue((cityListResult as Success).data[4].cityName == "Rabat")
 
     }
 }
