@@ -23,6 +23,7 @@ import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.utils.Constants
+import com.xplorer.projectx.utils.Constants.Companion.RECENT_CITY_STRING_LIST_KEY
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,7 +38,7 @@ class RecentCitiesRepository @Inject constructor(
     val citiesList = getCitiesFromDataSource()?.let { citiesListString ->
 
       transformJsonToList(citiesListString)
-    } ?: LinkedList<CityModel>()
+    } ?: LinkedList()
 
 
     var cityToRemove: CityModel? = null
@@ -60,7 +61,7 @@ class RecentCitiesRepository @Inject constructor(
 
     val cityEditor = sharedPreferences.edit()
 
-    cityEditor.putString(Constants.RECENT_CITY_STRING_LIST_KEY, transformListToString(citiesList))
+    cityEditor.putString(RECENT_CITY_STRING_LIST_KEY, transformListToString(citiesList))
     return onComplete(cityEditor.commit())
   }
 
@@ -75,7 +76,7 @@ class RecentCitiesRepository @Inject constructor(
   }
 
   private fun getCitiesFromDataSource(): String? {
-    return sharedPreferences.getString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
+    return sharedPreferences.getString(RECENT_CITY_STRING_LIST_KEY, null)
   }
 
   private fun transformJsonToList(cityData: String): LinkedList<CityModel> {

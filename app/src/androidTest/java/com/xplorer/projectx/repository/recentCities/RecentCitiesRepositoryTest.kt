@@ -9,6 +9,7 @@ import com.xplorer.projectx.ProjectX
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.utils.Constants
+import com.xplorer.projectx.utils.Constants.Companion.RECENT_CITY_STRING_LIST_KEY
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -49,7 +50,7 @@ class RecentCitiesRepositoryTest {
 
         // start with a clean slate before each test run
         val sharedPrefEditor = sharedPrefs.edit()
-        sharedPrefEditor.putString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
+        sharedPrefEditor.putString(RECENT_CITY_STRING_LIST_KEY, null)
         sharedPrefEditor.commit()
 
         recentCityRepo = RecentCitiesRepository(Gson(), sharedPrefs)
@@ -58,7 +59,7 @@ class RecentCitiesRepositoryTest {
     @After
     fun tearDown() {
         val sharedPrefEditor = sharedPrefs.edit()
-        sharedPrefEditor.putString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
+        sharedPrefEditor.putString(RECENT_CITY_STRING_LIST_KEY, null)
         sharedPrefEditor.commit()
     }
 
