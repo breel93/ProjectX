@@ -16,12 +16,15 @@
 package com.xplorer.projectx.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.android.gms.common.api.Status
@@ -33,7 +36,11 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
+import com.xplorer.projectx.ui.adapter.recent.RecentCitiesAdapter
 import dagger.android.support.DaggerFragment
+import java.util.*
+import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -44,6 +51,10 @@ class SearchStartFragment : DaggerFragment() {
     private lateinit var placesClients: PlacesClient
 
     lateinit var navController: NavController
+    @Inject
+    lateinit var searchViewModel: SearchStartViewModel
+    private lateinit var recentCityAdapter: RecentCitiesAdapter
+    private val recentCities = ArrayList<String>()
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -54,7 +65,13 @@ class SearchStartFragment : DaggerFragment() {
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_search_start, container, false)
 
+        Log.e("Search View Model", "OnCreateView called")
+
         getPlaceAutocomplete()
+
+        recentCityAdapter = RecentCitiesAdapter(context!!, recentCities)
+        binding.recentCitiesListView.adapter = recentCityAdapter
+        observeRecentCities()
 
         return binding.root
     }
@@ -63,6 +80,28 @@ class SearchStartFragment : DaggerFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         navController = Navigation.findNavController(view)
+        observeRecentCities()
+        searchViewModel.getRecentlySearchedCities()
+    }
+
+    private fun observeRecentCities() {
+        searchViewModel.recentCitiesLiveData.observe(viewLifecycleOwner, Observer { cityList ->
+            recentCities.clear()
+            recentCities.addAll(cityList)
+            recentCityAdapter.notifyDataSetChanged()
+        })
+
+        searchViewModel.addCityLiveData.observe(viewLifecycleOwner, Observer { cityName ->
+            Log.e("Search View Model", "Is update completed = $cityName")
+
+            cityName?.let {
+                if(recentCities.size > 5) {
+                    recentCities.removeAt(4)
+                }
+                recentCities.add(0, it)
+                recentCityAdapter.notifyDataSetChanged()
+            }
+        })
     }
 
     private fun getPlaceAutocomplete() {
@@ -89,6 +128,8 @@ class SearchStartFragment : DaggerFragment() {
                 val bundle = bundleOf(
                     "place" to place
                 )
+
+                searchViewModel.addCityToRecent(place.name!!)
                 navController.navigate(R.id.cityFragment, bundle)
             }
             override fun onError(status: Status) {
