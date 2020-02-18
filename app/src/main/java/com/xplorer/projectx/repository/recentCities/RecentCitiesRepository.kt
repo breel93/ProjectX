@@ -22,9 +22,11 @@ import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.utils.Constants
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 @Singleton
 class RecentCitiesRepository @Inject constructor(
@@ -36,16 +38,17 @@ class RecentCitiesRepository @Inject constructor(
     val citiesList = getCitiesFromDataSource()?.let { citiesListString ->
 
       transformJsonToList(citiesListString)
-    } ?: ArrayList<String>()
+    } ?: LinkedList<String>()
+
 
     if (citiesList.contains(cityName)) {
-      return onComplete(false)
+      citiesList.remove(cityName)
     }
 
-    citiesList.add(0, cityName)
+    citiesList.addFirst(cityName)
 
     if (citiesList.size > 5) {
-      citiesList.removeAt(citiesList.size - 1)
+      citiesList.pollLast()
     }
 
     val cityEditor = sharedPreferences.edit()
@@ -54,7 +57,7 @@ class RecentCitiesRepository @Inject constructor(
     return onComplete(cityEditor.commit())
   }
 
-  override fun getRecentCities(): Result<List<String>> {
+  override fun getRecentCities(): Result<LinkedList<String>> {
 
     getCitiesFromDataSource()?.let { citiesListString ->
 
@@ -68,12 +71,12 @@ class RecentCitiesRepository @Inject constructor(
     return sharedPreferences.getString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
   }
 
-  private fun transformJsonToList(cityData: String): ArrayList<String> {
-    return gson.fromJson<ArrayList<String>>(
-      cityData, object : TypeToken<List<String>>() {}.type)
+  private fun transformJsonToList(cityData: String): LinkedList<String> {
+    return gson.fromJson<LinkedList<String>>(
+      cityData, object : TypeToken<LinkedList<String>>() {}.type)
   }
 
-  private fun transformListToString(cityList: List<String>): String {
-    return gson.toJson(cityList, object : TypeToken<List<String>>() {}.type)
+  private fun transformListToString(cityList: LinkedList<String>): String {
+    return gson.toJson(cityList, object : TypeToken<LinkedList<String>>() {}.type)
   }
 }

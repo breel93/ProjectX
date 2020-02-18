@@ -73,14 +73,20 @@ class RecentCitiesRepositoryTest {
     }
 
     @Test
-    fun test_updateRecentCities_returns_with_false_onComplete_response_on_adding_already_existing_city() {
+    fun test_updateRecentCities_pushes_city_to_first_on_list() {
 
         // arrange, act
         recentCityRepo.updateRecentCities("Istanbul") {} // persist to shared preferences
-        recentCityRepo.updateRecentCities("Istanbul") { updateCompleted -> // try to add the same city name again
-            // assert
-            assertTrue(!updateCompleted)
-        }
+        recentCityRepo.updateRecentCities("Rabat") {}
+        recentCityRepo.updateRecentCities("Lagos") {}
+        recentCityRepo.updateRecentCities("Istanbul") {}
+        // act
+        val cityListResult = recentCityRepo.getRecentCities()
+
+        // assert
+        val cityListData = (cityListResult as Success).data
+        assertTrue(cityListData[2] == "Rabat")
+        assertTrue(cityListData[0] == "Istanbul")
     }
 
     @Test
