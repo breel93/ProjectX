@@ -9,7 +9,13 @@ fun Place.toCityModel(): CityModel {
     placeId = id!!
     cityName = name!!
     countryName = getCountry()?.name ?: "n/a"
+    shortCountryName = getCountry()?.shortName ?: "n/a"
     adminArea = getAreaName()
+    shortAdminArea = if(shortCountryName == "US" || shortCountryName == "CA") {
+      getState()?.shortName ?: shortCountryName
+    } else {
+      shortCountryName
+    }
 
     latLng?.let {
       lat = it.latitude
@@ -43,10 +49,8 @@ fun Place.getAreaName(): String {
 
   if(countryComp.shortName == "US" || countryComp.shortName == "CA") {
     val stateComp = getState() ?: return countryComp.name
-
     return stateComp.name
-
-  } else {
-     return countryComp.name
   }
+
+  return countryComp.name
 }
