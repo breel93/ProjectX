@@ -24,9 +24,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
 class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
     PagedListAdapter<Photo, CityPhotoPagedRecyclerAdapter.PhotoViewHolder>(PhotoDiffCallback) {
@@ -51,9 +53,16 @@ class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
             circularProgressDrawable.centerRadius = 40f
             circularProgressDrawable.setColorSchemeColors(
                 context.resources.getColor(R.color.colorAccent))
+            circularProgressDrawable.start()
             binding.cityPhoto.aspectRatio = photo.height.toDouble() / photo.width.toDouble()
+
+           val photoUrls : String = if(photo.photo_reference != null){
+               getPhotoWithReferenceURl(photo)
+           }else{
+               photo.urls.regular
+           }
             Glide.with(context)
-                .load(photo.urls.regular)
+                .load(photoUrls)
                 .apply(
                     RequestOptions()
                         .placeholder(circularProgressDrawable)

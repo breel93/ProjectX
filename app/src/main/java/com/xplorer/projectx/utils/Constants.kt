@@ -15,6 +15,9 @@
 */
 package com.xplorer.projectx.utils
 
+import com.xplorer.projectx.BuildConfig
+import com.xplorer.projectx.model.unsplash.Photo
+
 /**
  * Created by Robert Anizoba on 2020-01-15.
  */
@@ -42,5 +45,14 @@ class Constants {
         // Shared Preferences
         const val SHARED_PREF_KEY = "shared_prefs"
         const val RECENT_CITY_STRING_LIST_KEY = "recent_cities"
+
+
+        fun getPhotoWithReferenceURl(photo: Photo): String {
+            val mapBasedUrl = "https://maps.googleapis.com/maps/api/place/photo?"
+            val maxwidth = "maxwidth=700&"
+            val photoreference = "photoreference=${photo.photo_reference}&"
+            val apiKey = "key=${BuildConfig.GOOGLE_API_KEY}"
+            return  mapBasedUrl + maxwidth + photoreference + apiKey
+        }
     }
 }

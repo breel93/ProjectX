@@ -39,6 +39,10 @@ constructor(
         unsplashDataSourceFactory.unsplashDataSource.cityQuery = query
     }
 
+    fun setPlaceId(placeId: String) {
+        unsplashDataSourceFactory.unsplashDataSource.placeId = placeId
+    }
+
     fun refreshPhoto(): LiveData<PagedList<Photo>> {
         photoList = createInitialPhotoList()
         return photoList

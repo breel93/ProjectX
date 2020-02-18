@@ -40,8 +40,8 @@ class CityPhotoFragment : DaggerFragment() {
     internal lateinit var binding: FragmentCityPhotoBinding
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var viewModel: CityPhotoViewModel
-    lateinit var place: CityModel
+    private lateinit var viewModel: CityPhotoViewModel
+    private lateinit var place: CityModel
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -70,6 +70,7 @@ class CityPhotoFragment : DaggerFragment() {
         val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!)
         binding.photoList.adapter = cityPhotoPagedRecyclerAdapter
         viewModel.setSearchQuery(place.cityName)
+        viewModel.setPlaceId(place.placeId)
         viewModel.refreshPhoto().observe(viewLifecycleOwner, Observer {
             cityPhotoPagedRecyclerAdapter.submitList(it)
         })

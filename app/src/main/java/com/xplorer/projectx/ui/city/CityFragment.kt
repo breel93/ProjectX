@@ -78,11 +78,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
         areaName = place.adminArea!!
 
-        if (areaName != "n/a") {
-            viewModelCity.getPhotoData("${place.cityName}, $areaName")
-        } else {
-            viewModelCity.getPhotoData(place.cityName)
-        }
+        viewModelCity.getGooglePhotos(place.placeId)
 
         binding.cityAboutTitle.text = "About ${place.cityName}"
         binding.cityAboutLoadingBar.isVisible = true // make loading visible

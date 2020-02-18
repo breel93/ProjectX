@@ -22,9 +22,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.xplorer.projectx.BuildConfig.GOOGLE_API_KEY
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.CityPhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.utils.Constants
+import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
 class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private val context: Context) :
     RecyclerView.Adapter<CityPhotoRecyclerAdapter.CityPhotoViewHolder>() {
@@ -57,9 +60,8 @@ class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private v
             circularProgressDrawable.centerRadius = 60f
             circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorAccent))
             circularProgressDrawable.start()
-
             Glide.with(context)
-                .load(photo.urls.regular)
+                .load(getPhotoWithReferenceURl(photo))
                 .apply(
                     RequestOptions()
                         .placeholder(circularProgressDrawable)
