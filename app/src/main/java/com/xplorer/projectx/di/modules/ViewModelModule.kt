@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.xplorer.projectx.ui.city.CityPhotoViewModel
 import com.xplorer.projectx.ui.city.CitySearchViewModel
+import com.xplorer.projectx.ui.search.SearchStartViewModel
 import com.xplorer.projectx.view_model.ViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -36,6 +37,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(CityPhotoViewModel::class)
     internal abstract fun bindCityPhotoViewModel(cityPhotoViewModel: CityPhotoViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchStartViewModel::class)
+    internal abstract fun bindSearchStartViewModel(searchStartViewModel: SearchStartViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
