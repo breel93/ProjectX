@@ -16,9 +16,10 @@
 package com.xplorer.projectx.repository.recentCities
 
 import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.model.CityModel
 
 interface RecentCitiesRepo {
 
-  fun updateRecentCities(cityName: String, onComplete: (Boolean) -> Unit)
-  fun getRecentCities(): Result<List<String>>
+  fun updateRecentCities(city: CityModel, onComplete: (Boolean) -> Unit)
+  fun getRecentCities(): Result<List<CityModel>>
 }

@@ -21,12 +21,11 @@ import com.google.gson.reflect.TypeToken
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.utils.Constants
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 @Singleton
 class RecentCitiesRepository @Inject constructor(
@@ -34,18 +33,26 @@ class RecentCitiesRepository @Inject constructor(
   private val sharedPreferences: SharedPreferences
 ) : RecentCitiesRepo {
 
-  override fun updateRecentCities(cityName: String, onComplete: (Boolean) -> Unit) {
+  override fun updateRecentCities(city: CityModel, onComplete: (Boolean) -> Unit) {
     val citiesList = getCitiesFromDataSource()?.let { citiesListString ->
 
       transformJsonToList(citiesListString)
-    } ?: LinkedList<String>()
+    } ?: LinkedList<CityModel>()
 
 
-    if (citiesList.contains(cityName)) {
-      citiesList.remove(cityName)
+    var cityToRemove: CityModel? = null
+    for(cityModel in citiesList) {
+      if(cityModel.cityName == city.cityName &&
+              cityModel.countryName == city.countryName) {
+        cityToRemove = cityModel
+      }
     }
 
-    citiesList.addFirst(cityName)
+    if (cityToRemove != null) {
+      citiesList.remove(city)
+    }
+
+    citiesList.addFirst(city)
 
     if (citiesList.size > 5) {
       citiesList.pollLast()
@@ -57,7 +64,7 @@ class RecentCitiesRepository @Inject constructor(
     return onComplete(cityEditor.commit())
   }
 
-  override fun getRecentCities(): Result<LinkedList<String>> {
+  override fun getRecentCities(): Result<LinkedList<CityModel>> {
 
     getCitiesFromDataSource()?.let { citiesListString ->
 
@@ -71,12 +78,12 @@ class RecentCitiesRepository @Inject constructor(
     return sharedPreferences.getString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
   }
 
-  private fun transformJsonToList(cityData: String): LinkedList<String> {
-    return gson.fromJson<LinkedList<String>>(
-      cityData, object : TypeToken<LinkedList<String>>() {}.type)
+  private fun transformJsonToList(cityData: String): LinkedList<CityModel> {
+    return gson.fromJson<LinkedList<CityModel>>(
+      cityData, object : TypeToken<LinkedList<CityModel>>() {}.type)
   }
 
-  private fun transformListToString(cityList: LinkedList<String>): String {
-    return gson.toJson(cityList, object : TypeToken<LinkedList<String>>() {}.type)
+  private fun transformListToString(cityList: LinkedList<CityModel>): String {
+    return gson.toJson(cityList, object : TypeToken<LinkedList<CityModel>>() {}.type)
   }
 }
