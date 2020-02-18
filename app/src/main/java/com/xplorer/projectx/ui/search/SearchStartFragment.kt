@@ -86,20 +86,12 @@ class SearchStartFragment : DaggerFragment() {
 
     private fun observeRecentCities() {
         searchViewModel.recentCitiesLiveData.observe(viewLifecycleOwner, Observer { cityList ->
-            recentCities.clear()
-            recentCities.addAll(cityList)
-            recentCityAdapter.notifyDataSetChanged()
+            recentCityAdapter.setRecentCities(cityList)
         })
 
-        searchViewModel.addCityLiveData.observe(viewLifecycleOwner, Observer { cityName ->
-            Log.e("Search View Model", "Is update completed = $cityName")
-
-            cityName?.let {
-                if(recentCities.size > 5) {
-                    recentCities.removeAt(4)
-                }
-                recentCities.add(0, it)
-                recentCityAdapter.notifyDataSetChanged()
+        searchViewModel.addCityLiveData.observe(viewLifecycleOwner, Observer { updateCompleted ->
+            if(updateCompleted) {
+                searchViewModel.getRecentlySearchedCities()
             }
         })
     }

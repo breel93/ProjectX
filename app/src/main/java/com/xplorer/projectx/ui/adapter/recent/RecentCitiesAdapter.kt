@@ -41,6 +41,12 @@ class RecentCitiesAdapter(private val context: Context,
         return cityItemBinding.root
     }
 
+    fun setRecentCities(cities: List<String>) {
+        (cityList as ArrayList<String>).clear()
+        cityList.addAll(cities)
+        notifyDataSetChanged()
+    }
+
     override fun getItem(position: Int): Any {
         return cityList[position]
     }

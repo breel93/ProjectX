@@ -26,23 +26,29 @@ import javax.inject.Inject
 class SearchStartViewModel @Inject constructor(
     private val recentCitiesRepo: RecentCitiesRepo): ViewModel() {
 
+    private val recentCitiesList = ArrayList<String>()
+
     private var _recentCitiesLiveData = MutableLiveData<List<String>>()
     val recentCitiesLiveData: LiveData<List<String>>
         get() = _recentCitiesLiveData
 
     fun getRecentlySearchedCities() {
         when(val recentCities = recentCitiesRepo.getRecentCities()) {
-            is Success -> _recentCitiesLiveData.value = recentCities.data
+            is Success -> {
+                recentCitiesList.clear()
+                recentCitiesList.addAll(recentCities.data)
+                _recentCitiesLiveData.value = recentCitiesList
+            }
         }
     }
 
-    private var _addCityLiveData = MutableLiveData<String>()
-    val addCityLiveData: LiveData<String>
+    private var _addCityLiveData = MutableLiveData<Boolean>()
+    val addCityLiveData: LiveData<Boolean>
         get() = _addCityLiveData
 
     fun addCityToRecent(cityName: String) {
         recentCitiesRepo.updateRecentCities(cityName) { updateCompleted ->
-            _addCityLiveData.value = if(updateCompleted) cityName else null
+            _addCityLiveData.value = updateCompleted
         }
     }
 }
