@@ -58,7 +58,7 @@ class UnsplashRepositoryTest {
   fun testGetPhotoWithSuccessResult() {
 
     // arrange
-    val photoResult = PhotoResult(1, 30, ArrayList())
+    val photoResult = PhotoResult(1, 30, ArrayList(),ArrayList())
     val result = Success(photoResult)
     val mockCall = mock<Call<PhotoResult>> {
       on { execute() } doReturn Response.success(photoResult)
