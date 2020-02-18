@@ -9,6 +9,7 @@ import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.RecentCityItemBinding
+import com.xplorer.projectx.model.CityModel
 
 /**
  *  Designed and developed by ProjectX
@@ -26,7 +27,8 @@ import com.xplorer.projectx.databinding.RecentCityItemBinding
  * limitations under the License.
  */
 class RecentCitiesAdapter(private val context: Context,
-                          private val cityList: List<String>): BaseAdapter() {
+                          private val cityList: List<CityModel>,
+                          private val onItemSelectListener: (CityModel) -> Unit): BaseAdapter() {
 
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -37,12 +39,16 @@ class RecentCitiesAdapter(private val context: Context,
             parent,
             false)
 
-        cityItemBinding.cityNameText.text = cityList[position]
+        cityItemBinding.root.setOnClickListener {
+            onItemSelectListener(cityList[position])
+        }
+
+        cityItemBinding.cityNameText.text = cityList[position].cityName
         return cityItemBinding.root
     }
 
-    fun setRecentCities(cities: List<String>) {
-        (cityList as ArrayList<String>).clear()
+    fun setRecentCities(cities: List<CityModel>) {
+        (cityList as ArrayList<CityModel>).clear()
         cityList.addAll(cities)
         notifyDataSetChanged()
     }
