@@ -9,7 +9,9 @@ import kotlinx.android.parcel.Parcelize
 data class CityModel(@SerializedName("place_id") var placeId: String = "",
                      @SerializedName("name") var cityName: String = "",
                      @SerializedName("country") var countryName: String = "",
+                     @SerializedName("country_short") var shortCountryName: String = "",
                      @SerializedName("admin_area") var adminArea: String? = "",
+                     @SerializedName("admin_area_short") var shortAdminArea: String? = "",
                      @SerializedName("address") var address: String = "",
                      @SerializedName("latitude") var lat: Double = 0.0,
                      @SerializedName("longitude") var lon: Double = 0.0): Parcelable {

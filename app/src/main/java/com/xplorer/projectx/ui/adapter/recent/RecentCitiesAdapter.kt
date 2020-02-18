@@ -43,7 +43,15 @@ class RecentCitiesAdapter(private val context: Context,
             onItemSelectListener(cityList[position])
         }
 
-        cityItemBinding.cityNameText.text = cityList[position].cityName
+        val currentPlace = cityList[position]
+        val displayText = if(currentPlace.shortCountryName == "US" ||
+            currentPlace.shortCountryName == "CA") {
+            "${currentPlace.cityName}, ${currentPlace.shortAdminArea}"
+        } else {
+            "${currentPlace.cityName}, ${currentPlace.shortCountryName}"
+        }
+
+        cityItemBinding.cityNameText.text = displayText
         return cityItemBinding.root
     }
 
