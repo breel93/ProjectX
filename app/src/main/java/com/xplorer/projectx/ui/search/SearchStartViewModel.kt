@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.repository.recentCities.RecentCitiesRepo
 import javax.inject.Inject
 
@@ -26,10 +27,10 @@ import javax.inject.Inject
 class SearchStartViewModel @Inject constructor(
     private val recentCitiesRepo: RecentCitiesRepo): ViewModel() {
 
-    private val recentCitiesList = ArrayList<String>()
+    private val recentCitiesList = ArrayList<CityModel>()
 
-    private var _recentCitiesLiveData = MutableLiveData<List<String>>()
-    val recentCitiesLiveData: LiveData<List<String>>
+    private var _recentCitiesLiveData = MutableLiveData<List<CityModel>>()
+    val recentCitiesLiveData: LiveData<List<CityModel>>
         get() = _recentCitiesLiveData
 
     fun getRecentlySearchedCities() {
@@ -46,8 +47,8 @@ class SearchStartViewModel @Inject constructor(
     val addCityLiveData: LiveData<Boolean>
         get() = _addCityLiveData
 
-    fun addCityToRecent(cityName: String) {
-        recentCitiesRepo.updateRecentCities(cityName) { updateCompleted ->
+    fun addCityToRecent(city: CityModel) {
+        recentCitiesRepo.updateRecentCities(city) { updateCompleted ->
             _addCityLiveData.value = updateCompleted
         }
     }

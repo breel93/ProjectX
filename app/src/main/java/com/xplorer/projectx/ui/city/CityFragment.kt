@@ -37,17 +37,16 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.model.Place
 
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityBinding
+import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.model.latLong
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
 import com.xplorer.projectx.utils.AppPackageUtils
 import com.xplorer.projectx.utils.Constants
-import com.xplorer.projectx.utils.PlaceUtils
-import com.xplorer.projectx.utils.convertToString
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -60,7 +59,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModelCity: CitySearchViewModel
     private lateinit var binding: FragmentCityBinding
-    lateinit var place: Place
+    lateinit var place: CityModel
     private var areaName = "n/a"
     private lateinit var wikiArticleName: String
     private lateinit var navController: NavController
@@ -77,18 +76,18 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
             .get(CitySearchViewModel::class.java)
         observeViewState()
 
-        areaName = PlaceUtils.getAreaNameForCity(place)
+        areaName = place.adminArea!!
 
         if (areaName != "n/a") {
-            viewModelCity.getPhotoData("${place.name!!}, $areaName")
+            viewModelCity.getPhotoData("${place.cityName}, $areaName")
         } else {
-            viewModelCity.getPhotoData(place.name!!)
+            viewModelCity.getPhotoData(place.cityName)
         }
 
-        binding.cityAboutTitle.text = "About ${place.name!!}"
+        binding.cityAboutTitle.text = "About ${place.cityName}"
         binding.cityAboutLoadingBar.isVisible = true // make loading visible
 
-        viewModelCity.confirmCoordinatesForCity(place.name!!, place.latLng!!.convertToString())
+        viewModelCity.confirmCoordinatesForCity(place.cityName, place.getLatLongString())
         displaceCityPhotos()
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.cityMap) as SupportMapFragment
@@ -96,7 +95,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
         (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.cityFragmentToolBar!!.title = place.name!!
+        binding.cityFragmentToolBar!!.title = place.cityName
 
         // set more city info click listener
         binding.moreAboutCityButton.setOnClickListener(this)
@@ -113,7 +112,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         navController = Navigation.findNavController(view)
     }
 
-    private fun getAlternateConfirmation(place: Place) {
+    private fun getAlternateConfirmation(place: CityModel) {
 
         if (areaName == "n/a") {
             Toast.makeText(
@@ -124,8 +123,8 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
             return
         }
 
-        viewModelCity.altConfirmCoordinatesForCity("${place.name!!}, $areaName",
-            place.latLng!!.convertToString())
+        viewModelCity.altConfirmCoordinatesForCity("${place.cityName}, $areaName",
+            place.getLatLongString())
     }
 
     private fun observeViewState() {
@@ -144,7 +143,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         viewModelCity.coordConfirmationLiveData.observe(viewLifecycleOwner, Observer { confirmed ->
             when (confirmed) {
                 true -> {
-                    wikiArticleName = place.name!!
+                    wikiArticleName = place.cityName
                     viewModelCity.setCityInformationData(wikiArticleName)
                 }
                 false -> {
@@ -165,7 +164,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         viewModelCity.altCoordConfirmationLiveData.observe(viewLifecycleOwner, Observer { altConfirmed ->
             when (altConfirmed) {
                 true -> {
-                    wikiArticleName = "${place.name!!}, $areaName"
+                    wikiArticleName = "${place.cityName}, $areaName"
                     viewModelCity.setCityInformationData(wikiArticleName)
                 }
                 false -> {
@@ -211,7 +210,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         viewModelCity.successPhotoLiveData.observe(viewLifecycleOwner, Observer {
             cityPhotoRecyclerAdapter.setList(it)
         })
-        binding.cityPhotoTitle.text = place.name + "'s" + " photos"
+        binding.cityPhotoTitle.text = place.cityName+ "'s" + " photos"
         viewModelCity.errorPhotoLiveData.observe(viewLifecycleOwner, Observer {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
@@ -224,8 +223,8 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLng, 12.0f))
-        googleMap.addMarker(MarkerOptions().position(place.latLng!!).title(place.name))
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
+        googleMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
     }
 
     override fun onClick(v: View?) {

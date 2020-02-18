@@ -16,12 +16,10 @@
 package com.xplorer.projectx.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -36,9 +34,10 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.xplorer.projectx.R
+import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.ui.adapter.recent.RecentCitiesAdapter
+import com.xplorer.projectx.utils.toCityModel
 import dagger.android.support.DaggerFragment
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -54,7 +53,7 @@ class SearchStartFragment : DaggerFragment() {
     @Inject
     lateinit var searchViewModel: SearchStartViewModel
     private lateinit var recentCityAdapter: RecentCitiesAdapter
-    private val recentCities = ArrayList<String>()
+    private val recentCities = ArrayList<CityModel>()
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -65,11 +64,12 @@ class SearchStartFragment : DaggerFragment() {
         binding = DataBindingUtil.inflate(inflater,
             R.layout.fragment_search_start, container, false)
 
-        Log.e("Search View Model", "OnCreateView called")
-
         getPlaceAutocomplete()
 
-        recentCityAdapter = RecentCitiesAdapter(context!!, recentCities)
+        recentCityAdapter = RecentCitiesAdapter(context!!, recentCities) { cityModel ->
+            navigateToCityFragment(cityModel)
+        }
+
         binding.recentCitiesListView.adapter = recentCityAdapter
         observeRecentCities()
 
@@ -117,15 +117,22 @@ class SearchStartFragment : DaggerFragment() {
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
-                val bundle = bundleOf(
-                    "place" to place
-                )
 
-                searchViewModel.addCityToRecent(place.name!!)
-                navController.navigate(R.id.cityFragment, bundle)
+                val cityModel = place.toCityModel()
+
+                navigateToCityFragment(cityModel)
             }
             override fun onError(status: Status) {
             }
         })
+    }
+
+    private fun navigateToCityFragment(cityModel: CityModel) {
+        val bundle = bundleOf(
+            "place" to cityModel
+        )
+
+        searchViewModel.addCityToRecent(cityModel)
+        navController.navigate(R.id.cityFragment, bundle)
     }
 }
