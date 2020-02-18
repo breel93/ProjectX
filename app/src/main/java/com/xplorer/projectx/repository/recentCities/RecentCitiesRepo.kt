@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.xplorer.projectx.utils
+package com.xplorer.projectx.repository.recentCities
 
-import com.google.android.gms.maps.model.LatLng
+import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.model.CityModel
 
-fun LatLng.convertToString(): String {
-    return "${this.latitude},${this.longitude}"
-}
+interface RecentCitiesRepo {
 
-fun LatLng.convertToStringForNearbyPosts(): String {
-    return "${this.latitude}|${this.longitude}"
+  fun updateRecentCities(city: CityModel, onComplete: (Boolean) -> Unit)
+  fun getRecentCities(): Result<List<CityModel>>
 }

@@ -30,5 +30,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
         </androidx.cardview.widget.CardView>
 
+        <ListView
+            android:id="@+id/recentCitiesListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            android:layout_margin="2dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

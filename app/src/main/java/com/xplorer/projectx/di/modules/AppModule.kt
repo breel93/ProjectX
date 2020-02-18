@@ -15,6 +15,9 @@
 */
 package com.xplorer.projectx.di.modules
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.xplorer.projectx.api.UnsplashApi
 import com.xplorer.projectx.api.FoursquareAPI
@@ -23,6 +26,8 @@ import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepository
+import com.xplorer.projectx.repository.recentCities.RecentCitiesRepo
+import com.xplorer.projectx.repository.recentCities.RecentCitiesRepository
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.unsplash.UnsplashRepository
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
@@ -127,4 +132,17 @@ class AppModule {
     fun providesFoursquareRepository(foursquareRepository: FoursquareRepository): FoursquareRepo {
         return foursquareRepository
     }
+
+    @Provides
+    @Singleton
+    fun providesSharedPreferences(application: Application): SharedPreferences {
+        return application.getSharedPreferences(Constants.SHARED_PREF_KEY, Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    @Singleton
+    fun providesRecentCityRepository(recentCitiesRepo: RecentCitiesRepository): RecentCitiesRepo {
+        return recentCitiesRepo
+    }
+
 }

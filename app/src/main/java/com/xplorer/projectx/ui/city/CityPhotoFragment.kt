@@ -25,10 +25,10 @@ import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.libraries.places.api.model.Place
 
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityPhotoBinding
+import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.ui.adapter.CityPhotoPagedRecyclerAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -41,7 +41,7 @@ class CityPhotoFragment : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: CityPhotoViewModel
-    lateinit var place: Place
+    lateinit var place: CityModel
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -55,7 +55,7 @@ class CityPhotoFragment : DaggerFragment() {
         displayPictures()
         (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
         (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.cityFragmentToolBar!!.title = place.name + "'s" + " photos"
+        binding.cityFragmentToolBar!!.title = place.cityName + "'s" + " photos"
         return binding.root
     }
 
@@ -69,7 +69,7 @@ class CityPhotoFragment : DaggerFragment() {
         ViewCompat.setNestedScrollingEnabled(binding.photoList, true)
         val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!)
         binding.photoList.adapter = cityPhotoPagedRecyclerAdapter
-        viewModel.setSearchQuery(place.name!!)
+        viewModel.setSearchQuery(place.cityName)
         viewModel.refreshPhoto().observe(viewLifecycleOwner, Observer {
             cityPhotoPagedRecyclerAdapter.submitList(it)
         })

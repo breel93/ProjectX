@@ -38,5 +38,9 @@ class Constants {
 
         // Wikipedia info link
         const val WIKIPEDIA_INFO_URL = "$WIKIPEDIA_API_BASE_URL/wiki/"
+
+        // Shared Preferences
+        const val SHARED_PREF_KEY = "shared_prefs"
+        const val RECENT_CITY_STRING_LIST_KEY = "recent_cities"
     }
 }
