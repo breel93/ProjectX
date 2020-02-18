@@ -28,6 +28,7 @@ import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
 class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
     PagedListAdapter<Photo, CityPhotoPagedRecyclerAdapter.PhotoViewHolder>(PhotoDiffCallback) {
@@ -52,22 +53,14 @@ class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
             circularProgressDrawable.centerRadius = 40f
             circularProgressDrawable.setColorSchemeColors(
                 context.resources.getColor(R.color.colorAccent))
+            circularProgressDrawable.start()
             binding.cityPhoto.aspectRatio = photo.height.toDouble() / photo.width.toDouble()
 
-
-            val mapBasedUrl = "https://maps.googleapis.com/maps/api/place/photo?"
-            val maxwidth = "maxwidth=700&"
-            val photoreference = "photoreference=${photo.photo_reference}&"
-            val apiKey = "key=${BuildConfig.GOOGLE_API_KEY}"
-
-           var photoUrls : String
-
-            photoUrls = if(photo.photo_reference != null){
-                mapBasedUrl + maxwidth + photoreference + apiKey
-            }else{
-                photo.urls.regular
-            }
-
+           val photoUrls : String = if(photo.photo_reference != null){
+               getPhotoWithReferenceURl(photo)
+           }else{
+               photo.urls.regular
+           }
             Glide.with(context)
                 .load(photoUrls)
                 .apply(

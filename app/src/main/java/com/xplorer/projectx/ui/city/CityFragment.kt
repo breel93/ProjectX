@@ -78,13 +78,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
         areaName = place.adminArea!!
 
-//        if (areaName != "n/a") {
-//            viewModelCity.getPhotoData("${place.name!!}, $areaName")
-//        } else {
-//            viewModelCity.getPhotoData(place.name!!)
-//        }
-
-        viewModelCity.getGooglePhotos(place.id!!)
+        viewModelCity.getGooglePhotos(place.placeId)
 
         binding.cityAboutTitle.text = "About ${place.cityName}"
         binding.cityAboutLoadingBar.isVisible = true // make loading visible
@@ -210,7 +204,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         val cityPhotoRecyclerAdapter = CityPhotoRecyclerAdapter(photoList, context!!)
         binding.cityPhotoRecyclerView.adapter = cityPhotoRecyclerAdapter
         viewModelCity.successPhotoLiveData.observe(viewLifecycleOwner, Observer {
-//            Toast.makeText(context, it.size, Toast.LENGTH_LONG).show()
             cityPhotoRecyclerAdapter.setList(it)
         })
         binding.cityPhotoTitle.text = place.cityName+ "'s" + " photos"

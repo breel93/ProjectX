@@ -36,7 +36,6 @@ import javax.inject.Inject
 
 class CitySearchViewModel@Inject
 constructor(
-  private val unsplashRepository: UnsplashRepo,
   private val googlePicturesRepo: GooglePicturesRepo,
   private val foursquareRepository: FoursquareRepo,
   private val wikipediaRepository: WikipediaRepo,
@@ -51,15 +50,6 @@ constructor(
     private val _errorPhotoLiveData = MutableLiveData<String>()
     val errorPhotoLiveData: LiveData<String>
         get() = _errorPhotoLiveData
-
-    fun getPhotoData(query: String) {
-        unsplashRepository.getPhotoData(query, 1, 10) { result: Result<PhotoResult> ->
-            when (result) {
-                is Success -> processSuccess(result.data.photo)
-                is Failure -> processError(result.error)
-            }
-        }
-    }
 
     private fun processSuccess(photos: List<Photo>) {
         _successPhotoLiveData.value = photos
