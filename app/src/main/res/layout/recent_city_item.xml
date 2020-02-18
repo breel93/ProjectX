@@ -13,12 +13,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Dummy"
-            android:textSize="18sp"
+            android:textSize="23sp"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="30dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
