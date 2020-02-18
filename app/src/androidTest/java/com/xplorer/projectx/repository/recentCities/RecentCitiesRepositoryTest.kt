@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import com.xplorer.projectx.ProjectX
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.utils.Constants
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -51,6 +52,13 @@ class RecentCitiesRepositoryTest {
         sharedPrefEditor.commit()
 
         recentCityRepo = RecentCitiesRepository(Gson(), sharedPrefs)
+    }
+
+    @After
+    fun tearDown() {
+        val sharedPrefEditor = sharedPrefs.edit()
+        sharedPrefEditor.putString(Constants.RECENT_CITY_STRING_LIST_KEY, null)
+        sharedPrefEditor.commit()
     }
 
     @Test
