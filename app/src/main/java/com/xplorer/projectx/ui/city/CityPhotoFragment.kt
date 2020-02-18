@@ -69,7 +69,8 @@ class CityPhotoFragment : DaggerFragment() {
         ViewCompat.setNestedScrollingEnabled(binding.photoList, true)
         val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!)
         binding.photoList.adapter = cityPhotoPagedRecyclerAdapter
-        viewModel.setSearchQuery(place.cityName)
+        viewModel.setSearchQuery(place.name!!)
+        viewModel.setPlaceId(place.id!!)
         viewModel.refreshPhoto().observe(viewLifecycleOwner, Observer {
             cityPhotoPagedRecyclerAdapter.submitList(it)
         })

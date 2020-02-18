@@ -19,26 +19,42 @@ import androidx.paging.PageKeyedDataSource
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UnsplashDataSource @Inject
-internal constructor(private val unsplashRepository: UnsplashRepository) :
+internal constructor(
+    private val unsplashRepository: UnsplashRepository,
+    private val googlePicturesRepository: GooglePicturesRepository
+    ) :
     PageKeyedDataSource<Int, Photo>() {
 
     lateinit var cityQuery: String
+    lateinit var placeId: String
 
     override fun loadInitial(
       params: LoadInitialParams<Int>,
       callback: LoadInitialCallback<Int, Photo>
     ) {
-        unsplashRepository.getPhotoData(cityQuery, 1, 10) {
+//        unsplashRepository.getPhotoData(cityQuery, 1, 10) {
+//            when (it) {
+//                is Success -> {
+//                    val photoList = it.data.photo
+//                    photoList.let {
+//                        callback.onResult(photoList, null, 2)
+//                    }
+//                }
+//                is Failure -> it.error
+//            }
+//        }
+        googlePicturesRepository.getGooglePicturesData(placeId) {
             when (it) {
                 is Success -> {
-                    val photoList = it.data.photo
+                    val photoList = it.data
                     photoList.let {
-                        callback.onResult(photoList, null, 2)
+                        callback.onResult(photoList, null, 1)
                     }
                 }
                 is Failure -> it.error

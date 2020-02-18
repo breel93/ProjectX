@@ -21,11 +21,14 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.xplorer.projectx.api.UnsplashApi
 import com.xplorer.projectx.api.FoursquareAPI
+import com.xplorer.projectx.api.GooglePhotoApi
 import com.xplorer.projectx.api.WikipediaAPI
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.CoroutineContextProviderImpl
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepository
+import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepo
+import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepository
 import com.xplorer.projectx.repository.recentCities.RecentCitiesRepo
 import com.xplorer.projectx.repository.recentCities.RecentCitiesRepository
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
@@ -98,14 +101,6 @@ class AppModule {
             .create(UnsplashApi::class.java)
     }
 
-    @Singleton
-    @Provides
-    fun provideGoogleAPIRetrofit(gsonConverter: Converter.Factory): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(Constants.GOOGLE_API_BASE_URL)
-            .addConverterFactory(gsonConverter)
-            .build()
-    }
 
     @Singleton
     @Provides
@@ -116,6 +111,17 @@ class AppModule {
             .client(okHttpClient)
             .build()
             .create(FoursquareAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGoogleAPIRetrofit(okHttpClient: OkHttpClient): GooglePhotoApi {
+        return Retrofit.Builder()
+            .baseUrl(Constants.GOOGLE_API_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(GooglePhotoApi::class.java)
     }
 
     @Provides
@@ -145,4 +151,8 @@ class AppModule {
         return recentCitiesRepo
     }
 
+    @Provides
+    fun providesGooglePicturesRepository(googlePicturesRepository: GooglePicturesRepository): GooglePicturesRepo {
+        return googlePicturesRepository
+    }
 }

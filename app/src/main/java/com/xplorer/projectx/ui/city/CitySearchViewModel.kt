@@ -28,6 +28,7 @@ import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
+import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepo
 import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
 import kotlinx.coroutines.Job
@@ -36,6 +37,7 @@ import javax.inject.Inject
 class CitySearchViewModel@Inject
 constructor(
   private val unsplashRepository: UnsplashRepo,
+  private val googlePicturesRepo: GooglePicturesRepo,
   private val foursquareRepository: FoursquareRepo,
   private val wikipediaRepository: WikipediaRepo,
   application: Application
@@ -64,6 +66,16 @@ constructor(
     }
     private fun processError(error: Throwable) {
         _errorPhotoLiveData.value = error.localizedMessage
+    }
+
+    // google Photos
+    fun getGooglePhotos(place_id: String){
+        googlePicturesRepo.getGooglePicturesData(place_id){result: Result<List<Photo>> ->
+            when (result) {
+                is Success -> processSuccess(result.data)
+                is Failure -> processError(result.error)
+            }
+        }
     }
 
     // Venues / foursquare

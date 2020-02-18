@@ -28,5 +28,6 @@ data class Photo(
   @SerializedName("description") val description: String,
   @SerializedName("alt_description") val alt_description: String,
   @SerializedName("urls") val urls: Urls,
-  @SerializedName("likes") val likes: Int
+  @SerializedName("likes") val likes: Int,
+  @SerializedName("photo_reference") val photo_reference : String
 )

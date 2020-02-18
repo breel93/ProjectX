@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
@@ -52,8 +53,23 @@ class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
             circularProgressDrawable.setColorSchemeColors(
                 context.resources.getColor(R.color.colorAccent))
             binding.cityPhoto.aspectRatio = photo.height.toDouble() / photo.width.toDouble()
+
+
+            val mapBasedUrl = "https://maps.googleapis.com/maps/api/place/photo?"
+            val maxwidth = "maxwidth=700&"
+            val photoreference = "photoreference=${photo.photo_reference}&"
+            val apiKey = "key=${BuildConfig.GOOGLE_API_KEY}"
+
+           var photoUrls : String
+
+            photoUrls = if(photo.photo_reference != null){
+                mapBasedUrl + maxwidth + photoreference + apiKey
+            }else{
+                photo.urls.regular
+            }
+
             Glide.with(context)
-                .load(photo.urls.regular)
+                .load(photoUrls)
                 .apply(
                     RequestOptions()
                         .placeholder(circularProgressDrawable)

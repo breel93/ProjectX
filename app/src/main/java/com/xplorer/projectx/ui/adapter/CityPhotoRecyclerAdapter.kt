@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.xplorer.projectx.BuildConfig.GOOGLE_API_KEY
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.CityPhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
@@ -58,8 +59,22 @@ class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private v
             circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorAccent))
             circularProgressDrawable.start()
 
+//            Glide.with(context)
+//                .load(photo.urls.regular)
+//                .apply(
+//                    RequestOptions()
+//                        .placeholder(circularProgressDrawable)
+//                        .error(R.drawable.placeholder))
+//                .into(binding.cityPhoto)
+            val mapBasedUrl = "https://maps.googleapis.com/maps/api/place/photo?"
+            val maxwidth = "maxwidth=700&"
+            val photoreference = "photoreference=${photo.photo_reference}&"
+            val apiKey = "key=${GOOGLE_API_KEY}"
+
+            val photoUrls = mapBasedUrl + maxwidth + photoreference + apiKey
+
             Glide.with(context)
-                .load(photo.urls.regular)
+                .load(photoUrls)
                 .apply(
                     RequestOptions()
                         .placeholder(circularProgressDrawable)
