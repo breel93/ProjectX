@@ -28,9 +28,11 @@ import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
-class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
+class CityPhotoPagedRecyclerAdapter(internal var context: Context,
+                                    private val photoClickListener: PhotoClickListener) :
     PagedListAdapter<Photo, CityPhotoPagedRecyclerAdapter.PhotoViewHolder>(PhotoDiffCallback) {
 
     internal lateinit var binding: PhotoItemBinding
@@ -43,11 +45,12 @@ class CityPhotoPagedRecyclerAdapter(internal var context: Context) :
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val photo = getItem(position)
-        holder.bind(photo!!)
+        holder.bind(photo!!,photoClickListener)
     }
 
     inner class PhotoViewHolder(binding: PhotoItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: Photo) {
+        fun bind(photo: Photo,photoClickListener: PhotoClickListener) {
+            itemView.setOnClickListener { photoClickListener.showFullPhoto(photo) }
             val circularProgressDrawable = CircularProgressDrawable(context)
             circularProgressDrawable.strokeWidth = 10f
             circularProgressDrawable.centerRadius = 40f
