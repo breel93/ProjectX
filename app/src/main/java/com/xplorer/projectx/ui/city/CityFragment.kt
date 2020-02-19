@@ -49,6 +49,7 @@ import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
 import com.xplorer.projectx.model.poi.PlaceOfInterest
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
 import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.utils.AppPackageUtils
@@ -164,7 +165,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
             ).show()
             return
         }
-
         viewModelCity.altConfirmCoordinatesForCity("${place.cityName}, $areaName",
             place.getLatLongString())
     }
@@ -247,7 +247,13 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         binding.cityPhotoRecyclerView.hasFixedSize()
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         binding.cityPhotoRecyclerView.layoutManager = layoutManager
-        val cityPhotoRecyclerAdapter = CityPhotoRecyclerAdapter(photoList, context!!)
+        val photoClickListener = object : PhotoClickListener{
+            override fun showFullPhoto(photo: Photo) {
+                val actionBottomSheetFragment = PhotoDetailFragment.getPhoto(photo)
+                actionBottomSheetFragment.show(childFragmentManager, "")
+            }
+        }
+        val cityPhotoRecyclerAdapter = CityPhotoRecyclerAdapter(photoList, context!!,photoClickListener)
         binding.cityPhotoRecyclerView.adapter = cityPhotoRecyclerAdapter
         viewModelCity.successPhotoLiveData.observe(viewLifecycleOwner, Observer {
             cityPhotoRecyclerAdapter.setList(it)

@@ -26,10 +26,13 @@ import com.xplorer.projectx.BuildConfig.GOOGLE_API_KEY
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.CityPhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.utils.Constants
 import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
-class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private val context: Context) :
+class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>,
+                               private val context: Context,
+                               private val photoClickListener: PhotoClickListener) :
     RecyclerView.Adapter<CityPhotoRecyclerAdapter.CityPhotoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityPhotoViewHolder {
@@ -40,7 +43,7 @@ class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private v
 
     override fun onBindViewHolder(holder: CityPhotoViewHolder, position: Int) {
         val photo = cityPhotoList[position]
-        holder.bind(photo)
+        holder.bind(photo,photoClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -54,7 +57,8 @@ class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>, private v
 
     inner class CityPhotoViewHolder(internal var binding: CityPhotoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: Photo) {
+        fun bind(photo: Photo, photoClickListener: PhotoClickListener) {
+            itemView.setOnClickListener{ photoClickListener.showFullPhoto(photo)}
             val circularProgressDrawable = CircularProgressDrawable(context)
             circularProgressDrawable.strokeWidth = 12f
             circularProgressDrawable.centerRadius = 60f

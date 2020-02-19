@@ -15,8 +15,11 @@
 */
 package com.xplorer.projectx.model.unsplash
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Photo(
   @SerializedName("id") val id: String,
   @SerializedName("created_at") val created_at: String,
@@ -30,4 +33,4 @@ data class Photo(
   @SerializedName("urls") val urls: Urls,
   @SerializedName("likes") val likes: Int,
   @SerializedName("photo_reference") val photo_reference : String
-)
+): Parcelable

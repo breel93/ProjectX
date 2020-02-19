@@ -1,11 +1,10 @@
 <resources>
-    <string name="app_name">ProjectX</string>
+  <string name="app_name">ProjectX</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="cookie">Cookie</string>
-    <string name="authorization">Authorization</string>
-    <string name="okhttp">OkHttp</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="more_places_of_interest">more places of interest</string>
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="cookie">Cookie</string>
+  <string name="authorization">Authorization</string>
+  <string name="okhttp">OkHttp</string>
+  <string name="title_activity_maps">Map</string>
 </resources>
