@@ -15,12 +15,15 @@
 */
 package com.xplorer.projectx.ui.city
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
@@ -31,6 +34,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -43,8 +47,10 @@ import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
+import com.xplorer.projectx.model.poi.PlaceOfInterest
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
+import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.utils.AppPackageUtils
 import com.xplorer.projectx.utils.Constants
 import dagger.android.support.DaggerFragment
@@ -86,6 +92,8 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         viewModelCity.confirmCoordinatesForCity(place.cityName, place.getLatLongString())
         displaceCityPhotos()
 
+        buildPlacesOfInterest()
+
         val mapFragment = childFragmentManager.findFragmentById(R.id.cityMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
@@ -96,6 +104,44 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         // set more city info click listener
         binding.moreAboutCityButton.setOnClickListener(this)
         return binding.root
+    }
+
+    private fun buildPlacesOfInterest() {
+
+        binding.morePlacesButton.setOnClickListener {
+            Toast.makeText(context, "Go to map details screen", Toast.LENGTH_SHORT).show()
+        }
+
+        // Build places of interest items
+        val placesOfInterest = ArrayList<PlaceOfInterest>()
+
+        // using dummy entries for now
+        placesOfInterest.add(PlaceOfInterest("Restaurants"))
+        placesOfInterest.add(PlaceOfInterest("Bars"))
+        placesOfInterest.add(PlaceOfInterest("Lounges"))
+        placesOfInterest.add(PlaceOfInterest("ATMs"))
+        placesOfInterest.add(PlaceOfInterest("Fuel Stations"))
+        placesOfInterest.add(PlaceOfInterest("Banks"))
+
+        val placesOfInterestAdapter =
+            PlacesOfInterestAdapter(placesOfInterest) { placeType ->
+                Toast.makeText(context, "Place type clicked: $placeType", Toast.LENGTH_SHORT).show()
+            }
+
+        val windowManager = (context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val trueItemSize = resources.getDimensionPixelSize(R.dimen.poi_item_size) +
+                resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing)
+        var spanCount = displayMetrics.widthPixels / trueItemSize
+
+        if(spanCount % 2 != 0 && spanCount > 1) {
+            spanCount -= 1
+        }
+
+        val gridLM = GridLayoutManager(context, spanCount, GridLayoutManager.VERTICAL, false)
+        binding.poiRecyclerView.layoutManager = gridLM
+        binding.poiRecyclerView.adapter = placesOfInterestAdapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
