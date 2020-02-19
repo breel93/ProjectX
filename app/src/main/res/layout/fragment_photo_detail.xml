@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.city.PhotoDetailFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/closePhoto"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="16dp"
+      android:src="@drawable/ic_close_image"
+      app:backgroundTint="@color/translucent"
+      app:fabCustomSize="40dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+      android:id="@+id/fullPhoto"
+      android:layout_width="match_parent"
+      android:layout_height="500dp"
+      android:scaleType="fitXY"
+      android:src="@drawable/placeholder"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

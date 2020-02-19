@@ -21,14 +21,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityPhotoBinding
 import com.xplorer.projectx.model.CityModel
+import com.xplorer.projectx.model.unsplash.Photo
+import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoPagedRecyclerAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -42,6 +47,7 @@ class CityPhotoFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: CityPhotoViewModel
     private lateinit var place: CityModel
+    private lateinit var navController: NavController
 
     override fun onCreateView(
       inflater: LayoutInflater,
@@ -59,6 +65,11 @@ class CityPhotoFragment : DaggerFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         place = arguments!!.getParcelable("place")!!
@@ -66,13 +77,19 @@ class CityPhotoFragment : DaggerFragment() {
 
     private fun displayPictures() {
         binding.photoList.hasFixedSize()
-        ViewCompat.setNestedScrollingEnabled(binding.photoList, true)
-        val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!)
+        val photoClickListener = object : PhotoClickListener {
+            override fun showFullPhoto(photo: Photo) {
+                val actionBottomSheetFragment = PhotoDetailFragment.getPhoto(photo)
+                actionBottomSheetFragment.show(childFragmentManager, "")
+            }
+        }
+        val cityPhotoPagedRecyclerAdapter = CityPhotoPagedRecyclerAdapter(context!!,photoClickListener)
         binding.photoList.adapter = cityPhotoPagedRecyclerAdapter
         viewModel.setSearchQuery(place.cityName)
         viewModel.setPlaceId(place.placeId)
         viewModel.refreshPhoto().observe(viewLifecycleOwner, Observer {
             cityPhotoPagedRecyclerAdapter.submitList(it)
         })
+
     }
 }

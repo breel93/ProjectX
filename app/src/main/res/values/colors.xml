@@ -8,6 +8,7 @@
     <color name="colorblue">#1E90FF</color>
     <color name="colorGrey">#c3c3c3</color>
     <color name="colorSeashell">#FFF5EE</color>
+    <color name="translucent">#73000000</color>
     <color name="hotPink">#ff69b4</color>
     <color name="oldlace">#FDF5E6</color>
     <color name="blue">#345bdb</color>
