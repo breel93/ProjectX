@@ -26,31 +26,32 @@ import javax.inject.Singleton
 
 @Singleton
 class AppExecutors(private val diskIO: Executor, private val networkIO: Executor) {
-    private val mainIO: Executor
+  private val mainIO: Executor
 
-    @Inject
-    constructor() : this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(5))
-    init {
-        this.mainIO = MainThreadExecutor()
+  @Inject
+  constructor() : this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(5))
+
+  init {
+    this.mainIO = MainThreadExecutor()
+  }
+
+  internal class MainThreadExecutor : Executor {
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
+
+    override fun execute(command: Runnable) {
+      mainThreadHandler.post(command)
     }
+  }
 
-    internal class MainThreadExecutor : Executor {
-        private val mainThreadHandler = Handler(Looper.getMainLooper())
+  fun networkIO(): Executor {
+    return networkIO
+  }
 
-        override fun execute(command: Runnable) {
-            mainThreadHandler.post(command)
-        }
-    }
+  fun diskIO(): Executor {
+    return diskIO
+  }
 
-    fun networkIO(): Executor {
-        return networkIO
-    }
-
-    fun diskIO(): Executor {
-        return diskIO
-    }
-
-    fun mainIO(): Executor {
-        return mainIO
-    }
+  fun mainIO(): Executor {
+    return mainIO
+  }
 }

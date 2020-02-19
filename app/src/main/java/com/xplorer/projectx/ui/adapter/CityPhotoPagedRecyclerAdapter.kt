@@ -24,65 +24,68 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.xplorer.projectx.BuildConfig
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
-class CityPhotoPagedRecyclerAdapter(internal var context: Context,
-                                    private val photoClickListener: PhotoClickListener) :
-    PagedListAdapter<Photo, CityPhotoPagedRecyclerAdapter.PhotoViewHolder>(PhotoDiffCallback) {
+class CityPhotoPagedRecyclerAdapter(
+  internal var context: Context,
+  private val photoClickListener: PhotoClickListener
+) :
+  PagedListAdapter<Photo, CityPhotoPagedRecyclerAdapter.PhotoViewHolder>(PhotoDiffCallback) {
 
-    internal lateinit var binding: PhotoItemBinding
+  internal lateinit var binding: PhotoItemBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        binding = PhotoItemBinding.inflate(layoutInflater, parent, false)
-        return PhotoViewHolder(binding)
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
+    val layoutInflater = LayoutInflater.from(parent.context)
+    binding = PhotoItemBinding.inflate(layoutInflater, parent, false)
+    return PhotoViewHolder(binding)
+  }
+
+  override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+    val photo = getItem(position)
+    holder.bind(photo!!, photoClickListener)
+  }
+
+  inner class PhotoViewHolder(binding: PhotoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(photo: Photo, photoClickListener: PhotoClickListener) {
+      itemView.setOnClickListener { photoClickListener.showFullPhoto(photo) }
+      val circularProgressDrawable = CircularProgressDrawable(context)
+      circularProgressDrawable.strokeWidth = 10f
+      circularProgressDrawable.centerRadius = 40f
+      circularProgressDrawable.setColorSchemeColors(
+        context.resources.getColor(R.color.colorAccent)
+      )
+      circularProgressDrawable.start()
+      binding.cityPhoto.aspectRatio = photo.height.toDouble() / photo.width.toDouble()
+
+      val photoUrls: String = if (photo.photo_reference != null) {
+        getPhotoWithReferenceURl(photo)
+      } else {
+        photo.urls.regular
+      }
+      Glide.with(context)
+        .load(photoUrls)
+        .apply(
+          RequestOptions()
+            .placeholder(circularProgressDrawable)
+            .error(R.drawable.placeholder)
+        )
+        .into(binding.cityPhoto)
     }
+  }
 
-    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val photo = getItem(position)
-        holder.bind(photo!!,photoClickListener)
+  companion object {
+    val PhotoDiffCallback = object : DiffUtil.ItemCallback<Photo>() {
+      override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
+        return oldItem.id == newItem.id
+      }
+
+      override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
+        return oldItem == newItem
+      }
     }
-
-    inner class PhotoViewHolder(binding: PhotoItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: Photo,photoClickListener: PhotoClickListener) {
-            itemView.setOnClickListener { photoClickListener.showFullPhoto(photo) }
-            val circularProgressDrawable = CircularProgressDrawable(context)
-            circularProgressDrawable.strokeWidth = 10f
-            circularProgressDrawable.centerRadius = 40f
-            circularProgressDrawable.setColorSchemeColors(
-                context.resources.getColor(R.color.colorAccent))
-            circularProgressDrawable.start()
-            binding.cityPhoto.aspectRatio = photo.height.toDouble() / photo.width.toDouble()
-
-           val photoUrls : String = if(photo.photo_reference != null){
-               getPhotoWithReferenceURl(photo)
-           }else{
-               photo.urls.regular
-           }
-            Glide.with(context)
-                .load(photoUrls)
-                .apply(
-                    RequestOptions()
-                        .placeholder(circularProgressDrawable)
-                        .error(R.drawable.placeholder))
-                .into(binding.cityPhoto)
-        }
-    }
-
-    companion object {
-        val PhotoDiffCallback = object : DiffUtil.ItemCallback<Photo>() {
-            override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
-                return oldItem == newItem
-            }
-        }
-    }
+  }
 }

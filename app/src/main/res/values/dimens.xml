@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="poi_home_column_spacing">10dp</dimen>
-    <dimen name="poi_item_size">160dp</dimen>
-    <dimen name="photo_preview_height">150dp</dimen>
+  <dimen name="poi_home_column_spacing">10dp</dimen>
+  <dimen name="poi_item_size">160dp</dimen>
+  <dimen name="photo_preview_height">150dp</dimen>
 </resources>

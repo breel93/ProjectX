@@ -16,7 +16,6 @@
 package com.xplorer.projectx.ui.city
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,11 +24,10 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
-
+import androidx.fragment.app.Fragment
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityDescriptionBinding
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_city_description.*
 
 /**
  * A simple [Fragment] subclass.
@@ -41,37 +39,39 @@ class CityDescriptionFragment : DaggerFragment() {
   private lateinit var articleTitle: String
   private lateinit var parentActivity: AppCompatActivity
 
-    override fun onCreateView(
-      inflater: LayoutInflater,
-      container: ViewGroup?,
-      savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    // Inflate the layout for this fragment
 
-        binding = DataBindingUtil.inflate(inflater,
-          R.layout.fragment_city_description,
-          container,
-          false)
+    binding = DataBindingUtil.inflate(
+      inflater,
+      R.layout.fragment_city_description,
+      container,
+      false
+    )
 
-      parentActivity = activity as AppCompatActivity
+    parentActivity = activity as AppCompatActivity
 
-      parentActivity.setSupportActionBar(binding.cityDescriptionToolBar)
-      parentActivity.supportActionBar!!.apply {
-        setDisplayHomeAsUpEnabled(true)
-        title = "About $articleTitle"
-      }
-
-      binding.wikiWebView.apply {
-        webViewClient = object : WebViewClient() {
-          override fun onPageFinished(view: WebView?, url: String?) {
-            binding.wikiProgressBar.isGone = true
-          }
-        }
-        loadUrl(wikiLink)
-      }
-
-      return binding.root
+    parentActivity.setSupportActionBar(binding.cityDescriptionToolBar)
+    parentActivity.supportActionBar!!.apply {
+      setDisplayHomeAsUpEnabled(true)
+      title = "About $articleTitle"
     }
+
+    binding.wikiWebView.apply {
+      webViewClient = object : WebViewClient() {
+        override fun onPageFinished(view: WebView?, url: String?) {
+          binding.wikiProgressBar.isGone = true
+        }
+      }
+      loadUrl(wikiLink)
+    }
+
+    return binding.root
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

@@ -33,12 +33,13 @@ import com.xplorer.projectx.extentions.Mappable
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-data class WikiQueryTitleResponse(@SerializedName("query") val query: WikiQuery) : Mappable<String> {
-    override fun mapToData(): String {
-        if (query.pageObject.containsKey("-1")) {
-            return "N/A"
-        }
-
-        return query.pageObject.entries.first().value.title
+data class WikiQueryTitleResponse(@SerializedName("query") val query: WikiQuery) :
+  Mappable<String> {
+  override fun mapToData(): String {
+    if (query.pageObject.containsKey("-1")) {
+      return "N/A"
     }
+
+    return query.pageObject.entries.first().value.title
+  }
 }

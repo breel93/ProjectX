@@ -20,17 +20,17 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.xplorer.projectx.api.UnsplashApi
-import com.xplorer.projectx.model.unsplash.PhotoResult
+import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
-import com.xplorer.projectx.extentions.Result
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
@@ -58,7 +58,7 @@ class UnsplashRepositoryTest {
   fun testGetPhotoWithSuccessResult() {
 
     // arrange
-    val photoResult = PhotoResult(1, 30, ArrayList(),ArrayList())
+    val photoResult = PhotoResult(1, 30, ArrayList(), ArrayList())
     val result = Success(photoResult)
     val mockCall = mock<Call<PhotoResult>> {
       on { execute() } doReturn Response.success(photoResult)

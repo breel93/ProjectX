@@ -101,7 +101,6 @@ class AppModule {
             .create(UnsplashApi::class.java)
     }
 
-
     @Singleton
     @Provides
     fun provideFoursquareAPI(okHttpClient: OkHttpClient): FoursquareAPI {

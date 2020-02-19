@@ -20,14 +20,14 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.xplorer.projectx.api.FoursquareAPI
-import com.xplorer.projectx.model.foursquare.VenueResponse
-import com.xplorer.projectx.model.foursquare.VenueGroup
-import com.xplorer.projectx.model.foursquare.VenueItem
-import com.xplorer.projectx.model.foursquare.Venue
-import com.xplorer.projectx.model.foursquare.FoursquareResponse
-import com.xplorer.projectx.model.foursquare.VenueLocation
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.model.foursquare.VenueResponse
+import com.xplorer.projectx.model.foursquare.FoursquareResponse
+import com.xplorer.projectx.model.foursquare.VenueGroup
+import com.xplorer.projectx.model.foursquare.VenueItem
+import com.xplorer.projectx.model.foursquare.VenueLocation
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepository
@@ -66,13 +66,17 @@ class FoursquareRepositoryTest {
     val mockCall: Call<FoursquareResponse> = mock()
     whenever(mockCall.execute()).thenReturn(Response.success(createVenueResponse()))
     whenever(mockCall.clone()).thenReturn(mockCall)
-    whenever(mockFoursquareAPI.getVenues(anyString(),
-      anyString(),
-      anyString(),
-      anyString(),
-      anyInt(),
-      anyInt(),
-      anyString())).thenReturn(mockCall)
+    whenever(
+      mockFoursquareAPI.getVenues(
+        anyString(),
+        anyString(),
+        anyString(),
+        anyString(),
+        anyInt(),
+        anyInt(),
+        anyString()
+      )
+    ).thenReturn(mockCall)
 
     // act
     foursquareRepository.getVenueData(

@@ -40,15 +40,14 @@ import retrofit2.http.Query
 // places of interest using foursquare's api
 interface FoursquareAPI {
 
-    @GET("v2/venues/explore")
-    fun getVenues(
-      @Query("query") query: String,
-      @Query("client_id") clientId: String,
-      @Query("client_secret") clientSecret: String,
-      @Query("ll") latLong: String,
-      @Query("offset") offset: Int,
-      @Query("limit") perPage: Int = 10,
-      @Query("v") apiVersion: String = Constants.FOURSQUARE_API_VERSION
-    ):
-    Call<FoursquareResponse>
+  @GET("v2/venues/explore")
+  fun getVenues(
+    @Query("query") query: String,
+    @Query("client_id") clientId: String,
+    @Query("client_secret") clientSecret: String,
+    @Query("ll") latLong: String,
+    @Query("offset") offset: Int,
+    @Query("limit") perPage: Int = 10,
+    @Query("v") apiVersion: String = Constants.FOURSQUARE_API_VERSION
+  ): Call<FoursquareResponse>
 }

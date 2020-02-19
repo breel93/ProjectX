@@ -26,5 +26,5 @@ data class PhotoResult(
 ) : Mappable<PhotoResult> {
   override fun mapToData(): PhotoResult {
     return this
-    }
   }
+}

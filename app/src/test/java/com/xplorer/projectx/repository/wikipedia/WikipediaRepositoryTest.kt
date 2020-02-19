@@ -16,21 +16,21 @@
 package com.xplorer.projectx.repository.wikipedia
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
-import com.nhaarman.mockitokotlin2.whenever
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import com.xplorer.projectx.api.WikipediaAPI
-import com.xplorer.projectx.model.wikipedia.WikiGeoItem
-import com.xplorer.projectx.model.wikipedia.WikiQueryTitleResponse
-import com.xplorer.projectx.model.wikipedia.WikiQuery
-import com.xplorer.projectx.model.wikipedia.WikiGeoQuery
-import com.xplorer.projectx.model.wikipedia.WikiPageResult
-import com.xplorer.projectx.model.wikipedia.WikiGeoSearchResponse
-import com.xplorer.projectx.model.wikipedia.WikiCitySummaryResponse
-import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.wikipedia.WikiGeoSearchResponse
+import com.xplorer.projectx.model.wikipedia.WikiPageResult
+import com.xplorer.projectx.model.wikipedia.WikiQuery
+import com.xplorer.projectx.model.wikipedia.WikiQueryTitleResponse
+import com.xplorer.projectx.model.wikipedia.WikiGeoQuery
+import com.xplorer.projectx.model.wikipedia.WikiCitySummaryResponse
+import com.xplorer.projectx.model.wikipedia.WikiCityInfo
+import com.xplorer.projectx.model.wikipedia.WikiGeoItem
 import com.xplorer.projectx.networking.CoroutineContextProvider
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import okhttp3.ResponseBody
@@ -185,10 +185,13 @@ class WikipediaRepositoryTest {
     whenever(mockCall.execute()).thenReturn(Response.success(successBody))
     whenever(mockCall.clone()).thenReturn(mockCall)
 
-    whenever(wikipediaAPI.getNearbyWikiTitles(anyString(),
-      anyInt(),
-      anyInt()
-    )).thenReturn(mockCall)
+    whenever(
+      wikipediaAPI.getNearbyWikiTitles(
+        anyString(),
+        anyInt(),
+        anyInt()
+      )
+    ).thenReturn(mockCall)
 
     val onRelevantPostCompleteMock: (Result<List<String>>) -> Unit = mock()
     val relevantTitleListCaptor = argumentCaptor<Result<List<String>>>()
@@ -218,10 +221,13 @@ class WikipediaRepositoryTest {
     whenever(mockCall.execute()).thenReturn(Response.success(successBody))
     whenever(mockCall.clone()).thenReturn(mockCall)
 
-    whenever(wikipediaAPI.getNearbyWikiTitles(anyString(),
-      anyInt(),
-      anyInt()
-    )).thenReturn(mockCall)
+    whenever(
+      wikipediaAPI.getNearbyWikiTitles(
+        anyString(),
+        anyInt(),
+        anyInt()
+      )
+    ).thenReturn(mockCall)
 
     val onRelevantPostCompleteMock: (Result<List<String>>) -> Unit = mock()
     val relevantTitleListCaptor = argumentCaptor<Result<List<String>>>()

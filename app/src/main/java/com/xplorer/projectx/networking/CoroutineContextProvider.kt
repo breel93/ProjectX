@@ -38,16 +38,16 @@ import kotlin.coroutines.CoroutineContext
 
 @Singleton
 class CoroutineContextProviderImpl @Inject constructor() : CoroutineContextProvider {
-    override val main: CoroutineContext by lazy { Dispatchers.Main }
-    override val io: CoroutineContext by lazy { Dispatchers.IO }
+  override val main: CoroutineContext by lazy { Dispatchers.Main }
+  override val io: CoroutineContext by lazy { Dispatchers.IO }
 }
 
 class TestCoroutineContextProviderImpl : CoroutineContextProvider {
-    override val main: CoroutineContext by lazy { Dispatchers.Unconfined }
-    override val io: CoroutineContext by lazy { Dispatchers.Unconfined }
+  override val main: CoroutineContext by lazy { Dispatchers.Unconfined }
+  override val io: CoroutineContext by lazy { Dispatchers.Unconfined }
 }
 
 interface CoroutineContextProvider {
-    val main: CoroutineContext
-    val io: CoroutineContext
+  val main: CoroutineContext
+  val io: CoroutineContext
 }

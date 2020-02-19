@@ -32,5 +32,5 @@ data class Photo(
   @SerializedName("alt_description") val alt_description: String,
   @SerializedName("urls") val urls: Urls,
   @SerializedName("likes") val likes: Int,
-  @SerializedName("photo_reference") val photo_reference : String
-): Parcelable
+  @SerializedName("photo_reference") val photo_reference: String
+) : Parcelable

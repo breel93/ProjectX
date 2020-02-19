@@ -22,11 +22,11 @@ import retrofit2.http.Query
 
 interface UnsplashApi {
 
-    @GET("search/photos")
-    fun getPhotos(
-      @Query("client_id") client_id: String,
-      @Query("query") query: String,
-      @Query("page") page: Int,
-      @Query("per_page") perPage: Int
-    ): Call<PhotoResult>
+  @GET("search/photos")
+  fun getPhotos(
+    @Query("client_id") client_id: String,
+    @Query("query") query: String,
+    @Query("page") page: Int,
+    @Query("per_page") perPage: Int
+  ): Call<PhotoResult>
 }
