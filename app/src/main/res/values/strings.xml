@@ -7,4 +7,5 @@
   <string name="authorization">Authorization</string>
   <string name="okhttp">OkHttp</string>
   <string name="title_activity_maps">Map</string>
+    <string name="more_places_of_interest">more places of interest</string>
 </resources>
