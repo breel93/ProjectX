@@ -20,21 +20,19 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
-import com.xplorer.projectx.model.foursquare.Venue
-import com.xplorer.projectx.model.unsplash.Photo
-import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
+import com.xplorer.projectx.model.foursquare.Venue
+import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepo
-import com.xplorer.projectx.repository.unsplash.UnsplashRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 
-class CitySearchViewModel@Inject
+class CitySearchViewModel @Inject
 constructor(
   private val googlePicturesRepo: GooglePicturesRepo,
   private val foursquareRepository: FoursquareRepo,
@@ -42,128 +40,133 @@ constructor(
   application: Application
 ) : AndroidViewModel(application) {
 
-    private lateinit var job: Job
-    // Photos
-    private val _successPhotoLiveData = MutableLiveData<List<Photo>>()
-    val successPhotoLiveData: LiveData<List<Photo>>
-        get() = _successPhotoLiveData
-    private val _errorPhotoLiveData = MutableLiveData<String>()
-    val errorPhotoLiveData: LiveData<String>
-        get() = _errorPhotoLiveData
+  private lateinit var job: Job
+  // Photos
+  private val _successPhotoLiveData = MutableLiveData<List<Photo>>()
+  val successPhotoLiveData: LiveData<List<Photo>>
+    get() = _successPhotoLiveData
+  private val _errorPhotoLiveData = MutableLiveData<String>()
+  val errorPhotoLiveData: LiveData<String>
+    get() = _errorPhotoLiveData
 
-    private fun processSuccess(photos: List<Photo>) {
-        _successPhotoLiveData.value = photos
+  private fun processSuccess(photos: List<Photo>) {
+    _successPhotoLiveData.value = photos
+  }
+
+  private fun processError(error: Throwable) {
+    _errorPhotoLiveData.value = error.localizedMessage
+  }
+
+  // google Photos
+  fun getGooglePhotos(place_id: String) {
+    googlePicturesRepo.getGooglePicturesData(place_id) { result: Result<List<Photo>> ->
+      when (result) {
+        is Success -> processSuccess(result.data)
+        is Failure -> processError(result.error)
+      }
     }
-    private fun processError(error: Throwable) {
-        _errorPhotoLiveData.value = error.localizedMessage
+  }
+
+  // Venues / foursquare
+
+  private val _successVenueLiveData = MutableLiveData<List<Venue>>()
+  val successVenueLiveData: LiveData<List<Venue>>
+    get() = _successVenueLiveData
+  private val _errorVenueLiveData = MutableLiveData<String>()
+  val errorVenueLiveData: LiveData<String>
+    get() = _errorVenueLiveData
+
+  fun getVenueData(query: String, latLong: LatLng) {
+    val coordinates = "${latLong.latitude},${latLong.longitude}"
+    foursquareRepository.getVenueData(query, coordinates, 0) { result: Result<List<Venue>> ->
+      when (result) {
+        is Success -> processVenueSuccess(result.data)
+        is Failure -> processVenueError(result.error)
+      }
     }
+  }
 
-    // google Photos
-    fun getGooglePhotos(place_id: String){
-        googlePicturesRepo.getGooglePicturesData(place_id){result: Result<List<Photo>> ->
-            when (result) {
-                is Success -> processSuccess(result.data)
-                is Failure -> processError(result.error)
-            }
-        }
+  private fun processVenueSuccess(venues: List<Venue>) {
+    _successVenueLiveData.value = venues
+  }
+
+  private fun processVenueError(error: Throwable) {
+    _errorVenueLiveData.value = error.localizedMessage
+  }
+
+  // Location confirmation from Wikipedia
+
+  private val _coordConfirmationLiveData = MutableLiveData<Boolean>()
+  val coordConfirmationLiveData: LiveData<Boolean>
+    get() = _coordConfirmationLiveData
+
+  private val _errorCoordConfirmationLiveData = MutableLiveData<String>()
+  val errorCoordConfirmationLiveData: LiveData<String>
+    get() = _errorCoordConfirmationLiveData
+
+  fun confirmCoordinatesForCity(cityName: String, cityCoordinates: String) {
+    wikipediaRepository.confirmCityCoordinates(cityName, cityCoordinates) { confirmedResult ->
+
+      when (confirmedResult) {
+        is Success -> _coordConfirmationLiveData.value = confirmedResult.data
+        is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
+      }
     }
+  }
 
-    // Venues / foursquare
+  private val _altCoordConfirmationLiveData = MutableLiveData<Boolean>()
+  val altCoordConfirmationLiveData: LiveData<Boolean>
+    get() = _altCoordConfirmationLiveData
 
-    private val _successVenueLiveData = MutableLiveData<List<Venue>>()
-    val successVenueLiveData: LiveData<List<Venue>>
-        get() = _successVenueLiveData
-    private val _errorVenueLiveData = MutableLiveData<String>()
-    val errorVenueLiveData: LiveData<String>
-        get() = _errorVenueLiveData
-
-    fun getVenueData(query: String, latLong: LatLng) {
-        val coordinates = "${latLong.latitude},${latLong.longitude}"
-        foursquareRepository.getVenueData(query, coordinates, 0) { result: Result<List<Venue>> ->
-            when (result) {
-                is Success -> processVenueSuccess(result.data)
-                is Failure -> processVenueError(result.error)
-            }
-        }
+  fun altConfirmCoordinatesForCity(queryCityName: String, cityCoordinates: String) {
+    wikipediaRepository.getAlternateConfirmation(
+      queryCityName,
+      cityCoordinates
+    ) { confirmedResult ->
+      when (confirmedResult) {
+        is Success -> _altCoordConfirmationLiveData.value = confirmedResult.data
+        is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
+      }
     }
+  }
 
-    private fun processVenueSuccess(venues: List<Venue>) {
-        _successVenueLiveData.value = venues
+  private val _cityInfoLiveData = MutableLiveData<WikiCityInfo>()
+  val cityInfoLiveData: LiveData<WikiCityInfo>
+    get() = _cityInfoLiveData
+
+  private val _errorCityInfoLiveData = MutableLiveData<String>()
+  val errorCityInfoLiveData: LiveData<String>
+    get() = _errorCityInfoLiveData
+
+  fun setCityInformationData(cityName: String) {
+    wikipediaRepository.getCityInformation(cityName) { result ->
+      when (result) {
+        is Success -> _cityInfoLiveData.value = result.data
+        is Failure -> _errorCityInfoLiveData.value = result.error.localizedMessage
+      }
     }
-    private fun processVenueError(error: Throwable) {
-        _errorVenueLiveData.value = error.localizedMessage
+  }
+
+  private val _relatedTitlesLiveData = MutableLiveData<List<String>>()
+  val successRelatedTitlesLiveData: LiveData<List<String>>
+    get() = _relatedTitlesLiveData
+
+  private val _errorRelatedTitlesLiveData = MutableLiveData<String>()
+  val errorRelatedTitlesLiveData: LiveData<String>
+    get() = _errorCoordConfirmationLiveData
+
+  fun getRelevantPostTitlesForCity(cityCoordinates: String) {
+    wikipediaRepository.getRelevantPosts(cityCoordinates) { result ->
+      when (result) {
+        is Success -> _relatedTitlesLiveData.value = result.data
+        is Failure -> _errorRelatedTitlesLiveData.value = result.error.localizedMessage
+      }
     }
+  }
 
-    // Location confirmation from Wikipedia
-
-    private val _coordConfirmationLiveData = MutableLiveData<Boolean>()
-    val coordConfirmationLiveData: LiveData<Boolean>
-        get() = _coordConfirmationLiveData
-
-    private val _errorCoordConfirmationLiveData = MutableLiveData<String>()
-    val errorCoordConfirmationLiveData: LiveData<String>
-        get() = _errorCoordConfirmationLiveData
-
-    fun confirmCoordinatesForCity(cityName: String, cityCoordinates: String) {
-        wikipediaRepository.confirmCityCoordinates(cityName, cityCoordinates) { confirmedResult ->
-
-            when (confirmedResult) {
-                is Success -> _coordConfirmationLiveData.value = confirmedResult.data
-                is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
-            }
-        }
-    }
-
-    private val _altCoordConfirmationLiveData = MutableLiveData<Boolean>()
-    val altCoordConfirmationLiveData: LiveData<Boolean>
-        get() = _altCoordConfirmationLiveData
-
-    fun altConfirmCoordinatesForCity(queryCityName: String, cityCoordinates: String) {
-        wikipediaRepository.getAlternateConfirmation(queryCityName, cityCoordinates) { confirmedResult ->
-            when (confirmedResult) {
-                is Success -> _altCoordConfirmationLiveData.value = confirmedResult.data
-                is Failure -> _errorCoordConfirmationLiveData.value = confirmedResult.error.localizedMessage
-            }
-        }
-    }
-
-    private val _cityInfoLiveData = MutableLiveData<WikiCityInfo>()
-    val cityInfoLiveData: LiveData<WikiCityInfo>
-        get() = _cityInfoLiveData
-
-    private val _errorCityInfoLiveData = MutableLiveData<String>()
-    val errorCityInfoLiveData: LiveData<String>
-        get() = _errorCityInfoLiveData
-
-    fun setCityInformationData(cityName: String) {
-        wikipediaRepository.getCityInformation(cityName) { result ->
-            when (result) {
-                is Success -> _cityInfoLiveData.value = result.data
-                is Failure -> _errorCityInfoLiveData.value = result.error.localizedMessage
-            }
-        }
-    }
-
-    private val _relatedTitlesLiveData = MutableLiveData<List<String>>()
-    val successRelatedTitlesLiveData: LiveData<List<String>>
-        get() = _relatedTitlesLiveData
-
-    private val _errorRelatedTitlesLiveData = MutableLiveData<String>()
-    val errorRelatedTitlesLiveData: LiveData<String>
-        get() = _errorCoordConfirmationLiveData
-
-    fun getRelevantPostTitlesForCity(cityCoordinates: String) {
-        wikipediaRepository.getRelevantPosts(cityCoordinates) { result ->
-            when (result) {
-                is Success -> _relatedTitlesLiveData.value = result.data
-                is Failure -> _errorRelatedTitlesLiveData.value = result.error.localizedMessage
-            }
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        if (::job.isInitialized) job.cancel()
-        foursquareRepository.cancelRequests() // cancel requests in foursquare
-    }
+  override fun onCleared() {
+    super.onCleared()
+    if (::job.isInitialized) job.cancel()
+    foursquareRepository.cancelRequests() // cancel requests in foursquare
+  }
 }

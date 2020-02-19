@@ -22,55 +22,56 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.xplorer.projectx.BuildConfig.GOOGLE_API_KEY
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.CityPhotoItemBinding
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.PhotoClickListener
-import com.xplorer.projectx.utils.Constants
 import com.xplorer.projectx.utils.Constants.Companion.getPhotoWithReferenceURl
 
-class CityPhotoRecyclerAdapter(private var cityPhotoList: List<Photo>,
-                               private val context: Context,
-                               private val photoClickListener: PhotoClickListener) :
-    RecyclerView.Adapter<CityPhotoRecyclerAdapter.CityPhotoViewHolder>() {
+class CityPhotoRecyclerAdapter(
+  private var cityPhotoList: List<Photo>,
+  private val context: Context,
+  private val photoClickListener: PhotoClickListener
+) :
+  RecyclerView.Adapter<CityPhotoRecyclerAdapter.CityPhotoViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityPhotoViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = CityPhotoItemBinding.inflate(layoutInflater, parent, false)
-        return CityPhotoViewHolder(binding)
-    }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityPhotoViewHolder {
+    val layoutInflater = LayoutInflater.from(parent.context)
+    val binding = CityPhotoItemBinding.inflate(layoutInflater, parent, false)
+    return CityPhotoViewHolder(binding)
+  }
 
-    override fun onBindViewHolder(holder: CityPhotoViewHolder, position: Int) {
-        val photo = cityPhotoList[position]
-        holder.bind(photo,photoClickListener)
-    }
+  override fun onBindViewHolder(holder: CityPhotoViewHolder, position: Int) {
+    val photo = cityPhotoList[position]
+    holder.bind(photo, photoClickListener)
+  }
 
-    override fun getItemCount(): Int {
-        return cityPhotoList.size
-    }
+  override fun getItemCount(): Int {
+    return cityPhotoList.size
+  }
 
-    fun setList(photos: List<Photo>) {
-        cityPhotoList = photos
-        notifyDataSetChanged()
-    }
+  fun setList(photos: List<Photo>) {
+    cityPhotoList = photos
+    notifyDataSetChanged()
+  }
 
-    inner class CityPhotoViewHolder(internal var binding: CityPhotoItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(photo: Photo, photoClickListener: PhotoClickListener) {
-            itemView.setOnClickListener{ photoClickListener.showFullPhoto(photo)}
-            val circularProgressDrawable = CircularProgressDrawable(context)
-            circularProgressDrawable.strokeWidth = 12f
-            circularProgressDrawable.centerRadius = 60f
-            circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorAccent))
-            circularProgressDrawable.start()
-            Glide.with(context)
-                .load(getPhotoWithReferenceURl(photo))
-                .apply(
-                    RequestOptions()
-                        .placeholder(circularProgressDrawable)
-                        .error(R.drawable.placeholder))
-                .into(binding.cityPhoto)
-        }
+  inner class CityPhotoViewHolder(internal var binding: CityPhotoItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    fun bind(photo: Photo, photoClickListener: PhotoClickListener) {
+      itemView.setOnClickListener { photoClickListener.showFullPhoto(photo) }
+      val circularProgressDrawable = CircularProgressDrawable(context)
+      circularProgressDrawable.strokeWidth = 12f
+      circularProgressDrawable.centerRadius = 60f
+      circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorAccent))
+      circularProgressDrawable.start()
+      Glide.with(context)
+        .load(getPhotoWithReferenceURl(photo))
+        .apply(
+          RequestOptions()
+            .placeholder(circularProgressDrawable)
+            .error(R.drawable.placeholder)
+        )
+        .into(binding.cityPhoto)
     }
+  }
 }

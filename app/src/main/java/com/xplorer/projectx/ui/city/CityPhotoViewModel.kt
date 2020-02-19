@@ -29,34 +29,35 @@ constructor(
   private val unsplashDataSourceFactory: UnsplashDataSourceFactory,
   application: Application
 ) : AndroidViewModel(application) {
-    private var photoList: LiveData<PagedList<Photo>>
+  private var photoList: LiveData<PagedList<Photo>>
 
-    init {
-        photoList = createInitialPhotoList()
-    }
+  init {
+    photoList = createInitialPhotoList()
+  }
 
-    fun setSearchQuery(query: String) {
-        unsplashDataSourceFactory.unsplashDataSource.cityQuery = query
-    }
+  fun setSearchQuery(query: String) {
+    unsplashDataSourceFactory.unsplashDataSource.cityQuery = query
+  }
 
-    fun setPlaceId(placeId: String) {
-        unsplashDataSourceFactory.unsplashDataSource.placeId = placeId
-    }
+  fun setPlaceId(placeId: String) {
+    unsplashDataSourceFactory.unsplashDataSource.placeId = placeId
+  }
 
-    fun refreshPhoto(): LiveData<PagedList<Photo>> {
-        photoList = createInitialPhotoList()
-        return photoList
-    }
+  fun refreshPhoto(): LiveData<PagedList<Photo>> {
+    photoList = createInitialPhotoList()
+    return photoList
+  }
 
-    private fun createInitialPhotoList() =
-        LivePagedListBuilder(unsplashDataSourceFactory, createPagingConfig())
-            .build()
-    private fun createPagingConfig(): PagedList.Config {
-        return PagedList.Config.Builder()
-            .setEnablePlaceholders(true)
-            .setInitialLoadSizeHint(10)
-            .setPrefetchDistance(10)
-            .setPageSize(10)
-            .build()
-    }
+  private fun createInitialPhotoList() =
+    LivePagedListBuilder(unsplashDataSourceFactory, createPagingConfig())
+      .build()
+
+  private fun createPagingConfig(): PagedList.Config {
+    return PagedList.Config.Builder()
+      .setEnablePlaceholders(true)
+      .setInitialLoadSizeHint(10)
+      .setPrefetchDistance(10)
+      .setPageSize(10)
+      .build()
+  }
 }

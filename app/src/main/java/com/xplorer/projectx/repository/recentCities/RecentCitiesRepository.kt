@@ -22,9 +22,8 @@ import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.CityModel
-import com.xplorer.projectx.utils.Constants
 import com.xplorer.projectx.utils.Constants.Companion.RECENT_CITY_STRING_LIST_KEY
-import java.util.*
+import java.util.LinkedList
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,11 +39,11 @@ class RecentCitiesRepository @Inject constructor(
       transformJsonToList(citiesListString)
     } ?: LinkedList()
 
-
     var cityToRemove: CityModel? = null
-    for(cityModel in citiesList) {
-      if(cityModel.cityName == city.cityName &&
-              cityModel.countryName == city.countryName) {
+    for (cityModel in citiesList) {
+      if (cityModel.cityName == city.cityName &&
+        cityModel.countryName == city.countryName
+      ) {
         cityToRemove = cityModel
       }
     }
@@ -81,7 +80,8 @@ class RecentCitiesRepository @Inject constructor(
 
   private fun transformJsonToList(cityData: String): LinkedList<CityModel> {
     return gson.fromJson<LinkedList<CityModel>>(
-      cityData, object : TypeToken<LinkedList<CityModel>>() {}.type)
+      cityData, object : TypeToken<LinkedList<CityModel>>() {}.type
+    )
   }
 
   private fun transformListToString(cityList: LinkedList<CityModel>): String {

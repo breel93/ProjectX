@@ -15,8 +15,8 @@
 */
 package com.xplorer.projectx.repository.foursquare
 
-import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.extentions.Result
+import com.xplorer.projectx.model.foursquare.Venue
 
 interface FoursquareRepo {
 

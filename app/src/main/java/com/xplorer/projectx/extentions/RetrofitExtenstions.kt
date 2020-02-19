@@ -43,28 +43,28 @@ import java.net.ConnectException
  */
 // T is the response from the network call, R is the data to return to the viewModelCity
 fun <T : Mappable<R>, R : Any> Call<T>.getResult(): Result<R> {
-    val call = clone()
-    return try {
-        val response = call.execute()
-        val result = response.body()?.run { Success(mapToData()) }
-        val errorResult = response.errorBody()?.run { Failure(mapError(HttpException(response))!!) }
+  val call = clone()
+  return try {
+    val response = call.execute()
+    val result = response.body()?.run { Success(mapToData()) }
+    val errorResult = response.errorBody()?.run { Failure(mapError(HttpException(response))!!) }
 
-        result ?: errorResult!!
-    } catch (error: Throwable) {
-        if (BuildConfig.DEBUG) {
-            error.printStackTrace()
-        }
-        Failure(mapError(error)!!)
+    result ?: errorResult!!
+  } catch (error: Throwable) {
+    if (BuildConfig.DEBUG) {
+      error.printStackTrace()
     }
+    Failure(mapError(error)!!)
+  }
 }
 
 private val serverErrorCodes = 500..600
 private val authErrorCodes = 400..499
 
 private fun mapError(error: Throwable?): Throwable? = when {
-    error is JsonParseException -> ApiDataTransformException
-    error is IOException || error is ConnectException -> NetworkException
-    error is HttpException && error.code() in serverErrorCodes -> ServerError
-    error is HttpException && error.code() in authErrorCodes -> AuthError
-    else -> error
+  error is JsonParseException -> ApiDataTransformException
+  error is IOException || error is ConnectException -> NetworkException
+  error is HttpException && error.code() in serverErrorCodes -> ServerError
+  error is HttpException && error.code() in authErrorCodes -> AuthError
+  else -> error
 }

@@ -1,15 +1,30 @@
+/**
+ *  Designed and developed by ProjectX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
 package com.xplorer.projectx.ui.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.xplorer.projectx.databinding.PoiItemSmallBinding
 import com.xplorer.projectx.model.poi.PlaceOfInterest
 
-class PlacesOfInterestAdapter(private val places: List<PlaceOfInterest>,
-                              val onPlaceSelected: (String) -> Unit):
+class PlacesOfInterestAdapter(
+  private val places: List<PlaceOfInterest>,
+  val onPlaceSelected: (String) -> Unit
+) :
   RecyclerView.Adapter<PlacesOfInterestAdapter.PlacesOfInterestViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlacesOfInterestViewHolder {
@@ -27,8 +42,8 @@ class PlacesOfInterestAdapter(private val places: List<PlaceOfInterest>,
     holder.bind(poi)
   }
 
-  inner class PlacesOfInterestViewHolder(internal val binding: PoiItemSmallBinding):
-    RecyclerView.ViewHolder(binding.root)  {
+  inner class PlacesOfInterestViewHolder(internal val binding: PoiItemSmallBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(poi: PlaceOfInterest) {
       binding.poiTypeButton.text = poi.placeType

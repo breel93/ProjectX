@@ -35,18 +35,18 @@ import com.xplorer.projectx.extentions.Mappable
  */
 
 data class FoursquareResponse(@SerializedName("response") val venueResponse: VenueResponse) :
-    Mappable<List<Venue>> {
+  Mappable<List<Venue>> {
 
-    override fun mapToData(): List<Venue> {
-        val recommendedGroup = this.venueResponse.venueGroups[0] // recommended places group
-        val venueList = ArrayList<Venue>()
+  override fun mapToData(): List<Venue> {
+    val recommendedGroup = this.venueResponse.venueGroups[0] // recommended places group
+    val venueList = ArrayList<Venue>()
 
-        if (recommendedGroup.venueItemList.isNotEmpty()) {
-            for (venueItem in recommendedGroup.venueItemList) {
-                venueList.add(venueItem.venue)
-            }
-        }
-
-        return venueList
+    if (recommendedGroup.venueItemList.isNotEmpty()) {
+      for (venueItem in recommendedGroup.venueItemList) {
+        venueList.add(venueItem.venue)
+      }
     }
+
+    return venueList
+  }
 }

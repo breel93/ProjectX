@@ -25,18 +25,18 @@ import timber.log.Timber
 
 class MainActivity : DaggerAppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+  private lateinit var binding: ActivityMainBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-            override fun log(message: String) {
-                Timber.tag("OkHttp").d(message)
-            }
-        })
-        logging.redactHeader(getString(R.string.authorization))
-        logging.redactHeader(getString(R.string.cookie))
-    }
+    val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
+      override fun log(message: String) {
+        Timber.tag("OkHttp").d(message)
+      }
+    })
+    logging.redactHeader(getString(R.string.authorization))
+    logging.redactHeader(getString(R.string.cookie))
+  }
 }

@@ -36,17 +36,17 @@ import kotlinx.coroutines.launch
  */
 
 object CoroutineExecutor {
-    fun <T : Any> ioToMain(
-      workOnIo: suspend (() -> T?),
-      workOnMain: ((T?) -> Unit),
-      contextProvider: CoroutineContextProvider?
-    ) =
-        CoroutineScope(contextProvider!!.main).launch {
+  fun <T : Any> ioToMain(
+    workOnIo: suspend (() -> T?),
+    workOnMain: ((T?) -> Unit),
+    contextProvider: CoroutineContextProvider?
+  ) =
+    CoroutineScope(contextProvider!!.main).launch {
 
-            val data = CoroutineScope(contextProvider.io).async rt@{
-                return@rt workOnIo()
-            }.await()
+      val data = CoroutineScope(contextProvider.io).async rt@{
+        return@rt workOnIo()
+      }.await()
 
-            workOnMain(data)
-        }
+      workOnMain(data)
+    }
 }

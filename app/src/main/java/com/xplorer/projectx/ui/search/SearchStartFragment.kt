@@ -90,7 +90,7 @@ class SearchStartFragment : DaggerFragment() {
         })
 
         searchViewModel.addCityLiveData.observe(viewLifecycleOwner, Observer { updateCompleted ->
-            if(updateCompleted) {
+            if (updateCompleted) {
                 searchViewModel.getRecentlySearchedCities()
             }
         })

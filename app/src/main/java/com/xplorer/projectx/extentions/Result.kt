@@ -32,9 +32,10 @@ package com.xplorer.projectx.extentions
  */
 
 sealed class Result<out T : Any>
+
 data class Success<out T : Any>(val data: T) : Result<T>()
 data class Failure(val error: Throwable) : Result<Nothing>()
 
 interface Mappable<out T : Any> {
-    fun mapToData(): T
+  fun mapToData(): T
 }
