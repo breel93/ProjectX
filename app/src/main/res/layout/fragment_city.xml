@@ -74,7 +74,7 @@
             <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/cityPhotoRecyclerView"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="@dimen/photo_preview_height"
               android:layout_marginBottom="0dp"
               app:layout_constraintBottom_toBottomOf="parent"
               app:layout_constraintEnd_toEndOf="parent"
@@ -194,7 +194,7 @@
             <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/poiRecyclerView"
               android:layout_width="wrap_content"
-              android:layout_height="@dimen/photo_preview_height"
+              android:layout_height="wrap_content"
               android:clipToPadding="false"
               android:paddingBottom="10dp"
               app:layout_constraintEnd_toEndOf="parent"
