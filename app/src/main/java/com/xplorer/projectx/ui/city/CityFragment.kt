@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -34,12 +35,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityBinding
@@ -69,6 +71,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   private var areaName = "n/a"
   private lateinit var wikiArticleName: String
   private lateinit var navController: NavController
+  private val MAP_BUNDLE_KEY = "MAP_BUNDLE_KEY"
+  private lateinit var mapView: MapView
+  private lateinit var toolbar: Toolbar
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -96,10 +101,18 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
     buildPlacesOfInterest()
 
-    val mapFragment = childFragmentManager.findFragmentById(R.id.cityMap) as SupportMapFragment
-    mapFragment.getMapAsync(this)
+    mapView = binding.cityMap
 
-    (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
+    var mapBundle: Bundle? = null
+    if (savedInstanceState != null) {
+      mapBundle = savedInstanceState.getBundle(MAP_BUNDLE_KEY)
+    }
+    mapView.onCreate(mapBundle)
+    mapView.getMapAsync(this)
+
+    toolbar = binding.cityFragmentToolBar
+
+    (activity as AppCompatActivity).setSupportActionBar(toolbar)
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     binding.cityFragmentToolBar!!.title = place.cityName
 
@@ -110,9 +123,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
   private fun buildPlacesOfInterest() {
 
-    binding.morePlacesButton.setOnClickListener {
-      Toast.makeText(context, "Go to map details screen", Toast.LENGTH_SHORT).show()
-    }
+    binding.morePlacesButton.setOnClickListener(this)
 
     // Build places of interest items
     val placesOfInterest = ArrayList<PlaceOfInterest>()
@@ -284,6 +295,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   override fun onMapReady(googleMap: GoogleMap) {
     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
     googleMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
+    googleMap.setOnMapClickListener {
+      goToCityMap()
+    }
   }
 
   override fun onClick(v: View?) {
@@ -295,7 +309,29 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
           launchWikiWebView()
         }
       }
+
+      R.id.morePlacesButton -> {
+        goToCityMap()
+      }
+
+      R.id.cityMap -> {
+        goToCityMap()
+      }
     }
+  }
+
+  private fun goToCityMap(placeOfInterest: String = "") {
+    val extras = bundleOf(
+      "place" to place,
+      "poi" to placeOfInterest
+    )
+
+    val sharedExtras = FragmentNavigatorExtras(
+      mapView to resources.getString(R.string.city_map_transition_name),
+      toolbar to resources.getString(R.string.toolbar_transition_name)
+    )
+
+    navController.navigate(R.id.cityMapFragment, extras, null, sharedExtras)
   }
 
   private fun launchWikiWebView() {
@@ -326,4 +362,48 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
       Uri.parse(Constants.WIKIPEDIA_INFO_URL + wikiArticleName)
     )
   }
+
+  override fun onLowMemory() {
+    super.onLowMemory()
+    mapView.onLowMemory()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    mapView.onDestroy()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    mapView.onPause()
+  }
+
+  override fun onStop() {
+    super.onStop()
+    mapView.onStop()
+  }
+
+  override fun onStart() {
+    super.onStart()
+    mapView.onStart()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    mapView.onResume()
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    var mapViewBundle = outState.getBundle(MAP_BUNDLE_KEY)
+    if (mapViewBundle == null) {
+      mapViewBundle = Bundle()
+      outState.putBundle(MAP_BUNDLE_KEY, mapViewBundle)
+    }
+
+    mapView.onSaveInstanceState(mapViewBundle)
+  }
 }
+
+//
+//

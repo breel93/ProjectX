@@ -8,4 +8,6 @@
   <string name="okhttp">OkHttp</string>
   <string name="title_activity_maps">Map</string>
   <string name="more_places_of_interest">more places of interest</string>
+  <string name="city_map_transition_name">city_map</string>
+  <string name="toolbar_transition_name">toolbar_transition_name</string>
 </resources>

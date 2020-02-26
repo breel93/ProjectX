@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          android:transitionName="@string/toolbar_transition_name"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -178,21 +179,22 @@
             android:layout_height="wrap_content"
             android:paddingBottom="20dp">
 
-            <androidx.fragment.app.FragmentContainerView
-              android:id="@+id/cityMap"
-              android:name="com.google.android.gms.maps.SupportMapFragment"
-              android:layout_width="match_parent"
-              android:layout_height="300dp"
-              android:layout_marginTop="2dp"
-              android:layout_marginBottom="8dp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/cityMap"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:transitionName="@string/city_map_transition_name"/>
+
 
             <androidx.recyclerview.widget.RecyclerView
               android:id="@+id/poiRecyclerView"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_height="@dimen/photo_preview_height"
               android:clipToPadding="false"
               android:paddingBottom="10dp"
               app:layout_constraintEnd_toEndOf="parent"
