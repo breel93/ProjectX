@@ -93,11 +93,11 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
     binding.cityAboutTitle.text = "About ${place.cityName}"
     binding.cityAboutLoadingBar.isVisible = true // make loading visible
+    binding.morePlacesButton.text = "Explore ${place.cityName}"
+    binding.morePlacesButton.setOnClickListener(this)
 
     viewModelCity.confirmCoordinatesForCity(place.cityName, place.getLatLongString())
     displaceCityPhotos()
-
-    buildPlacesOfInterest()
 
     mapView = binding.cityMap
 
@@ -117,35 +117,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     // set more city info click listener
     binding.moreAboutCityButton.setOnClickListener(this)
     return binding.root
-  }
-
-  private fun buildPlacesOfInterest() {
-
-    binding.morePlacesButton.setOnClickListener(this)
-
-    // Build places of interest items
-    val placesOfInterest = ArrayList<PlaceOfInterest>()
-
-    // using dummy entries for now
-    placesOfInterest.add(PlaceOfInterest("Restaurants"))
-    placesOfInterest.add(PlaceOfInterest("Bars"))
-    placesOfInterest.add(PlaceOfInterest("Lounges"))
-    placesOfInterest.add(PlaceOfInterest("ATMs"))
-    placesOfInterest.add(PlaceOfInterest("Fuel Stations"))
-    placesOfInterest.add(PlaceOfInterest("Banks"))
-
-    val placesOfInterestAdapter =
-      PlacesOfInterestAdapter(placesOfInterest) { placeType ->
-        Toast.makeText(context, "Place type clicked: $placeType", Toast.LENGTH_SHORT).show()
-      }
-
-    val spanCount = RecyclerViewUtils.getDynamicSpanCount(context,
-      resources.getDimensionPixelSize(R.dimen.poi_item_size),
-      resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing))
-
-    val gridLM = GridLayoutManager(context, spanCount, GridLayoutManager.VERTICAL, false)
-    binding.poiRecyclerView.layoutManager = gridLM
-    binding.poiRecyclerView.adapter = placesOfInterestAdapter
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {

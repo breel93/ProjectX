@@ -72,7 +72,7 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
 
     parent.setSupportActionBar(toolbar)
     parent.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    parent.supportActionBar!!.title = "Search ${place.cityName}"
+    parent.supportActionBar!!.title = "Explore ${place.cityName}"
 
     return binding.root
   }

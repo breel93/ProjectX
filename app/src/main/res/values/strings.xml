@@ -7,7 +7,7 @@
   <string name="authorization">Authorization</string>
   <string name="okhttp">OkHttp</string>
   <string name="title_activity_maps">Map</string>
-  <string name="more_places_of_interest">more places of interest</string>
+  <string name="more_places_of_interest">Explore City</string>
   <string name="city_map_transition_name">city_map</string>
   <string name="toolbar_transition_name">toolbar_transition_name</string>
   <string name="select_a_place_of_interest">Select a place \n of interest</string>

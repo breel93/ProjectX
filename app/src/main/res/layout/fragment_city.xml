@@ -179,6 +179,26 @@
             android:layout_height="wrap_content"
             android:paddingBottom="20dp">
 
+            <Button
+                android:id="@+id/morePlacesButton"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/colorAccent"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
+                android:maxWidth="250dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/more_places_of_interest"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/cityMap"/>
+
             <com.google.android.gms.maps.MapView
                 android:id="@+id/cityMap"
                 android:layout_width="match_parent"
@@ -187,34 +207,10 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/morePlacesButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:transitionName="@string/city_map_transition_name"/>
 
-
-            <androidx.recyclerview.widget.RecyclerView
-              android:id="@+id/poiRecyclerView"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:clipToPadding="false"
-              android:paddingBottom="10dp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/cityMap" />
-
-            <Button
-              android:id="@+id/morePlacesButton"
-              android:layout_width="wrap_content"
-              android:layout_height="50dp"
-              android:layout_margin="20dp"
-              android:background="@color/colorAccent"
-              android:paddingStart="30dp"
-              android:paddingEnd="30dp"
-              android:text="@string/more_places_of_interest"
-              android:textColor="@android:color/white"
-              android:textSize="16sp"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/poiRecyclerView" />
 
           </androidx.constraintlayout.widget.ConstraintLayout>
 
