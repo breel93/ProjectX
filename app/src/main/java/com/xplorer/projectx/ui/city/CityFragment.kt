@@ -15,14 +15,11 @@
 */
 package com.xplorer.projectx.ui.city
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -55,6 +52,7 @@ import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
 import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.utils.AppPackageUtils
 import com.xplorer.projectx.utils.Constants
+import com.xplorer.projectx.utils.RecyclerViewUtils
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -141,16 +139,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
         Toast.makeText(context, "Place type clicked: $placeType", Toast.LENGTH_SHORT).show()
       }
 
-    val windowManager = (context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
-    val displayMetrics = DisplayMetrics()
-    windowManager.defaultDisplay.getMetrics(displayMetrics)
-    val trueItemSize = resources.getDimensionPixelSize(R.dimen.poi_item_size) +
-            resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing)
-    var spanCount = displayMetrics.widthPixels / trueItemSize
-
-    if (spanCount % 2 != 0 && spanCount > 1) {
-      spanCount -= 1
-    }
+    val spanCount = RecyclerViewUtils.getDynamicSpanCount(context,
+      resources.getDimensionPixelSize(R.dimen.poi_item_size),
+      resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing))
 
     val gridLM = GridLayoutManager(context, spanCount, GridLayoutManager.VERTICAL, false)
     binding.poiRecyclerView.layoutManager = gridLM
