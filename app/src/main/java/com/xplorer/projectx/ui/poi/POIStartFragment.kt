@@ -38,6 +38,7 @@ class POIStartFragment : Fragment() {
   private lateinit var poiAdapter: PlacesOfInterestAdapter
   private val poiList = ArrayList<PlaceOfInterest>()
 
+
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,

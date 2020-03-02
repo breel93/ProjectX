@@ -10,4 +10,31 @@
   <string name="more_places_of_interest">more places of interest</string>
   <string name="city_map_transition_name">city_map</string>
   <string name="toolbar_transition_name">toolbar_transition_name</string>
+  <string name="select_a_place_of_interest">Select a place \n of interest</string>
+  <string name="more_poi_text">More…</string>
+
+  <array name="place_of_interest_list">
+    <item>Restaurants</item>
+    <item>Bars</item>
+    <item>Coffee</item>
+    <item>Parks</item>
+    <item>Gyms</item>
+    <item>Art</item>
+    <item>Attractions</item>
+    <item>Nightlife</item>
+    <item>Live Music</item>
+    <item>Movies</item>
+    <item>Libraries</item>
+    <item>Hotels</item>
+    <item>ATMs</item>
+    <item>Beauty Salons</item>
+    <item>Car Rental</item>
+    <item>Car Wash</item>
+    <item>Gas</item>
+    <item>Dry Cleaning</item>
+    <item>Hospitals</item>
+    <item>Pharmacies</item>
+    <item>Libraries</item>
+    <item>Shopping Malls</item>
+  </array>
 </resources>

@@ -6,7 +6,8 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.city.CityMapFragment">
+    tools:context=".ui.city.CityMapFragment"
+      android:animateLayoutChanges="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mapFragmentToolbar"
@@ -36,10 +37,14 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        app:navGraph="@navigation/city_map_navigation_graph"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cityMap"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:paddingBottom="20dp"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
