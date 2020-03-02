@@ -15,12 +15,16 @@
 */
 package com.xplorer.projectx.ui.poi
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FullPoiListLayoutBinding
@@ -41,8 +45,6 @@ class FullPOIListFragment : BottomSheetDialogFragment() {
       container,
       false)
 
-    isCancelable = false
-
     val placesOfInterest = resources.getStringArray(R.array.place_of_interest_list).toList()
 
     poiAdapter = POISelectionAdapter(context!!, placesOfInterest) { selectedPOI ->
@@ -54,6 +56,42 @@ class FullPOIListFragment : BottomSheetDialogFragment() {
     binding.exitPOIBtn.setOnClickListener {
       dismiss()
     }
+
     return binding.root
+  }
+
+  override fun onActivityCreated(savedInstanceState: Bundle?) {
+    super.onActivityCreated(savedInstanceState)
+    val touchOutsideView = dialog!!
+      .window!!
+      .decorView.findViewById<View>(com.google.android.material.R.id.touch_outside)
+
+    touchOutsideView.setOnClickListener(null)
+  }
+
+  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+    val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+    bottomSheetDialog.setOnShowListener {
+      val bottomSheet = bottomSheetDialog
+        .findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+
+      bottomSheet?.let {
+        BottomSheetBehavior.from(bottomSheet).apply {
+          isHideable = true
+
+          setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+              if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                state = BottomSheetBehavior.STATE_EXPANDED
+              }
+            }
+
+            override fun onSlide(p0: View, p1: Float) {}
+          })
+        }
+      }
+    }
+
+    return bottomSheetDialog
   }
 }
