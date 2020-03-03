@@ -33,7 +33,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -45,14 +44,11 @@ import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
-import com.xplorer.projectx.model.poi.PlaceOfInterest
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
-import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.utils.AppPackageUtils
 import com.xplorer.projectx.utils.Constants
-import com.xplorer.projectx.utils.RecyclerViewUtils
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -282,10 +278,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     }
   }
 
-  private fun goToCityMap(placeOfInterest: String = "") {
+  private fun goToCityMap() {
     val extras = bundleOf(
-      "place" to place,
-      "poi" to placeOfInterest
+      "place" to place
     )
 
     val sharedExtras = FragmentNavigatorExtras(

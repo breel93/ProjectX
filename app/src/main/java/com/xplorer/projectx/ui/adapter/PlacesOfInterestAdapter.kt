@@ -19,10 +19,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.xplorer.projectx.databinding.PoiItemSmallBinding
-import com.xplorer.projectx.model.poi.PlaceOfInterest
 
 class PlacesOfInterestAdapter(
-  private val places: List<PlaceOfInterest>,
+  private val places: List<String>,
   val onPlaceSelected: (String) -> Unit
 ) :
   RecyclerView.Adapter<PlacesOfInterestAdapter.PlacesOfInterestViewHolder>() {
@@ -45,11 +44,9 @@ class PlacesOfInterestAdapter(
   inner class PlacesOfInterestViewHolder(internal val binding: PoiItemSmallBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(poi: PlaceOfInterest) {
-      binding.poiTypeButton.text = poi.placeType
-      binding.poiTypeButton.setOnClickListener { onPlaceSelected(poi.placeType) }
-      //    holder.binding.poiImageView
-//      .setImageDrawable(context.resources.getDrawable(poi.image, null))
+    fun bind(poi: String) {
+      binding.poiTypeButton.text = poi
+      binding.poiTypeButton.setOnClickListener { onPlaceSelected(poi) }
     }
   }
 }

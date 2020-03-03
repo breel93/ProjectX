@@ -25,10 +25,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PlacesOfInterestLayoutBinding
-import com.xplorer.projectx.model.poi.PlaceOfInterest
 import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.utils.RecyclerViewUtils
-import java.util.Random
 import java.util.Locale
 import kotlin.collections.ArrayList
 
@@ -36,8 +34,7 @@ class POIStartFragment : Fragment() {
 
   private lateinit var binding: PlacesOfInterestLayoutBinding
   private lateinit var poiAdapter: PlacesOfInterestAdapter
-  private val poiList = ArrayList<PlaceOfInterest>()
-
+  private val poiList = ArrayList<String>()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -49,14 +46,14 @@ class POIStartFragment : Fragment() {
       container,
       false)
 
-    val placesOfInterest = resources.getStringArray(R.array.place_of_interest_list)
+    val placesOfInterest = resources.getStringArray(R.array.place_of_interest_list).toList() as ArrayList<String>
+    placesOfInterest.shuffle()
 
     for (i in 0 until 5) {
-      poiList.add(PlaceOfInterest(placesOfInterest[i]))
+      poiList.add(placesOfInterest[i])
     }
 
-    poiList.shuffle(Random(4))
-    poiList.add(PlaceOfInterest(getString(R.string.more_poi_text)))
+    poiList.add(getString(R.string.more_poi_text))
 
     poiAdapter = PlacesOfInterestAdapter(poiList) { selectedPOI ->
       if (selectedPOI.toLowerCase(Locale.getDefault()) ==
