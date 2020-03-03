@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -251,11 +252,25 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
-    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
+    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f),
+      object: GoogleMap.CancelableCallback {
+      override fun onFinish() {
+        val topMargin = resources.getDimensionPixelSize(R.dimen.explore_city_button_margin) * -1f
+
+        binding.morePlacesButton
+          .animate()
+          .setDuration(500)
+          .setStartDelay(300)
+          .y(topMargin)
+          .alpha(1f)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+      }
+
+      override fun onCancel() {}
+    })
+
     googleMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
-    googleMap.setOnMapClickListener {
-      goToCityMap()
-    }
   }
 
   override fun onClick(v: View?) {
@@ -269,10 +284,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
       }
 
       R.id.morePlacesButton -> {
-        goToCityMap()
-      }
-
-      R.id.cityMap -> {
         goToCityMap()
       }
     }
