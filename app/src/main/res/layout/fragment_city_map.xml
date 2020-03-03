@@ -3,15 +3,48 @@
 
   <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.city.CityMapFragment">
+    tools:context=".ui.city.CityMapFragment"
+      android:animateLayoutChanges="true">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:text="@string/hello_blank_fragment" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mapFragmentToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cityMap"
+        android:transitionName="@string/toolbar_transition_name"/>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/cityMap"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
+        app:layout_constraintTop_toBottomOf="@id/mapFragmentToolbar"
+        android:transitionName="@string/city_map_transition_name"/>
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navGraph="@navigation/city_map_navigation_graph"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cityMap"
+        android:layout_marginBottom="8dp"
+        android:paddingBottom="20dp"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

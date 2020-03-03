@@ -15,16 +15,15 @@
 */
 package com.xplorer.projectx.ui.city
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -34,23 +33,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
-import com.xplorer.projectx.model.poi.PlaceOfInterest
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
-import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.utils.AppPackageUtils
 import com.xplorer.projectx.utils.Constants
 import dagger.android.support.DaggerFragment
@@ -69,6 +66,9 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   private var areaName = "n/a"
   private lateinit var wikiArticleName: String
   private lateinit var navController: NavController
+  private val MAP_BUNDLE_KEY = "MAP_BUNDLE_KEY"
+  private lateinit var mapView: MapView
+  private lateinit var toolbar: Toolbar
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -90,60 +90,30 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
     binding.cityAboutTitle.text = "About ${place.cityName}"
     binding.cityAboutLoadingBar.isVisible = true // make loading visible
+    binding.morePlacesButton.text = "Explore ${place.cityName}"
+    binding.morePlacesButton.setOnClickListener(this)
 
     viewModelCity.confirmCoordinatesForCity(place.cityName, place.getLatLongString())
     displaceCityPhotos()
 
-    buildPlacesOfInterest()
+    mapView = binding.cityMap
 
-    val mapFragment = childFragmentManager.findFragmentById(R.id.cityMap) as SupportMapFragment
-    mapFragment.getMapAsync(this)
+    var mapBundle: Bundle? = null
+    if (savedInstanceState != null) {
+      mapBundle = savedInstanceState.getBundle(MAP_BUNDLE_KEY)
+    }
+    mapView.onCreate(mapBundle)
+    mapView.getMapAsync(this)
 
-    (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
+    toolbar = binding.cityFragmentToolBar
+
+    (activity as AppCompatActivity).setSupportActionBar(toolbar)
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     binding.cityFragmentToolBar!!.title = place.cityName
 
     // set more city info click listener
     binding.moreAboutCityButton.setOnClickListener(this)
     return binding.root
-  }
-
-  private fun buildPlacesOfInterest() {
-
-    binding.morePlacesButton.setOnClickListener {
-      Toast.makeText(context, "Go to map details screen", Toast.LENGTH_SHORT).show()
-    }
-
-    // Build places of interest items
-    val placesOfInterest = ArrayList<PlaceOfInterest>()
-
-    // using dummy entries for now
-    placesOfInterest.add(PlaceOfInterest("Restaurants"))
-    placesOfInterest.add(PlaceOfInterest("Bars"))
-    placesOfInterest.add(PlaceOfInterest("Lounges"))
-    placesOfInterest.add(PlaceOfInterest("ATMs"))
-    placesOfInterest.add(PlaceOfInterest("Fuel Stations"))
-    placesOfInterest.add(PlaceOfInterest("Banks"))
-
-    val placesOfInterestAdapter =
-      PlacesOfInterestAdapter(placesOfInterest) { placeType ->
-        Toast.makeText(context, "Place type clicked: $placeType", Toast.LENGTH_SHORT).show()
-      }
-
-    val windowManager = (context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
-    val displayMetrics = DisplayMetrics()
-    windowManager.defaultDisplay.getMetrics(displayMetrics)
-    val trueItemSize = resources.getDimensionPixelSize(R.dimen.poi_item_size) +
-            resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing)
-    var spanCount = displayMetrics.widthPixels / trueItemSize
-
-    if (spanCount % 2 != 0 && spanCount > 1) {
-      spanCount -= 1
-    }
-
-    val gridLM = GridLayoutManager(context, spanCount, GridLayoutManager.VERTICAL, false)
-    binding.poiRecyclerView.layoutManager = gridLM
-    binding.poiRecyclerView.adapter = placesOfInterestAdapter
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -282,7 +252,24 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
-    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
+    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f),
+      object: GoogleMap.CancelableCallback {
+      override fun onFinish() {
+        val topMargin = resources.getDimensionPixelSize(R.dimen.explore_city_button_margin) * -1f
+
+        binding.morePlacesButton
+          .animate()
+          .setDuration(500)
+          .setStartDelay(300)
+          .y(topMargin)
+          .alpha(1f)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+      }
+
+      override fun onCancel() {}
+    })
+
     googleMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
   }
 
@@ -295,7 +282,24 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
           launchWikiWebView()
         }
       }
+
+      R.id.morePlacesButton -> {
+        goToCityMap()
+      }
     }
+  }
+
+  private fun goToCityMap() {
+    val extras = bundleOf(
+      "place" to place
+    )
+
+    val sharedExtras = FragmentNavigatorExtras(
+      mapView to resources.getString(R.string.city_map_transition_name),
+      toolbar to resources.getString(R.string.toolbar_transition_name)
+    )
+
+    navController.navigate(R.id.cityMapFragment, extras, null, sharedExtras)
   }
 
   private fun launchWikiWebView() {
@@ -326,4 +330,48 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
       Uri.parse(Constants.WIKIPEDIA_INFO_URL + wikiArticleName)
     )
   }
+
+  override fun onLowMemory() {
+    super.onLowMemory()
+    mapView.onLowMemory()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    mapView.onDestroy()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    mapView.onPause()
+  }
+
+  override fun onStop() {
+    super.onStop()
+    mapView.onStop()
+  }
+
+  override fun onStart() {
+    super.onStart()
+    mapView.onStart()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    mapView.onResume()
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    var mapViewBundle = outState.getBundle(MAP_BUNDLE_KEY)
+    if (mapViewBundle == null) {
+      mapViewBundle = Bundle()
+      outState.putBundle(MAP_BUNDLE_KEY, mapViewBundle)
+    }
+
+    mapView.onSaveInstanceState(mapViewBundle)
+  }
 }
+
+//
+//

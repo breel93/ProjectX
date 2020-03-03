@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_margin="10dp"
+      android:clickable="true"
+      android:focusable="true">
+
+    <ImageView
+        android:id="@+id/poiImg"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_near_me_black_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/poiName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="5dp"
+        android:tint="@color/colorAccent"
+        android:layout_marginStart="20dp"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+      android:id="@+id/poiName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="15dp"
+      android:textSize="18sp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toEndOf="@id/poiImg"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Dummy" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#193F3F3F"
+        app:layout_constraintTop_toBottomOf="@id/poiName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

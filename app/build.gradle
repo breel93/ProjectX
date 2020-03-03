@@ -103,8 +103,11 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + versions.coroutines_android
 
     //navigation
-    implementation 'androidx.navigation:navigation-fragment:' + versions.navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:' + versions.navigation
     implementation 'androidx.navigation:navigation-ui:' + versions.navigation
+
+    //transitions
+    implementation 'androidx.transition:transition:' + versions.transition
 
 
     //test
