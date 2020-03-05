@@ -3,14 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/city_map_navigation_graph"
-    app:startDestination="@id/poiListFragment"
+    app:startDestination="@id/POIListFragment"
     tools:ignore="UnusedNavigation">
 
     <fragment
-        android:id="@+id/poiListFragment"
+        android:id="@+id/poiStartFragment"
         android:name="com.xplorer.projectx.ui.poi.POIStartFragment"
-        android:label="POIFragment" >
+        android:label="POIStartFragment">
     </fragment>
+
+    <fragment
+        android:id="@+id/POIListFragment"
+        android:name="com.xplorer.projectx.ui.poi.POIListFragment"
+        android:label="POIListFragment" />
 
 
 </navigation>
