@@ -24,16 +24,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.LatLng
+
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityMapBinding
 import com.xplorer.projectx.model.CityModel
+import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -49,6 +53,8 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
   private val MAP_BUNDLE_KEY = "MAP_BUNDLE_KEY_2"
   private lateinit var mapView: MapView
   private lateinit var toolbar: Toolbar
+  private lateinit var viewMap: GoogleMap
+  private lateinit var previousMarker: Marker
 
   @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -98,12 +104,34 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
 
     sharedCityMapViewModel.setCurrentCoordinates(place.getLatLongString())
 
+    sharedCityMapViewModel.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->
+      if(venues != null) {
+
+//          val icon: BitmapDescriptor = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)
+        for(venue in venues) {
+          viewMap.addMarker(
+            MarkerOptions()
+              .position(LatLng(venue.venueLocation.lat.toDouble(), venue.venueLocation.lon.toDouble()))
+              .title(venue.venueName)).tag = venue.venueName
+        }
+      } else {
+        resetMap()
+      }
+    })
+
     sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
   }
 
+  private fun resetMap() {
+    viewMap.clear()
+    viewMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
+    viewMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
+  }
+
   override fun onMapReady(googleMap: GoogleMap) {
-    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
-    googleMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
+    viewMap = googleMap
+    viewMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
+    viewMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
   }
 
   override fun onLowMemory() {
