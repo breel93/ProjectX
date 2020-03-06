@@ -123,8 +123,13 @@ class POIStartFragment : DaggerFragment(), POISelectionListener {
   }
 
   private fun observePOIChanges() {
-    sharedCityMapViewModel = parentFragment?.let {
-      ViewModelProvider(it, viewModelFactory).get(CityMapViewModel::class.java)
+
+    // Using the city map fragment as the lifecycle owner for the viewModel provider
+
+    sharedCityMapViewModel = parentFragment?.let { parent ->
+      parent.parentFragment?.let { cityMapFragment ->
+        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
+      }
     }!!
 
     sharedCityMapViewModel

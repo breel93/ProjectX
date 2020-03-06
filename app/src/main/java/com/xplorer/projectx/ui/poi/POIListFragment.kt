@@ -105,14 +105,19 @@ class POIListFragment : DaggerFragment() {
     }
 
     val currentPOI = sharedCityMapViewModel.currentPOILiveData.value
-    sharedCityMapViewModel.getVenueData(currentPOI!!, "35.6804,139.7690")
+    val coordinates = sharedCityMapViewModel.getCurrentCoordnates()
+
+    sharedCityMapViewModel.getVenueData(currentPOI!!, coordinates!!)
 
     bottomNavController = Navigation.findNavController(view)
   }
 
   private fun setUpSharedViewModel() {
-    sharedCityMapViewModel = parentFragment?.let {
-      ViewModelProvider(it, viewModelFactory).get(CityMapViewModel::class.java)
+
+    sharedCityMapViewModel = parentFragment?.let { parent ->
+      parent.parentFragment?.let { cityMapFragment ->
+        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
+      }
     }!!
 
     sharedCityMapViewModel

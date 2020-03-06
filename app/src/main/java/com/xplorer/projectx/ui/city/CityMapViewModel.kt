@@ -31,6 +31,19 @@ class CityMapViewModel @Inject constructor(
     _successVenueLiveData.value = null
   }
 
+  // Please check this for an alternative to provide coordinates to the
+  // places of interest recycler view fragment
+
+  private var currentCoordinates: String? = null
+
+  fun setCurrentCoordinates(coordinates: String) {
+    this.currentCoordinates = coordinates
+  }
+
+  fun getCurrentCoordnates(): String? {
+    return this.currentCoordinates
+  }
+
   // Venues / foursquare
 
   private val _successVenueLiveData = MutableLiveData<List<Venue>>()

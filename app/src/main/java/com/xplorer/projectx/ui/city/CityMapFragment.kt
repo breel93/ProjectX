@@ -24,8 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -37,6 +36,7 @@ import com.xplorer.projectx.databinding.FragmentCityMapBinding
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.latLong
 import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -48,8 +48,11 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
   private lateinit var parent: AppCompatActivity
   private val MAP_BUNDLE_KEY = "MAP_BUNDLE_KEY_2"
   private lateinit var mapView: MapView
-  private lateinit var bottomMapNavController: NavController
   private lateinit var toolbar: Toolbar
+
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
+  private lateinit var sharedCityMapViewModel: CityMapViewModel
 
 
   override fun onCreateView(
@@ -83,13 +86,19 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     place = arguments!!.getParcelable("place")!!
-    sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    val fragmentContainer = view.findViewById<View>(R.id.bottomContainer)
-    bottomMapNavController = Navigation.findNavController(fragmentContainer)
+
+
+    // Using the city map fragment as the lifecycle owner for the viewModel provider
+    // To share its resources with the children fragment
+    sharedCityMapViewModel =  ViewModelProvider(this, viewModelFactory).get(CityMapViewModel::class.java)
+
+    sharedCityMapViewModel.setCurrentCoordinates(place.getLatLongString())
+
+    sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
