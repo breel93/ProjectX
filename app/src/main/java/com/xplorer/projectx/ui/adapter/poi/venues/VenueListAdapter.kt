@@ -68,7 +68,7 @@ class VenueListAdapter(
         text = "open"
       }
 
-      binding.placeCategory.text = venue.venueLocation.address
+      binding.placeCategory.text = venue.venueCategories?.first()?.categoryName ?: "No Category Available"
       binding.placeDistance.text = "33 mi"
 
       itemView.setOnClickListener {
