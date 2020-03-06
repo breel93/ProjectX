@@ -19,60 +19,129 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PlacesOfInterestLayoutBinding
 import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
+import com.xplorer.projectx.ui.city.CityMapViewModel
 import com.xplorer.projectx.utils.RecyclerViewUtils
+import dagger.android.support.DaggerFragment
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class POIStartFragment : Fragment() {
+class POIStartFragment : DaggerFragment(), POISelectionListener {
 
+
+
+  private lateinit var bottomNavController: NavController
   private lateinit var binding: PlacesOfInterestLayoutBinding
   private lateinit var poiAdapter: PlacesOfInterestAdapter
   private val poiList = ArrayList<String>()
+
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
+  private lateinit var sharedCityMapViewModel: CityMapViewModel
+
+  private var savedView: View? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    binding = DataBindingUtil.inflate(inflater,
-      R.layout.places_of_interest_layout,
-      container,
-      false)
 
-    val placesOfInterest = resources.getStringArray(R.array.place_of_interest_list).toList() as ArrayList<String>
-    placesOfInterest.shuffle()
+    if(savedView == null) {
 
-    for (i in 0 until 5) {
-      poiList.add(placesOfInterest[i])
+      binding = DataBindingUtil.inflate(inflater,
+        R.layout.places_of_interest_layout,
+        container,
+        false)
+
+      val placesOfInterest = resources.getStringArray(R.array.place_of_interest_list).toList() as ArrayList<String>
+      placesOfInterest.shuffle()
+
+      for (i in 0 until 5) {
+        poiList.add(placesOfInterest[i])
+      }
+
+      poiList.add(getString(R.string.more_poi_text))
+
+      val spanCount = RecyclerViewUtils.getDynamicSpanCount(context,
+        resources.getDimensionPixelSize(R.dimen.poi_item_size),
+        resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing))
+
+      val gridLM = GridLayoutManager(context, spanCount, GridLayoutManager.VERTICAL, false)
+      binding.poiFullRecyclerView.layoutManager = gridLM
+
+      savedView = binding.root
+      return savedView
     }
 
-    poiList.add(getString(R.string.more_poi_text))
+    return savedView
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    observePOIChanges()
 
     poiAdapter = PlacesOfInterestAdapter(poiList) { selectedPOI ->
       if (selectedPOI.toLowerCase(Locale.getDefault()) ==
         getString(R.string.more_poi_text).toLowerCase(Locale.getDefault())) {
-        val actionBottomSheetFragment = FullPOIListFragment()
+        val actionBottomSheetFragment = FullPOIListFragment(this)
         actionBottomSheetFragment.show(childFragmentManager, "")
       } else {
-        Toast.makeText(context, "Selected this place: $selectedPOI", Toast.LENGTH_SHORT).show()
+        sharedCityMapViewModel.clearPlacesOfInterest()
+        sharedCityMapViewModel.setCurrentPOI(selectedPOI)
       }
     }
 
-    val spanCount = RecyclerViewUtils.getDynamicSpanCount(context,
-      resources.getDimensionPixelSize(R.dimen.poi_item_size),
-      resources.getDimensionPixelSize(R.dimen.poi_home_column_spacing))
-
-    val gridLM = GridLayoutManager(context, spanCount, GridLayoutManager.VERTICAL, false)
-    binding.poiFullRecyclerView.layoutManager = gridLM
     binding.poiFullRecyclerView.adapter = poiAdapter
 
-    return binding.root
+    requireActivity().onBackPressedDispatcher.addCallback(this,
+      object: OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+
+          savedView = null
+
+          if(isEnabled) {
+            isEnabled = false
+            requireActivity().onBackPressed()
+          }
+        }
+      })
+
+    bottomNavController = Navigation.findNavController(view)
+  }
+
+  private fun observePOIChanges() {
+    sharedCityMapViewModel = parentFragment?.let {
+      ViewModelProvider(it, viewModelFactory).get(CityMapViewModel::class.java)
+    }!!
+
+    sharedCityMapViewModel
+      .currentPOILiveData
+      .observe(viewLifecycleOwner, Observer { selectedPOI ->
+
+        if (selectedPOI != null) {
+          val poiBundle = bundleOf(
+            "poi" to selectedPOI
+          )
+
+          bottomNavController.navigate(R.id.poiListFragment, poiBundle)
+        }
+      })
+  }
+
+  override fun onSelectPOI(poi: String) {
+    sharedCityMapViewModel.setCurrentPOI(poi)
   }
 }

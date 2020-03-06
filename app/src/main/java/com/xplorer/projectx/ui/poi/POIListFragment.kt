@@ -19,26 +19,46 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PlacesListContainerBinding
 import com.xplorer.projectx.model.foursquare.Venue
-import com.xplorer.projectx.model.foursquare.VenueLocation
 import com.xplorer.projectx.ui.adapter.poi.venues.VenueListAdapter
 import com.xplorer.projectx.ui.adapter.snap.SnapOnScrollListener
+import com.xplorer.projectx.ui.city.CityMapViewModel
+import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.places_list_container.*
+import javax.inject.Inject
 
-class POIListFragment : Fragment() {
+class POIListFragment : DaggerFragment() {
 
   private lateinit var binding: PlacesListContainerBinding
   private val venueList = ArrayList<Venue>()
   private lateinit var venueListAdapter: VenueListAdapter
   private lateinit var venueRecycler: RecyclerView
+  private lateinit var loadingIndicator: ProgressBar
+  private lateinit var venueErrorLayout: LinearLayout
+  private lateinit var backButton: ImageButton
   private val snapHelper = LinearSnapHelper()
+  private lateinit var bottomNavController: NavController
+
+  @Inject
+  lateinit var viewModelFactory: ViewModelProvider.Factory
+  private lateinit var sharedCityMapViewModel: CityMapViewModel
+
+  private var savedView: View? = null
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -46,43 +66,103 @@ class POIListFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View? {
 
-    binding = DataBindingUtil.inflate(LayoutInflater.from(context),
-      R.layout.places_list_container,
-      container,
-      false)
+    if(savedView == null) {
+      binding = DataBindingUtil.inflate(LayoutInflater.from(context),
+        R.layout.places_list_container,
+        container,
+        false)
 
-    val venue1 = Venue("",
-      "The Place",
-      VenueLocation("South Side", 0f, 0f))
+      venueRecycler = binding.placeListRecycler
+      loadingIndicator = binding.placeLoadingIndicator
+      venueErrorLayout = binding.poiErrorMessage
+      backButton = binding.backButton
 
-    for (x in 0 until 10) {
-      venueList.add(venue1)
+      venueRecycler.layoutManager = LinearLayoutManager(context,
+        LinearLayoutManager.HORIZONTAL,
+        false)
+
+      savedView = binding.root
+
+      return savedView
     }
 
-    venueRecycler = binding.placeListRecycler
+    return savedView
 
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+
+    setUpVenueRecyclerView()
+
+    setUpSharedViewModel()
+
+    backButton.setOnClickListener {
+
+      sharedCityMapViewModel.clearPlacesOfInterest()
+      sharedCityMapViewModel.setCurrentPOI(null)
+      bottomNavController.popBackStack()
+    }
+
+    val currentPOI = sharedCityMapViewModel.currentPOILiveData.value
+    sharedCityMapViewModel.getVenueData(currentPOI!!, "35.6804,139.7690")
+
+    bottomNavController = Navigation.findNavController(view)
+  }
+
+  private fun setUpSharedViewModel() {
+    sharedCityMapViewModel = parentFragment?.let {
+      ViewModelProvider(it, viewModelFactory).get(CityMapViewModel::class.java)
+    }!!
+
+    sharedCityMapViewModel
+      .successVenueLiveData
+      .observe(viewLifecycleOwner, Observer<List<Venue>> {
+
+        if(poiErrorMessage.isVisible) {
+          poiErrorMessage.visibility = View.GONE
+        }
+
+        if (it != null) {
+          loadingIndicator.visibility = View.GONE
+          venueRecycler.visibility = View.VISIBLE
+
+          venueList.addAll(it)
+          venueListAdapter.notifyDataSetChanged()
+        }
+
+      })
+
+    sharedCityMapViewModel
+      .errorVenueLiveData
+      .observe(viewLifecycleOwner, Observer {
+        loadingIndicator.visibility = View.GONE
+        venueRecycler.visibility = View.INVISIBLE
+        venueErrorLayout.visibility = View.VISIBLE
+      })
+  }
+
+  private fun setUpVenueRecyclerView() {
     venueListAdapter = VenueListAdapter(context!!, venueList) { selectedVenue ->
-      Toast.makeText(context,
+      Toast.makeText(
+        context,
         "Clicked on venue: ${selectedVenue.venueName}",
-        Toast.LENGTH_SHORT)
+        Toast.LENGTH_SHORT
+      )
         .show()
     }
-
-    venueRecycler.layoutManager = LinearLayoutManager(context,
-      LinearLayoutManager.HORIZONTAL,
-      false)
 
     venueRecycler.adapter = venueListAdapter
     snapHelper.attachToRecyclerView(venueRecycler)
 
-    val snapOnScrollListener = SnapOnScrollListener(snapHelper,
+    val snapOnScrollListener = SnapOnScrollListener(
+      snapHelper,
       SnapOnScrollListener.NotifyBehavior.NOTIFY_ON_STATE_IDLE
     ) { snapPosition ->
       Toast.makeText(context, "Snapped at position: $snapPosition", Toast.LENGTH_SHORT).show()
     }
 
     venueRecycler.addOnScrollListener(snapOnScrollListener)
-
-    return binding.root
   }
+
 }
