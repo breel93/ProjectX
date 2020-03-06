@@ -4,4 +4,5 @@
   <dimen name="poi_item_size">160dp</dimen>
   <dimen name="photo_preview_height">150dp</dimen>
   <dimen name="explore_city_button_margin">-20dp</dimen>
+    <dimen name="bottom_container_height">240dp</dimen>
 </resources>
