@@ -19,6 +19,8 @@ import com.xplorer.projectx.ui.city.CityDescriptionFragment
 import com.xplorer.projectx.ui.city.CityFragment
 import com.xplorer.projectx.ui.city.CityMapFragment
 import com.xplorer.projectx.ui.city.CityPhotoFragment
+import com.xplorer.projectx.ui.poi.POIListFragment
+import com.xplorer.projectx.ui.poi.POIStartFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -35,4 +37,10 @@ abstract class CityFragmentModule {
 
     @ContributesAndroidInjector
     internal abstract fun contributeCityMapFragment(): CityMapFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun contributePOIStartFragment(): POIStartFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun contributePOIListFragment(): POIListFragment
 }

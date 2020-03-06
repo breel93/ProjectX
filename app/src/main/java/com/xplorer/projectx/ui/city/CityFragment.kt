@@ -43,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.CityModel
-import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.PhotoClickListener
@@ -143,15 +142,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   }
 
   private fun observeViewState() {
-
-    // venue state observers
-    viewModelCity.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->
-      Toast.makeText(activity, "Total places found: ${venues.size}", Toast.LENGTH_SHORT).show()
-    })
-
-    viewModelCity.errorVenueLiveData.observe(viewLifecycleOwner, Observer {
-      Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-    })
 
     // wikipedia state observer
     // main location confirmation
