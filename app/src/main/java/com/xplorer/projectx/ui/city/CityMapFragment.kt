@@ -48,8 +48,9 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
   private lateinit var parent: AppCompatActivity
   private val MAP_BUNDLE_KEY = "MAP_BUNDLE_KEY_2"
   private lateinit var mapView: MapView
-  private lateinit var navController: NavController
+  private lateinit var bottomMapNavController: NavController
   private lateinit var toolbar: Toolbar
+
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -57,6 +58,7 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
     savedInstanceState: Bundle?
   ): View? {
     // Inflate the layout for this fragment
+
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_city_map, container, false)
     mapView = binding.cityMap
 
@@ -74,6 +76,7 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
     parent.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     parent.supportActionBar!!.title = "Explore ${place.cityName}"
 
+
     return binding.root
   }
 
@@ -85,7 +88,8 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    navController = Navigation.findNavController(view)
+    val fragmentContainer = view.findViewById<View>(R.id.bottomContainer)
+    bottomMapNavController = Navigation.findNavController(fragmentContainer)
   }
 
   override fun onMapReady(googleMap: GoogleMap) {
