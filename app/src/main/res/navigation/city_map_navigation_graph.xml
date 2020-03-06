@@ -10,11 +10,6 @@
         android:id="@+id/poiStartFragment"
         android:name="com.xplorer.projectx.ui.poi.POIStartFragment"
         android:label="POIStartFragment">
-        <action
-            android:id="@+id/action_poiStartFragment_to_poiListFragment"
-            app:destination="@id/poiListFragment"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 
     <fragment
