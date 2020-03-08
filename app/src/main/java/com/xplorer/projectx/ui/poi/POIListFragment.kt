@@ -114,12 +114,14 @@ class POIListFragment : DaggerFragment() {
 
   private fun setUpSharedViewModel() {
 
+    // set the viewModel owner to the city map fragment
     sharedCityMapViewModel = parentFragment?.let { parent ->
       parent.parentFragment?.let { cityMapFragment ->
         ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
       }
     }!!
 
+    // show the list of places on success
     sharedCityMapViewModel
       .successVenueLiveData
       .observe(viewLifecycleOwner, Observer<List<Venue>> {
@@ -137,6 +139,11 @@ class POIListFragment : DaggerFragment() {
         }
 
       })
+
+    //
+    sharedCityMapViewModel.currentPlaceIndex.observe(viewLifecycleOwner, Observer { index ->
+      venueRecycler.smoothScrollToPosition(index)
+    })
 
     sharedCityMapViewModel
       .errorVenueLiveData
@@ -164,7 +171,9 @@ class POIListFragment : DaggerFragment() {
       snapHelper,
       SnapOnScrollListener.NotifyBehavior.NOTIFY_ON_STATE_IDLE
     ) { snapPosition ->
-      Toast.makeText(context, "Snapped at position: $snapPosition", Toast.LENGTH_SHORT).show()
+      snapPosition?.let {
+        sharedCityMapViewModel.setCurrentMarkerPosition(snapPosition)
+      }
     }
 
     venueRecycler.addOnScrollListener(snapOnScrollListener)

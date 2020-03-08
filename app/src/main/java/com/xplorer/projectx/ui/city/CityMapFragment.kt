@@ -15,6 +15,9 @@
 */
 package com.xplorer.projectx.ui.city
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import androidx.transition.TransitionInflater
 import android.view.LayoutInflater
@@ -22,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,9 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityMapBinding
@@ -40,6 +42,7 @@ import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
 import dagger.android.support.DaggerFragment
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -54,12 +57,15 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
   private lateinit var mapView: MapView
   private lateinit var toolbar: Toolbar
   private lateinit var viewMap: GoogleMap
-  private lateinit var previousMarker: Marker
+  private val markerList = ArrayList<Marker>()
+  private var previousMarker: Marker? = null
+  private var currentMarker: Marker? = null
+  private lateinit var selectedIcon: BitmapDescriptor
+  private lateinit var unselectedIcon: BitmapDescriptor
 
   @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
   private lateinit var sharedCityMapViewModel: CityMapViewModel
-
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -85,6 +91,8 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
     parent.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     parent.supportActionBar!!.title = "Explore ${place.cityName}"
 
+    unselectedIcon = bitmapDescriptorFromVector(context!!, R.drawable.marker_unselected)!!
+    selectedIcon = bitmapDescriptorFromVector(context!!, R.drawable.marker_selected)!!
 
     return binding.root
   }
@@ -103,27 +111,59 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
     sharedCityMapViewModel =  ViewModelProvider(this, viewModelFactory).get(CityMapViewModel::class.java)
 
     sharedCityMapViewModel.setCurrentCoordinates(place.getLatLongString())
-
     sharedCityMapViewModel.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->
       if(venues != null) {
+        try {
+          for(venue in venues) {
+            markerList.add(viewMap.addMarker(
+              MarkerOptions()
+                .icon(unselectedIcon)
+                .position(LatLng(venue.venueLocation.lat.toDouble(), venue.venueLocation.lon.toDouble()))
+                .title(venue.venueName)))
+          }
 
-//          val icon: BitmapDescriptor = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)
-        for(venue in venues) {
-          viewMap.addMarker(
-            MarkerOptions()
-              .position(LatLng(venue.venueLocation.lat.toDouble(), venue.venueLocation.lon.toDouble()))
-              .title(venue.venueName)).tag = venue.venueName
+          currentMarker = markerList[0]
+          moveToMarker(0)
+
+        } catch (e: Exception) {
+          e.printStackTrace()
         }
+
       } else {
         resetMap()
       }
     })
 
+    sharedCityMapViewModel.currentMarkerPosition.observe(viewLifecycleOwner, Observer { position ->
+      moveToMarker(position)
+    })
+
     sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+  }
+
+  private fun moveToMarker(position: Int) {
+    previousMarker = currentMarker
+    currentMarker = markerList[position]
+
+    previousMarker?.setIcon(unselectedIcon)
+    currentMarker?.setIcon(selectedIcon)
+
+    currentMarker?.showInfoWindow()
+    viewMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentMarker?.position, 14f))
+  }
+
+  private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+    return ContextCompat.getDrawable(context, vectorResId)?.run {
+      setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+      val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+      draw(Canvas(bitmap))
+      BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
   }
 
   private fun resetMap() {
     viewMap.clear()
+    markerList.clear()
     viewMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
     viewMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
   }
@@ -132,6 +172,12 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
     viewMap = googleMap
     viewMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f))
     viewMap.addMarker(MarkerOptions().position(place.latLong()).title(place.cityName))
+    viewMap.setOnMarkerClickListener { clickedMarker ->
+      if(clickedMarker.title != place.cityName) {
+        sharedCityMapViewModel.selectPlaceOnPOIList(markerList.indexOf(clickedMarker))
+      }
+      true
+    }
   }
 
   override fun onLowMemory() {

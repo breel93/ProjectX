@@ -16,15 +16,28 @@ class CityMapViewModel @Inject constructor(
 
   // for shared viewModel
 
+  // For selecting place from full list of Places of Interest
   private val _currentPOILiveData = MutableLiveData<String>()
   val currentPOILiveData: LiveData<String>
     get() = _currentPOILiveData
 
-  private val _currentPOIIndex = MutableLiveData<Int>()
-  val currentPOIIndex: LiveData<Int> get() = _currentPOIIndex
-
   fun setCurrentPOI(poi: String?) {
     _currentPOILiveData.value = poi
+  }
+
+  // For scrolling to marker position based on place of interest results
+  private val _currentMarkerPosition = MutableLiveData<Int>()
+  val currentMarkerPosition: LiveData<Int> get() = _currentMarkerPosition
+
+  fun setCurrentMarkerPosition(placeIndex: Int) {
+    _currentMarkerPosition.value = placeIndex
+  }
+
+  // For scrolling to place of interest index based on marker clicked
+  private val _currentPlaceIndex = MutableLiveData<Int>()
+  val currentPlaceIndex: LiveData<Int> get() = _currentPlaceIndex
+  fun selectPlaceOnPOIList(placeIndex: Int) {
+    _currentPlaceIndex.value = placeIndex
   }
 
   fun clearPlacesOfInterest() {
