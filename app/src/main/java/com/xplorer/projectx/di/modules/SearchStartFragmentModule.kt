@@ -16,6 +16,7 @@
 package com.xplorer.projectx.di.modules
 
 import com.xplorer.projectx.ui.search.SearchStartFragment
+import com.xplorer.projectx.ui.splash.SplashScreenFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -23,4 +24,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class SearchStartFragmentModule {
     @ContributesAndroidInjector
     internal abstract fun contributeSearchStartFragment(): SearchStartFragment
+
+    @ContributesAndroidInjector
+    internal abstract fun contributeSplashScreenFragment(): SplashScreenFragment
 }

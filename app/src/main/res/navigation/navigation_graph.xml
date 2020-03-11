@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/navigation_graph"
-  app:startDestination="@id/searchStartFragment"
+  app:startDestination="@id/splashScreenFragment"
   tools:ignore="UnusedNavigation">
 
   <fragment
@@ -12,7 +12,8 @@
     android:label="SearchStartFragment">
     <action
       android:id="@+id/action_searchStartFragment_to_cityFragment"
-      app:destination="@id/cityFragment" />
+      app:destination="@id/cityFragment"
+      app:popUpTo="@+id/searchStartFragment" />
   </fragment>
   <fragment
     android:id="@+id/cityFragment"
@@ -21,15 +22,18 @@
     tools:layout="@layout/fragment_city">
     <action
       android:id="@+id/action_cityFragment_to_cityPhotoFragment"
-      app:destination="@id/cityPhotoFragment" />
+      app:destination="@id/cityPhotoFragment"
+      app:popUpTo="@+id/cityFragment" />
     <action
       android:id="@+id/action_cityFragment_to_cityDescription"
       app:destination="@id/cityDescription"
       app:enterAnim="@android:anim/fade_in"
-      app:exitAnim="@android:anim/fade_out" />
+      app:exitAnim="@android:anim/fade_out"
+      app:popUpTo="@+id/cityFragment" />
     <action
       android:id="@+id/action_cityFragment_to_cityMapFragment"
-      app:destination="@id/cityMapFragment" />
+      app:destination="@id/cityMapFragment"
+      app:popUpTo="@+id/cityFragment" />
   </fragment>
   <fragment
     android:id="@+id/cityPhotoFragment"
@@ -46,4 +50,12 @@
     android:name="com.xplorer.projectx.ui.city.CityMapFragment"
     android:label="fragment_city_map"
     tools:layout="@layout/fragment_city_map" />
+  <fragment
+    android:id="@+id/splashScreenFragment"
+    android:name="com.xplorer.projectx.ui.splash.SplashScreenFragment"
+    android:label="SplashScreenFragment" >
+    <action
+      android:id="@+id/action_splashScreenFragment_to_searchStartFragment"
+      app:destination="@id/searchStartFragment" />
+  </fragment>
 </navigation>

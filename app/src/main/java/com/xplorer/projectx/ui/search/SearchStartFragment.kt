@@ -135,4 +135,8 @@ class SearchStartFragment : DaggerFragment() {
         searchViewModel.addCityToRecent(cityModel)
         navController.navigate(R.id.cityFragment, bundle)
     }
+
+    fun onBackPressed() {
+        // handle back press event
+    }
 }
