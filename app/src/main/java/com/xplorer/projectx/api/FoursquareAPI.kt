@@ -47,7 +47,7 @@ interface FoursquareAPI {
     @Query("client_secret") clientSecret: String,
     @Query("ll") latLong: String,
     @Query("offset") offset: Int,
-    @Query("limit") perPage: Int = 10,
+    @Query("limit") perPage: Int,
     @Query("v") apiVersion: String = Constants.FOURSQUARE_API_VERSION
   ): Call<FoursquareResponse>
 }

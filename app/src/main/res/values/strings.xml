@@ -13,6 +13,7 @@
   <string name="select_a_place_of_interest">Select a place \n of interest</string>
   <string name="more_poi_text">More…</string>
     <string name="no_poi_found">No places of interest found. Try a different category</string>
+    <string name="open_status">Open Status:</string>
 
     <array name="place_of_interest_list">
     <item>Restaurants</item>

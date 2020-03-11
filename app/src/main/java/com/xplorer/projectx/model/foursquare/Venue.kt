@@ -37,5 +37,5 @@ data class Venue(
   @SerializedName("name") val venueName: String,
   @SerializedName("location") val venueLocation: VenueLocation,
   @SerializedName("categories") val venueCategories: List<VenueCategory>?,
-  @SerializedName("hours") val venueStatus: VenueStatus
+  @SerializedName("hours") val venueStatus: VenueStatus?
 )

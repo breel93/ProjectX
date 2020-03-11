@@ -24,7 +24,7 @@ interface FoursquareRepo {
     query: String,
     coordinates: String,
     offset: Int,
-    resultLimit: Int = 10,
+    resultLimit: Int = 20,
     onComplete: (Result<List<Venue>>) -> Unit
   )
 

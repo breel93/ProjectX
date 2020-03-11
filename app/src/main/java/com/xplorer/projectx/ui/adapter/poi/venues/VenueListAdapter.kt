@@ -59,17 +59,24 @@ class VenueListAdapter(
     fun bind(venue: Venue) {
       binding.placeName.text = venue.venueName
       binding.placeStatus.run {
-        if (true) {
-          setTextColor(context.resources.getColor(R.color.quantum_googred))
-        } else {
-          setTextColor(context.resources.getColor(R.color.quantum_googgreen))
+
+        val status = venue.venueStatus?.let { venueStatus ->
+          if(venueStatus.isOpen) "open" else "closed"
+        } ?: "n/a"
+
+        when(status) {
+          "open" -> setTextColor(context.resources.getColor(R.color.quantum_googred))
+          "closed" -> setTextColor(context.resources.getColor(R.color.quantum_googgreen))
+          "n/a" -> setTextColor(context.resources.getColor(R.color.quantum_grey))
+
         }
 
-        text = "open"
+        text = "${context.resources.getString(R.string.open_status)} $status"
+
       }
 
+
       binding.placeCategory.text = venue.venueCategories?.first()?.categoryName ?: "No Category Available"
-      binding.placeDistance.text = "33 mi"
 
       itemView.setOnClickListener {
         onItemSelect(venue)
