@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.mikhaellopez.rxanimation.RxAnimation
 import com.mikhaellopez.rxanimation.backgroundColor
@@ -126,7 +127,11 @@ class SplashScreenFragment : DaggerFragment() {
         )
       )
         .doOnTerminate {
-          navController.navigate(R.id.searchStartFragment)
+          val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashScreenFragment, true)
+            .build()
+          navController.navigate(R.id.action_splashScreenFragment_to_searchStartFragment,
+            null,
+            navOptions)
         }
         .subscribe()
 
