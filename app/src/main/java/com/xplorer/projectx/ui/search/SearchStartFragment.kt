@@ -96,8 +96,6 @@ class SearchStartFragment : DaggerFragment() {
         })
     }
 
-
-
     private fun getPlaceAutocomplete() {
         if (!Places.isInitialized()) {
             Places.initialize(context!!, getString(R.string.google_api_key))
@@ -139,6 +137,6 @@ class SearchStartFragment : DaggerFragment() {
     }
 
     fun onBackPressed() {
-        //handle back press event
+        // handle back press event
     }
 }

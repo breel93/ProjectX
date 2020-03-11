@@ -253,7 +253,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
   override fun onMapReady(googleMap: GoogleMap) {
     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.latLong(), 12.0f),
-      object: GoogleMap.CancelableCallback {
+      object : GoogleMap.CancelableCallback {
       override fun onFinish() {
         val topMargin = resources.getDimensionPixelSize(R.dimen.explore_city_button_margin) * -1f
 
