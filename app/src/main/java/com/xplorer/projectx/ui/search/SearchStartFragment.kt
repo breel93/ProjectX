@@ -96,6 +96,8 @@ class SearchStartFragment : DaggerFragment() {
         })
     }
 
+
+
     private fun getPlaceAutocomplete() {
         if (!Places.isInitialized()) {
             Places.initialize(context!!, getString(R.string.google_api_key))
@@ -134,5 +136,9 @@ class SearchStartFragment : DaggerFragment() {
 
         searchViewModel.addCityToRecent(cityModel)
         navController.navigate(R.id.cityFragment, bundle)
+    }
+
+    fun onBackPressed() {
+        //handle back press event
     }
 }
