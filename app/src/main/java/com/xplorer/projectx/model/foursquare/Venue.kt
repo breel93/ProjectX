@@ -36,5 +36,5 @@ data class Venue(
   @SerializedName("id") val venueId: String,
   @SerializedName("name") val venueName: String,
   @SerializedName("location") val venueLocation: VenueLocation,
-  @SerializedName("categories") val venueCategories: List<VenueCategory>?
+  @SerializedName("categories") val venueCategories: List<VenueCategory>? = null
 )

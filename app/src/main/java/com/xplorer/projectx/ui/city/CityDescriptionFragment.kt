@@ -76,7 +76,7 @@ class CityDescriptionFragment : DaggerFragment() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    wikiLink = arguments!!.getString("wikilink")!!
+    wikiLink = arguments!!.getString("web_url")!!
     articleTitle = arguments!!.getString("title")!!
   }
 }

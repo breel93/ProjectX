@@ -15,6 +15,8 @@
 */
 package com.xplorer.projectx.ui.poi
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +24,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.Toast
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -38,6 +39,8 @@ import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.ui.adapter.poi.venues.VenueListAdapter
 import com.xplorer.projectx.ui.adapter.snap.SnapOnScrollListener
 import com.xplorer.projectx.ui.city.CityMapViewModel
+import com.xplorer.projectx.utils.BrowserUtils
+import com.xplorer.projectx.utils.Constants
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -160,12 +163,14 @@ class POIListFragment : DaggerFragment() {
 
   private fun setUpVenueRecyclerView() {
     venueListAdapter = VenueListAdapter(venueList) { selectedVenue ->
-      Toast.makeText(
-        context,
-        "Clicked on venue: ${selectedVenue.venueName}",
-        Toast.LENGTH_SHORT
-      )
-        .show()
+      val url = Constants.FOURSQUARE_VENUE_INFO_URL + selectedVenue.venueId
+      BrowserUtils.launchBrowser(context!!,
+        url
+        ) {
+        // fallback for no chrome on user's device
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
+      }
     }
 
     venueRecycler.adapter = venueListAdapter
