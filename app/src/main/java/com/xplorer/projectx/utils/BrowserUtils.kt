@@ -12,7 +12,7 @@ class BrowserUtils {
                       onWebView: (() -> Unit)? = null) {
 
       val hasChrome = AppPackageUtils.appInstalled(context, "com.android.chrome")
-      if (!hasChrome) {
+      if (hasChrome) {
         launchWikiChromeTab(context, url)
       } else {
         onWebView?.invoke()
