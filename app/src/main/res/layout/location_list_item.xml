@@ -6,7 +6,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="5dp"
             android:layout_marginEnd="10dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,10 +44,13 @@
                     app:layout_constraintStart_toEndOf="@id/divider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_margin="20dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     tools:text="Place of Interest with long name"
                     android:maxLines="2"
                     android:ellipsize="end"
+                    android:textColor="@color/quantum_grey700"
                     android:textSize="20sp" />
 
                 <TextView
@@ -57,10 +60,9 @@
                     app:layout_constraintStart_toEndOf="@id/divider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/placeName"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="50dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="20dp"
                     tools:text="Category"
                     android:textStyle="italic"
@@ -70,16 +72,22 @@
 
 
                 <TextView
-                    android:id="@+id/placeStatus"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/placeAddress"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toEndOf="@id/divider"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/placeCategory"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginStart="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:textSize="15sp"
-                    android:textColor="@android:color/holo_red_dark"
-                    tools:text="Closed" />
+                    android:maxLines="2"
+                    android:lineSpacingExtra="5dp"
+                    android:ellipsize="end"
+                    android:textColor="@color/quantum_grey600"
+                    tools:text="123 Example street, 123 Example street, 123 Example street, 123 Example street, " />
 
 
 
