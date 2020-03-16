@@ -33,7 +33,7 @@ import com.google.gson.annotations.SerializedName
  * limitations under the License.
  */
 data class VenueLocation(
-  @SerializedName("address") val address: String,
+  @SerializedName("address") val address: String?,
   @SerializedName("lat") val lat: Float,
   @SerializedName("lng") val lon: Float
 )
