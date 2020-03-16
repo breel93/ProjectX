@@ -15,7 +15,6 @@
 */
 package com.xplorer.projectx.ui.adapter.poi.venues
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -25,7 +24,6 @@ import com.xplorer.projectx.databinding.LocationListItemBinding
 import com.xplorer.projectx.model.foursquare.Venue
 
 class VenueListAdapter(
-  private val context: Context,
   private val venueList: List<Venue>,
   private val onItemSelect: (Venue) -> Unit
 ) :
@@ -58,24 +56,7 @@ class VenueListAdapter(
 
     fun bind(venue: Venue) {
       binding.placeName.text = venue.venueName
-      binding.placeStatus.run {
-
-        val status = venue.venueStatus?.let { venueStatus ->
-          if(venueStatus.isOpen) "open" else "closed"
-        } ?: "n/a"
-
-        when(status) {
-          "open" -> setTextColor(context.resources.getColor(R.color.quantum_googred))
-          "closed" -> setTextColor(context.resources.getColor(R.color.quantum_googgreen))
-          "n/a" -> setTextColor(context.resources.getColor(R.color.quantum_grey))
-
-        }
-
-        text = "${context.resources.getString(R.string.open_status)} $status"
-
-      }
-
-
+      binding.placeAddress.text = venue.venueLocation.address ?: "No address available"
       binding.placeCategory.text = venue.venueCategories?.first()?.categoryName ?: "No Category Available"
 
       itemView.setOnClickListener {

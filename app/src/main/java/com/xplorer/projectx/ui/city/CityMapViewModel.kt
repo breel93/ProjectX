@@ -1,5 +1,6 @@
 package com.xplorer.projectx.ui.city
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,6 +41,10 @@ class CityMapViewModel @Inject constructor(
     _currentPlaceIndex.value = placeIndex
   }
 
+  fun clearErrors() {
+    _errorVenueLiveData.value = null
+  }
+
   fun clearPlacesOfInterest() {
     _successVenueLiveData.value = null
   }
@@ -70,7 +75,13 @@ class CityMapViewModel @Inject constructor(
 
     foursquareRepository.getVenueData(query, coordinates, 0) { result: Result<List<Venue>> ->
       when (result) {
-        is Success -> processVenueSuccess(result.data)
+        is Success -> {
+          if(result.data.isNotEmpty()) {
+            processVenueSuccess(result.data)
+          } else {
+            processVenueError(Throwable("No ${_currentPOILiveData.value} Found in this location"))
+          }
+        }
         is Failure -> processVenueError(result.error)
       }
     }

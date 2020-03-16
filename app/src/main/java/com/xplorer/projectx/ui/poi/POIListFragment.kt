@@ -23,7 +23,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.core.view.isVisible
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,7 +39,6 @@ import com.xplorer.projectx.ui.adapter.poi.venues.VenueListAdapter
 import com.xplorer.projectx.ui.adapter.snap.SnapOnScrollListener
 import com.xplorer.projectx.ui.city.CityMapViewModel
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.places_list_container.*
 import javax.inject.Inject
 
 class POIListFragment : DaggerFragment() {
@@ -50,6 +49,7 @@ class POIListFragment : DaggerFragment() {
   private lateinit var venueRecycler: RecyclerView
   private lateinit var loadingIndicator: ProgressBar
   private lateinit var venueErrorLayout: LinearLayout
+  private lateinit var errorTextView: TextView
   private lateinit var backButton: ImageButton
   private val snapHelper = LinearSnapHelper()
   private lateinit var bottomNavController: NavController
@@ -75,6 +75,7 @@ class POIListFragment : DaggerFragment() {
       venueRecycler = binding.placeListRecycler
       loadingIndicator = binding.placeLoadingIndicator
       venueErrorLayout = binding.poiErrorMessage
+      errorTextView = binding.errorMessageText
       backButton = binding.backButton
 
       venueRecycler.layoutManager = LinearLayoutManager(context,
@@ -99,6 +100,7 @@ class POIListFragment : DaggerFragment() {
 
     backButton.setOnClickListener {
 
+      sharedCityMapViewModel.clearErrors()
       sharedCityMapViewModel.clearPlacesOfInterest()
       sharedCityMapViewModel.setCurrentPOI(null)
       bottomNavController.popBackStack()
@@ -126,10 +128,6 @@ class POIListFragment : DaggerFragment() {
       .successVenueLiveData
       .observe(viewLifecycleOwner, Observer<List<Venue>> {
 
-        if(poiErrorMessage.isVisible) {
-          poiErrorMessage.visibility = View.GONE
-        }
-
         if (it != null) {
           loadingIndicator.visibility = View.GONE
           venueRecycler.visibility = View.VISIBLE
@@ -145,17 +143,23 @@ class POIListFragment : DaggerFragment() {
       venueRecycler.smoothScrollToPosition(index)
     })
 
+    // failure
     sharedCityMapViewModel
       .errorVenueLiveData
-      .observe(viewLifecycleOwner, Observer {
-        loadingIndicator.visibility = View.GONE
-        venueRecycler.visibility = View.INVISIBLE
-        venueErrorLayout.visibility = View.VISIBLE
+      .observe(viewLifecycleOwner, Observer { error ->
+
+        if(error != null) {
+
+          loadingIndicator.visibility = View.GONE
+          venueRecycler.visibility = View.INVISIBLE
+          venueErrorLayout.visibility = View.VISIBLE
+          errorTextView.text = error
+        }
       })
   }
 
   private fun setUpVenueRecyclerView() {
-    venueListAdapter = VenueListAdapter(context!!, venueList) { selectedVenue ->
+    venueListAdapter = VenueListAdapter(venueList) { selectedVenue ->
       Toast.makeText(
         context,
         "Clicked on venue: ${selectedVenue.venueName}",

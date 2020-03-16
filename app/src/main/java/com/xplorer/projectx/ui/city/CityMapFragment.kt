@@ -112,7 +112,7 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
 
     sharedCityMapViewModel.setCurrentCoordinates(place.getLatLongString())
     sharedCityMapViewModel.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->
-      if(venues != null) {
+      if(venues != null && venues.isNotEmpty()) {
         try {
           for(venue in venues) {
             markerList.add(viewMap.addMarker(
