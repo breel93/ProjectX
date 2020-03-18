@@ -20,20 +20,17 @@ class BrowserUtils {
     }
 
     private fun launchWikiChromeTab(context: Context, url: String) {
-      val wikiTabIntent = CustomTabsIntent.Builder().apply {
+      val wikiTabIntent = CustomTabsIntent.Builder().run {
 
         setShowTitle(true)
-
-          setExitAnimations(
+        setExitAnimations(
           context,
           android.R.anim.fade_in,
           android.R.anim.fade_out
         )
 
-        context.let {
-
-        }
-      }.build()
+        build()
+      }
 
       wikiTabIntent.launchUrl(
         context,
