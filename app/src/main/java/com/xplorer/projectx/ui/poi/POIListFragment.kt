@@ -37,7 +37,7 @@ import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.PlacesListContainerBinding
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.ui.adapter.poi.venues.VenueListAdapter
-import com.xplorer.projectx.ui.adapter.snap.SnapOnScrollListener
+import com.xplorer.projectx.utils.snap.SnapOnScrollListener
 import com.xplorer.projectx.ui.city.CityMapViewModel
 import com.xplorer.projectx.utils.BrowserUtils
 import com.xplorer.projectx.utils.Constants
