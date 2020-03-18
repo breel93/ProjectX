@@ -17,6 +17,7 @@ package com.xplorer.projectx.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.xplorer.projectx.ui.city.CityMapViewModel
 import com.xplorer.projectx.ui.city.CityPhotoViewModel
 import com.xplorer.projectx.ui.city.CitySearchViewModel
 import com.xplorer.projectx.ui.search.SearchStartViewModel
@@ -42,6 +43,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SearchStartViewModel::class)
     internal abstract fun bindSearchStartViewModel(searchStartViewModel: SearchStartViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(CityMapViewModel::class)
+    internal abstract fun bindCityMapViewModel(cityMapViewModel: CityMapViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

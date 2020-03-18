@@ -35,5 +35,6 @@ import com.google.gson.annotations.SerializedName
 data class Venue(
   @SerializedName("id") val venueId: String,
   @SerializedName("name") val venueName: String,
-  @SerializedName("location") val venueLocation: VenueLocation
+  @SerializedName("location") val venueLocation: VenueLocation,
+  @SerializedName("categories") val venueCategories: List<VenueCategory>? = null
 )

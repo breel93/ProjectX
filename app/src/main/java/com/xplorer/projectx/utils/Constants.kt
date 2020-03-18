@@ -53,5 +53,7 @@ class Constants {
       val apiKey = "key=${BuildConfig.GOOGLE_API_KEY}"
       return mapBasedUrl + maxwidth + photoreference + apiKey
     }
+
+    const val FOURSQUARE_VENUE_INFO_URL = "https://foursquare.com/venue/"
   }
 }

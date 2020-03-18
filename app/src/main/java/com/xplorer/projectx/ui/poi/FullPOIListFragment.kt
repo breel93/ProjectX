@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,7 +29,9 @@ import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FullPoiListLayoutBinding
 import com.xplorer.projectx.ui.adapter.poi.POISelectionAdapter
 
-class FullPOIListFragment : BottomSheetDialogFragment() {
+
+class FullPOIListFragment(private val poiListener: POISelectionListener) : BottomSheetDialogFragment() {
+
 
   private lateinit var binding: FullPoiListLayoutBinding
   private lateinit var poiAdapter: POISelectionAdapter
@@ -40,6 +41,7 @@ class FullPOIListFragment : BottomSheetDialogFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
+
     binding = DataBindingUtil.inflate(inflater,
       R.layout.full_poi_list_layout,
       container,
@@ -48,7 +50,8 @@ class FullPOIListFragment : BottomSheetDialogFragment() {
     val placesOfInterest = resources.getStringArray(R.array.place_of_interest_list).toList()
 
     poiAdapter = POISelectionAdapter(context!!, placesOfInterest) { selectedPOI ->
-      Toast.makeText(context, "Selected this place: $selectedPOI", Toast.LENGTH_SHORT).show()
+      poiListener.onSelectPOI(selectedPOI)
+      dismiss()
     }
 
     binding.poiListView.adapter = poiAdapter

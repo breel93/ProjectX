@@ -9,42 +9,61 @@
     tools:context=".ui.city.CityMapFragment"
       android:animateLayoutChanges="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mapFragmentToolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/mapFragmentAppBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_height="?actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cityMap"
-        android:transitionName="@string/toolbar_transition_name"/>
+        app:layout_constraintBottom_toTopOf="@id/cityMapFragmentCard">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/cityMap"
+      <androidx.appcompat.widget.Toolbar
+          android:id="@+id/mapFragmentToolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          app:layout_scrollFlags="scroll|enterAlways"
+          app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+          android:transitionName="@string/toolbar_transition_name"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cityMapFragmentCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
-        app:layout_constraintTop_toBottomOf="@id/mapFragmentToolbar"
-        android:transitionName="@string/city_map_transition_name"/>
+        app:layout_constraintBottom_toTopOf="@+id/bottomContainerCard"
+        app:layout_constraintTop_toBottomOf="@id/mapFragmentAppBar">
 
+      <com.google.android.gms.maps.MapView
+          android:id="@+id/cityMap"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:transitionName="@string/city_map_transition_name"/>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/bottomContainer"
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottomContainerCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navGraph="@navigation/city_map_navigation_graph"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cityMap"
-        android:layout_marginBottom="8dp"
-        android:paddingBottom="20dp"/>
+        app:layout_constraintTop_toBottomOf="@id/cityMapFragmentCard"
+        android:layout_margin="8dp"
+        >
+
+      <androidx.fragment.app.FragmentContainerView
+          android:id="@+id/bottomContainer"
+          android:name="androidx.navigation.fragment.NavHostFragment"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:navGraph="@navigation/city_map_navigation_graph"
+          android:paddingBottom="20dp" />
+
+    </androidx.cardview.widget.CardView>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

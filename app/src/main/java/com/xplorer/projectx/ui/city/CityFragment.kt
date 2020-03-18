@@ -15,7 +15,6 @@
 */
 package com.xplorer.projectx.ui.city
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,6 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -43,12 +41,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityBinding
 import com.xplorer.projectx.model.CityModel
-import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
-import com.xplorer.projectx.utils.AppPackageUtils
+import com.xplorer.projectx.utils.BrowserUtils
 import com.xplorer.projectx.utils.Constants
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -143,15 +140,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   }
 
   private fun observeViewState() {
-
-    // venue state observers
-    viewModelCity.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->
-      Toast.makeText(activity, "Total places found: ${venues.size}", Toast.LENGTH_SHORT).show()
-    })
-
-    viewModelCity.errorVenueLiveData.observe(viewLifecycleOwner, Observer {
-      Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-    })
 
     // wikipedia state observer
     // main location confirmation
@@ -276,11 +264,20 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
   override fun onClick(v: View?) {
     when (v!!.id) {
       R.id.moreAboutCityButton -> {
-        if (AppPackageUtils.appInstalled(context!!, "com.android.chrome")) {
-          launchWikiChromeTab()
-        } else {
-          launchWikiWebView()
-        }
+
+        val url = Constants.WIKIPEDIA_INFO_URL + wikiArticleName
+
+        BrowserUtils.launchBrowser(
+          context!!,
+          url
+          ) {
+            // fallback for no chrome on user's device
+            val urlBundle = bundleOf(
+              "web_url" to url,
+              "title" to wikiArticleName
+            )
+            navController.navigate(R.id.cityDescription, urlBundle)
+          }
       }
 
       R.id.morePlacesButton -> {
@@ -300,35 +297,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     )
 
     navController.navigate(R.id.cityMapFragment, extras, null, sharedExtras)
-  }
-
-  private fun launchWikiWebView() {
-    val wikiBundle = bundleOf(
-      "wikilink" to Constants.WIKIPEDIA_INFO_URL + wikiArticleName,
-      "title" to wikiArticleName
-    )
-
-    navController.navigate(R.id.cityDescription, wikiBundle)
-  }
-
-  private fun launchWikiChromeTab() {
-    val wikiTabIntent = CustomTabsIntent.Builder().apply {
-
-      setShowTitle(true)
-
-      context?.let {
-        setExitAnimations(
-          it,
-          android.R.anim.fade_in,
-          android.R.anim.fade_out
-        )
-      }
-    }.build()
-
-    wikiTabIntent.launchUrl(
-      context,
-      Uri.parse(Constants.WIKIPEDIA_INFO_URL + wikiArticleName)
-    )
   }
 
   override fun onLowMemory() {

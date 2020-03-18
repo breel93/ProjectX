@@ -24,7 +24,7 @@
       android:id="@+id/fullPhoto"
       android:layout_width="match_parent"
       android:layout_height="500dp"
-      android:scaleType="fitXY"
+      android:scaleType="centerCrop"
       android:src="@drawable/placeholder"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"

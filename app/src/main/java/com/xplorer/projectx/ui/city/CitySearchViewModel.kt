@@ -35,7 +35,6 @@ import javax.inject.Inject
 class CitySearchViewModel @Inject
 constructor(
   private val googlePicturesRepo: GooglePicturesRepo,
-  private val foursquareRepository: FoursquareRepo,
   private val wikipediaRepository: WikipediaRepo,
   application: Application
 ) : AndroidViewModel(application) {
@@ -65,33 +64,6 @@ constructor(
         is Failure -> processError(result.error)
       }
     }
-  }
-
-  // Venues / foursquare
-
-  private val _successVenueLiveData = MutableLiveData<List<Venue>>()
-  val successVenueLiveData: LiveData<List<Venue>>
-    get() = _successVenueLiveData
-  private val _errorVenueLiveData = MutableLiveData<String>()
-  val errorVenueLiveData: LiveData<String>
-    get() = _errorVenueLiveData
-
-  fun getVenueData(query: String, latLong: LatLng) {
-    val coordinates = "${latLong.latitude},${latLong.longitude}"
-    foursquareRepository.getVenueData(query, coordinates, 0) { result: Result<List<Venue>> ->
-      when (result) {
-        is Success -> processVenueSuccess(result.data)
-        is Failure -> processVenueError(result.error)
-      }
-    }
-  }
-
-  private fun processVenueSuccess(venues: List<Venue>) {
-    _successVenueLiveData.value = venues
-  }
-
-  private fun processVenueError(error: Throwable) {
-    _errorVenueLiveData.value = error.localizedMessage
   }
 
   // Location confirmation from Wikipedia
@@ -162,11 +134,5 @@ constructor(
         is Failure -> _errorRelatedTitlesLiveData.value = result.error.localizedMessage
       }
     }
-  }
-
-  override fun onCleared() {
-    super.onCleared()
-    if (::job.isInitialized) job.cancel()
-    foursquareRepository.cancelRequests() // cancel requests in foursquare
   }
 }

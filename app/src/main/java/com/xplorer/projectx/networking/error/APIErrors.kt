@@ -20,6 +20,6 @@ package com.xplorer.projectx.networking.error
  */
 object ApiDataTransformException : Throwable()
 
-object NetworkException : Throwable()
-object ServerError : Throwable()
-object AuthError : Throwable()
+object NetworkException : Throwable("No Network. Check your internet connection and try again")
+object ServerError : Throwable("There was an issue with the server. Try again soon")
+object AuthError : Throwable("Authentication error with the server")
