@@ -69,7 +69,7 @@ class POIListFragment : DaggerFragment() {
     savedInstanceState: Bundle?
   ): View? {
 
-    if(savedView == null) {
+    if (savedView == null) {
       binding = DataBindingUtil.inflate(LayoutInflater.from(context),
         R.layout.places_list_container,
         container,
@@ -91,7 +91,6 @@ class POIListFragment : DaggerFragment() {
     }
 
     return savedView
-
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,7 +137,6 @@ class POIListFragment : DaggerFragment() {
           venueList.addAll(it)
           venueListAdapter.notifyDataSetChanged()
         }
-
       })
 
     //
@@ -151,7 +149,7 @@ class POIListFragment : DaggerFragment() {
       .errorVenueLiveData
       .observe(viewLifecycleOwner, Observer { error ->
 
-        if(error != null) {
+        if (error != null) {
 
           loadingIndicator.visibility = View.GONE
           venueRecycler.visibility = View.INVISIBLE
@@ -187,5 +185,4 @@ class POIListFragment : DaggerFragment() {
 
     venueRecycler.addOnScrollListener(snapOnScrollListener)
   }
-
 }

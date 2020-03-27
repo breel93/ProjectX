@@ -19,14 +19,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.maps.model.LatLng
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
-import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.model.wikipedia.WikiCityInfo
-import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
 import kotlinx.coroutines.Job

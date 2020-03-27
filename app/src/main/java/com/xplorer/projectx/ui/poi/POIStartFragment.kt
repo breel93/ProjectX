@@ -39,8 +39,6 @@ import kotlin.collections.ArrayList
 
 class POIStartFragment : DaggerFragment(), POISelectionListener {
 
-
-
   private lateinit var bottomNavController: NavController
   private lateinit var binding: PlacesOfInterestLayoutBinding
   private lateinit var poiAdapter: PlacesOfInterestAdapter
@@ -58,7 +56,7 @@ class POIStartFragment : DaggerFragment(), POISelectionListener {
     savedInstanceState: Bundle?
   ): View? {
 
-    if(savedView == null) {
+    if (savedView == null) {
 
       binding = DataBindingUtil.inflate(inflater,
         R.layout.places_of_interest_layout,
@@ -107,12 +105,12 @@ class POIStartFragment : DaggerFragment(), POISelectionListener {
     binding.poiFullRecyclerView.adapter = poiAdapter
 
     requireActivity().onBackPressedDispatcher.addCallback(this,
-      object: OnBackPressedCallback(true) {
+      object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
 
           savedView = null
 
-          if(isEnabled) {
+          if (isEnabled) {
             isEnabled = false
             requireActivity().onBackPressed()
           }
