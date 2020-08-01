@@ -1,5 +1,6 @@
 package com.xplorer.projectx.utils
 
+import com.xplorer.projectx.model.foursquare.*
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.model.unsplash.PhotoResult
 import com.xplorer.projectx.model.unsplash.Urls
@@ -53,6 +54,36 @@ class MockTestUtil {
     photoList.add(photo)
     photoList.add(photo1)
     return photoList
+  }
+
+  fun createVenueResponse(): FoursquareResponse {
+    val venueLocation = VenueLocation("address", 19f, 19f)
+    val venue = Venue("aabb", "Place of Interest", venueLocation)
+    val venueItem = VenueItem(venue)
+
+    val venueLocation2 = VenueLocation("address2", 56f, 56f)
+    val venue2 = Venue("aabb", "Place of Interest2", venueLocation2)
+    val venueItem2 = VenueItem(venue2)
+
+    val venueItemList = ArrayList<VenueItem>()
+    venueItemList.add(venueItem)
+    venueItemList.add(venueItem2)
+
+    val recommendedVenueGroup = VenueGroup("recommended", venueItemList)
+    val venueGroups = ArrayList<VenueGroup>()
+    venueGroups.add(recommendedVenueGroup)
+
+    return FoursquareResponse(VenueResponse(venueGroups, 2))
+  }
+  fun venueList() : List<Venue>{
+    val venueList = ArrayList<Venue>()
+    val venueLocation2 = VenueLocation("address2", 56f, 56f)
+    val venue2 = Venue("aabb", "Place of Interest2", venueLocation2)
+    val venueLocation = VenueLocation("address", 19f, 19f)
+    val venue = Venue("aabb", "Place of Interest", venueLocation)
+    venueList.add(venue)
+    venueList.add(venue2)
+    return venueList
   }
 
 }

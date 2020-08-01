@@ -31,6 +31,7 @@ import com.xplorer.projectx.model.foursquare.VenueLocation
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepository
+import com.xplorer.projectx.utils.MockTestUtil
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -63,8 +64,9 @@ class FoursquareRepositoryTest {
   fun `test get venue data returns list of venues on success`() {
 
     // arrange
+    val mockTestUtil = MockTestUtil()
     val mockCall: Call<FoursquareResponse> = mock()
-    whenever(mockCall.execute()).thenReturn(Response.success(createVenueResponse()))
+    whenever(mockCall.execute()).thenReturn(Response.success(mockTestUtil.createVenueResponse()))
     whenever(mockCall.clone()).thenReturn(mockCall)
     whenever(
       mockFoursquareAPI.getVenues(
@@ -93,23 +95,4 @@ class FoursquareRepositoryTest {
     assertTrue((venueResultCaptor.firstValue as Success).data.size == 2)
   }
 
-  private fun createVenueResponse(): FoursquareResponse {
-    val venueLocation = VenueLocation("address", 19f, 19f)
-    val venue = Venue("aabb", "Place of Interest", venueLocation)
-    val venueItem = VenueItem(venue)
-
-    val venueLocation2 = VenueLocation("address2", 56f, 56f)
-    val venue2 = Venue("aabb", "Place of Interest2", venueLocation2)
-    val venueItem2 = VenueItem(venue2)
-
-    val venueItemList = ArrayList<VenueItem>()
-    venueItemList.add(venueItem)
-    venueItemList.add(venueItem2)
-
-    val recommendedVenueGroup = VenueGroup("recommended", venueItemList)
-    val venueGroups = ArrayList<VenueGroup>()
-    venueGroups.add(recommendedVenueGroup)
-
-    return FoursquareResponse(VenueResponse(venueGroups, 2))
-  }
 }

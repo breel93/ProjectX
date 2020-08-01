@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 package com.xplorer.projectx.ui.search
 
 import androidx.lifecycle.LiveData
@@ -42,29 +42,29 @@ class SearchStartViewModel @Inject constructor(
   private val recentCitiesRepo: RecentCitiesRepo
 ) : ViewModel() {
 
-    private val recentCitiesList = ArrayList<CityModel>()
+  private val recentCitiesList = ArrayList<CityModel>()
 
-    private var _recentCitiesLiveData = MutableLiveData<List<CityModel>>()
-    val recentCitiesLiveData: LiveData<List<CityModel>>
-        get() = _recentCitiesLiveData
+  private var _recentCitiesLiveData = MutableLiveData<List<CityModel>>()
+  val recentCitiesLiveData: LiveData<List<CityModel>>
+    get() = _recentCitiesLiveData
 
-    fun getRecentlySearchedCities() {
-        when (val recentCities = recentCitiesRepo.getRecentCities()) {
-            is Success -> {
-                recentCitiesList.clear()
-                recentCitiesList.addAll(recentCities.data)
-                _recentCitiesLiveData.value = recentCitiesList
-            }
-        }
+  fun getRecentlySearchedCities() {
+    when (val recentCities = recentCitiesRepo.getRecentCities()) {
+      is Success -> {
+        recentCitiesList.clear()
+        recentCitiesList.addAll(recentCities.data)
+        _recentCitiesLiveData.value = recentCitiesList
+      }
     }
+  }
 
-    private var _addCityLiveData = MutableLiveData<Boolean>()
-    val addCityLiveData: LiveData<Boolean>
-        get() = _addCityLiveData
+  private var _addCityLiveData = MutableLiveData<Boolean>()
+  val addCityLiveData: LiveData<Boolean>
+    get() = _addCityLiveData
 
-    fun addCityToRecent(city: CityModel) {
-        recentCitiesRepo.updateRecentCities(city) { updateCompleted ->
-            _addCityLiveData.value = updateCompleted
-        }
+  fun addCityToRecent(city: CityModel) {
+    recentCitiesRepo.updateRecentCities(city) { updateCompleted ->
+      _addCityLiveData.value = updateCompleted
     }
+  }
 }

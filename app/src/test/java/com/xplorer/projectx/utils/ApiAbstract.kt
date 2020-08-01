@@ -20,7 +20,7 @@ import java.util.*
 
 @RunWith(JUnit4::class)
 open class ApiAbstract<T> {
-  private var mockWebServer: MockWebServer? = null
+  public var mockWebServer: MockWebServer? = null
 
   @Before
   @Throws(IOException::class)
@@ -41,7 +41,7 @@ open class ApiAbstract<T> {
   }
 
   @Throws(IOException::class)
-  private fun enqueueResponse(
+  public fun enqueueResponse(
     fileName: String,
     headers: Map<String?, String?>
   ) {

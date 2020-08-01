@@ -12,8 +12,9 @@ import org.junit.Test
 class WikipediaApiTest : ApiAbstract<WikipediaAPI>(){
 
   private var wikipediaAPI: WikipediaAPI? = null
+
   @Before
-  fun initService(){
+  public fun initService(){
     this.wikipediaAPI = createService(WikipediaAPI::class.java)
   }
 
