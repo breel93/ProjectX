@@ -1,0 +1,148 @@
+
+{
+  "html_attributions": [
+
+  ],
+  "result": {
+    "address_components": [
+      {
+        "long_name": "Lagos",
+        "short_name": "Lagos",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Lagos",
+        "short_name": "LA",
+        "types": [
+          "administrative_area_level_1",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Nigeria",
+        "short_name": "NG",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ],
+    "adr_address": "<span class=\"locality\">Lagos</span>, <span class=\"country-name\">Nigeria</span>",
+    "formatted_address": "Lagos, Nigeria",
+    "geometry": {
+      "location": {
+        "lat": 6.5243793,
+        "lng": 3.3792057
+      },
+      "viewport": {
+        "northeast": {
+          "lat": 6.7027591,
+          "lng": 3.4696459
+        },
+        "southwest": {
+          "lat": 6.393351099999999,
+          "lng": 3.0982732
+        }
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+    "id": "f5e45a1cb67f5581896d92388b6402c552e4d5f0",
+    "name": "Lagos",
+    "photos": [
+      {
+        "height": 768,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/117475456540922569390\">Abiodun Alexis</a>"
+        ],
+        "photo_reference": "CmRaAAAAA6_LuVt45qCjvYY3ezueOyvLhIJta4D-VT04xo-AWpmwBnLDcOo4S101bnqsSdp8clh79XFy5LXgV5wyPEZ5Zqbw2MSGx2HsFC1dTeDzMgrjG0PtfhOCGU-xQ9-TmWvsEhDLbJg-pa57y6MBJATqXC4-GhRFy7VYeLULG-eG2zVSrqiem5-4xw",
+        "width": 1024
+      },
+      {
+        "height": 433,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/113482343908983147932\">Randolfo Santos</a>"
+        ],
+        "photo_reference": "CmRaAAAAhy4CUqH3BQm0_H-5TO1mwLdfhzUbgu5X9M01cV9olbpcy5yr0ajUG_JgO_ikDj3xO94TdLShu5HyguqDpVRNbBvJ0KQZADIeQByGakMS6Zxfn28Jj3FoMJ19jEBdRhTtEhAQGe2rRrWwPuIDV9z_vPP9GhRy0hfeqFI0F5np7SUeyDU04ipL3w",
+        "width": 320
+      },
+      {
+        "height": 1500,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/110408553051434415928\">Isaac Oguji</a>"
+        ],
+        "photo_reference": "CmRaAAAAlY95hgDSFivd4DiuFPbC7IsQXKuc1B8f9ZiAk_Em-tp6daBY-Jf5oFAMWpkLmGMx-LrLxESlOW7p6D_ZyM9ZUlxdWmrzv4iMmmMffiQDddir_2PYOCqn271zD2HaW7DmEhA5rlQjne9SXoTaxQEvhHNnGhTZ-cbBxsDrywvqdi5OnyrODPetTg",
+        "width": 2000
+      },
+      {
+        "height": 3456,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/110204022241351220320\">emaquist</a>"
+        ],
+        "photo_reference": "CmRaAAAABexqZYSPbzcZBAWSWziMR6_PgeXy_uWCHxfLOY5NuNJo63ZUdzBAqF9QSEQ2RcaIp7gBu48zWUvIoffdeCpfFmorTi6GlUNa5fJfK7Ovx1KoOEpiF3jrl9cfAiGpnVEaEhDUfWrFWCMG7KNBK_91tsuFGhS10WoJSaUGNfR3uxthlgp5QzBn_Q",
+        "width": 4608
+      },
+      {
+        "height": 3000,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/107857159455502067354\">Oluwaseye Majekodunmi</a>"
+        ],
+        "photo_reference": "CmRaAAAAfJm3yo2Rp7qk0EJpykX2eSkJ9uHK0_djfnr4Ab_7whixQNjMCh9ey4mDJIJWVLt3hgxHrjpRHR4S86hDCaVxrqveUecp5ZhU9rAihURyN5Dr0uz1xHkd6M6iX7I22WVlEhCtLcXuUbqZelKZ28G6Zi5dGhQcPaA7PV_dHyYGqvjaABs90D6YUg",
+        "width": 4000
+      },
+      {
+        "height": 2632,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/105083051436535847790\">Samson Traveljunkie</a>"
+        ],
+        "photo_reference": "CmRaAAAA460Rv4rvwP-RGeKDnVhTLQJgjyeo2HUrx8PPle_7yAL-J9rvpVWXkYmsC14SYhyuk1X0HwPiv2J0wNY_EBaEy-yb6MTVs1qtPBds23h7TE_6_4I3cMawycBVgzM3pzGDEhA7s6DwTH2jLF8ZGZQ-if-XGhSYX1yFLVEAnPPdKZEZMnz5WhvBLA",
+        "width": 4160
+      },
+      {
+        "height": 3264,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/114997907217915060439\">Ussa Nifemi</a>"
+        ],
+        "photo_reference": "CmRaAAAAXgsblfPjSO718L85Jr-UMFdAwr44ZMn7XX6LDRFcYuXv04AeqBCAeuL6ml-jCn_k1novK8G2AjfvQVysow9gjNQmFOgcVm4AgVx2K-zheEphsCHZIOHigWTgt02JR8lHEhBI7v1_Jz8Ah9BDIJN3EaeBGhQWu0_1gO2T212FL7lBYCDNuX5gGw",
+        "width": 2448
+      },
+      {
+        "height": 723,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/106956667666245080678\">Vladyslav Akhmedulin</a>"
+        ],
+        "photo_reference": "CmRaAAAA8QIuVYUA9u4WoTKPwe2zAHBCujDGtYQPi-n_sks2tNtsxxl_5hCqKCBfSm4GxAifdGTKIoqu9qmFFv7_a93gxjjWAexO0qu8wF1Xv-9jzZrlz12Rf51Pz8cF4uiD8_m6EhBH2A-scSx7txShxjMExBNRGhRBTytkH8pFBw1K4vnVhoBNJL4Exw",
+        "width": 1024
+      },
+      {
+        "height": 3265,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/108178750865026327029\">Sagir Adamu</a>"
+        ],
+        "photo_reference": "CmRaAAAAXzEv0gyuTfTD-39g6i-okCsgNQqpVloro9IZAT3TvTtV3thqd5XOUoBlh_1w3E--IOWxPYkQ7HjRYC66Clvf-r9XC68uFhoxIN1GAnrNh6J3Djcxi4RXxbt7CoCpt0DgEhAXNU48PoRZJuGox7S1mrf6GhQi1iKx4Qwnktc0adQPifjGJCw5BA",
+        "width": 4898
+      },
+      {
+        "height": 3640,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/110518191692811784359\">Reginald Bassey</a>"
+        ],
+        "photo_reference": "CmRaAAAAPcQ-wHLz9Ao6VP5Y3NPCUCeyxRSHBM4_5S62vqYXmMRnbk8TnfYK3PCWe-fHz3OP3r7dqjvJ5zKgUK7rG2RyQAtPBmYXMrcVKYFumaqCPN3H6_9MVMBOnBJ6D2sNt3uXEhDmurcdLmXQicnQPog5CAY7GhTnMzn_0uF1r-EiFbSDF7-9qFPA3w",
+        "width": 5464
+      }
+    ],
+    "place_id": "ChIJwYCC5iqLOxARy9nDZ6OHntw",
+    "reference": "ChIJwYCC5iqLOxARy9nDZ6OHntw",
+    "scope": "GOOGLE",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?q=Lagos,+Nigeria&ftid=0x103b8b2ae68280c1:0xdc9e87a367c3d9cb",
+    "utc_offset": 60,
+    "vicinity": "Lagos"
+  },
+  "status": "OK"
+}

@@ -15,10 +15,9 @@
 */
 package com.xplorer.projectx.ui.city
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.xplorer.projectx.extentions.Failure
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
@@ -26,17 +25,13 @@ import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
-import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 class CitySearchViewModel @Inject
 constructor(
   private val googlePicturesRepo: GooglePicturesRepo,
-  private val wikipediaRepository: WikipediaRepo,
-  application: Application
-) : AndroidViewModel(application) {
-
-  private lateinit var job: Job
+  private val wikipediaRepository: WikipediaRepo
+) : ViewModel() {
   // Photos
   private val _successPhotoLiveData = MutableLiveData<List<Photo>>()
   val successPhotoLiveData: LiveData<List<Photo>>

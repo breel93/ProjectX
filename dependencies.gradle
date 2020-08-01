@@ -72,6 +72,8 @@ ext.versions = [
         espresso                    : '3.2.0',
         mockitoVersion              : '3.2.4',
         mockitoKotlin               : '2.2.0',
+        mockwebserver               : '4.8.0',
+        arch_core_testing           : '2.1.0',
         robolectric                 : '4.3.1',
         powerMock                   : '2.0.5',
         powerMockModuleJunit4       : '2.0.5',
