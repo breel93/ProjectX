@@ -106,7 +106,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
 
     (activity as AppCompatActivity).setSupportActionBar(toolbar)
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    binding.cityFragmentToolBar!!.title = place.cityName
+    binding.cityFragmentToolBar.title = place.cityName
 
     // set more city info click listener
     binding.moreAboutCityButton.setOnClickListener(this)

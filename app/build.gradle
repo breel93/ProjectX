@@ -130,6 +130,9 @@ dependencies {
     testImplementation 'org.powermock:powermock-module-junit4-rule:' + versions.powerMockModuleJunit4Rule
     testImplementation 'org.powermock:powermock-api-mockito2:' + versions.powerMockApiMockito
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin
+    testImplementation 'com.squareup.okhttp3:mockwebserver:' + versions.mockwebserver
+    testImplementation 'androidx.arch.core:core-testing:' + versions.arch_core_testing
+
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
