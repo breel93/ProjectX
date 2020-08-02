@@ -8,28 +8,38 @@
     android:layout_height="wrap_content"
     tools:context=".ui.city.PhotoDetailFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
       android:id="@+id/closePhoto"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_marginStart="16dp"
       android:layout_marginTop="16dp"
+      android:elevation="20dp"
+      android:gravity="center"
       android:src="@drawable/ic_close_image"
-      app:backgroundTint="@color/translucent"
-      app:fabCustomSize="40dp"
+      android:background="@drawable/circle_background"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-      android:id="@+id/fullPhoto"
+    <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
-      android:layout_height="500dp"
-      android:scaleType="centerCrop"
-      android:src="@drawable/placeholder"
+      android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent" >
+      <ImageView
+        android:id="@+id/fullPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:scaleType="center"
+        android:src="@drawable/placeholder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
+
   </androidx.constraintlayout.widget.ConstraintLayout>
 
 

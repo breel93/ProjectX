@@ -2,42 +2,99 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
-
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchStartFragment">
+    android:background="@color/colorWhite">
 
-    <androidx.cardview.widget.CardView
-      android:id="@+id/cardView"
+    <ImageView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="10dp"
-      android:layout_marginTop="100dp"
-      android:layout_marginEnd="10dp"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_height="0dp"
+      android:src="@drawable/city__view"
+      app:layout_constraintBottom_toTopOf="@+id/cardView2"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
+      app:layout_constraintTop_toTopOf="parent" />
 
-      <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/autocomplete_fragment"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-    </androidx.cardview.widget.CardView>
-
-    <ListView
-      android:id="@+id/recentCitiesListView"
+    <androidx.cardview.widget.CardView
+      android:id="@+id/cardView2"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_margin="2dp"
-      android:divider="@null"
-      app:layout_constraintTop_toBottomOf="@+id/cardView" />
+      app:cardCornerRadius="10dp"
+      app:cardElevation="10dp"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
 
+      <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/splash_bg"
+        android:fitsSystemWindows="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_splash_bottom_drawable" />
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.search.SearchStartFragment">
+
+        <TextView
+          android:id="@+id/textView"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="24dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginBottom="24dp"
+          android:text="Hey There!, Where to Next"
+          android:textColor="@color/colorSmokeWhite"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          app:layout_constraintBottom_toTopOf="@+id/cardView"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.cardview.widget.CardView
+          android:id="@+id/cardView"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginStart="10dp"
+          android:layout_marginEnd="10dp"
+          app:cardUseCompatPadding="true"
+          app:cardCornerRadius="5dp"
+          app:layout_constraintBottom_toTopOf="@id/recentCitiesListView"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent">
+
+          <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+        </androidx.cardview.widget.CardView>
+
+        <ListView
+          android:id="@+id/recentCitiesListView"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="2dp"
+          android:layout_marginStart="10dp"
+          android:layout_marginEnd="10dp"
+          android:layout_marginBottom="20dp"
+          android:divider="@null"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
   </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>
