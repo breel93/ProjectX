@@ -155,7 +155,7 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
       }
     })
 
-    viewModelCity.errorCoordConfirmationLiveData.observe(viewLifecycleOwner, Observer { error ->
+    viewModelCity.errorCoordConfirmationLiveData.observe(viewLifecycleOwner, Observer {
       binding.cityAboutLoadingBar.isVisible = false // make loading visible
       binding.cityAboutText.apply {
         isVisible = true

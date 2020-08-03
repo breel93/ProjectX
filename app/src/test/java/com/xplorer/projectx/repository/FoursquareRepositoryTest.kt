@@ -23,11 +23,7 @@ import com.xplorer.projectx.api.FoursquareAPI
 import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.foursquare.Venue
-import com.xplorer.projectx.model.foursquare.VenueResponse
 import com.xplorer.projectx.model.foursquare.FoursquareResponse
-import com.xplorer.projectx.model.foursquare.VenueGroup
-import com.xplorer.projectx.model.foursquare.VenueItem
-import com.xplorer.projectx.model.foursquare.VenueLocation
 import com.xplorer.projectx.networking.TestCoroutineContextProviderImpl
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
 import com.xplorer.projectx.repository.foursquare.FoursquareRepository
@@ -94,5 +90,4 @@ class FoursquareRepositoryTest {
 
     assertTrue((venueResultCaptor.firstValue as Success).data.size == 2)
   }
-
 }

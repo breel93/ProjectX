@@ -261,7 +261,6 @@ class WikipediaRepositoryTest {
     val onCompleteCityInfoMock: (Result<WikiCityInfo>) -> Unit = mock()
     val cityInfoResultCaptor = argumentCaptor<Result<WikiCityInfo>>()
 
-
     // act
     wikiRepo.getCityInformation("Bamako", onCompleteCityInfoMock)
 

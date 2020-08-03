@@ -62,7 +62,7 @@ class CityPhotoRecyclerAdapter(
       val circularProgressDrawable = CircularProgressDrawable(context)
       circularProgressDrawable.strokeWidth = 12f
       circularProgressDrawable.centerRadius = 60f
-      circularProgressDrawable.setColorSchemeColors(context.resources.getColor(R.color.colorAccent))
+      circularProgressDrawable.setColorSchemeColors(R.color.colorAccent)
       circularProgressDrawable.start()
       Glide.with(context)
         .load(getPhotoWithReferenceURl(photo))
