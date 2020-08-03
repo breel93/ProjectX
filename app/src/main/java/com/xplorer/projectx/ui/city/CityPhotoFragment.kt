@@ -58,7 +58,7 @@ class CityPhotoFragment : DaggerFragment() {
     displayPictures()
     (activity as AppCompatActivity).setSupportActionBar(binding.cityFragmentToolBar)
     (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    binding.cityFragmentToolBar!!.title = place.cityName + "'s" + " photos"
+    binding.cityFragmentToolBar.title = place.cityName + "'s" + " photos"
     return binding.root
   }
 

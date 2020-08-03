@@ -58,9 +58,7 @@ class PhotoDetailFragment : BottomSheetDialogFragment() {
     val circularProgressDrawable = CircularProgressDrawable(context!!)
     circularProgressDrawable.strokeWidth = 10f
     circularProgressDrawable.centerRadius = 40f
-    circularProgressDrawable.setColorSchemeColors(
-      context!!.resources.getColor(R.color.colorAccent)
-    )
+    circularProgressDrawable.setColorSchemeColors(R.color.colorAccent)
     circularProgressDrawable.start()
 
     val photoUrls: String = if (photo.photo_reference != null) {

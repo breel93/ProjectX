@@ -1,3 +1,18 @@
+/**
+ *  Designed and developed by ProjectX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
 package com.xplorer.projectx.ui.city
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -22,7 +37,7 @@ import org.mockito.Mockito.anyString
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class CitySearchViewModelTest{
+class CitySearchViewModelTest {
   private lateinit var viewModel: CitySearchViewModel
   private lateinit var googlePicturesRepo: GooglePicturesRepo
   private lateinit var wikipediaRepo: WikipediaRepo
@@ -31,17 +46,17 @@ class CitySearchViewModelTest{
   var instantExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
   @Before
-  fun setUp(){
+  fun setUp() {
     googlePicturesRepo = mock(GooglePicturesRepo::class.java)
     wikipediaRepo = mock(WikipediaRepo::class.java)
     viewModel = CitySearchViewModel(googlePicturesRepo, wikipediaRepo)
   }
 
   @Test
-  fun `test livedata get success list of photo`(){
+  fun `test livedata get success list of photo`() {
     val mockTestUtil = MockTestUtil()
     val result = Success(mockTestUtil.photoResult().photo)
-    whenever(googlePicturesRepo.getGooglePicturesData(anyString(), any())).thenAnswer{
+    whenever(googlePicturesRepo.getGooglePicturesData(anyString(), any())).thenAnswer {
       (it.arguments[1] as (Result<List<Photo>>) -> Unit).invoke(result)
     }
     viewModel.getGooglePhotos("lagos")
@@ -54,9 +69,9 @@ class CitySearchViewModelTest{
   }
 
   @Test
-  fun `test livedata get failure list of photo`(){
+  fun `test livedata get failure list of photo`() {
     val result = Failure(Throwable("Some Error"))
-    whenever(googlePicturesRepo.getGooglePicturesData(anyString(), any())).thenAnswer{
+    whenever(googlePicturesRepo.getGooglePicturesData(anyString(), any())).thenAnswer {
       (it.arguments[1] as (Result<List<Photo>>) -> Unit).invoke(result)
     }
     viewModel.getGooglePhotos("lagos")
@@ -64,11 +79,11 @@ class CitySearchViewModelTest{
   }
 
   @Test
-  fun `test livedata get success wiki info`(){
+  fun `test livedata get success wiki info`() {
     // arrange
     val mockTestUtil = MockTestUtil()
     val wikiResult = Success(WikiCityInfo("lagos", mockTestUtil.wikiDataSummary))
-    whenever(wikipediaRepo.getCityInformation(anyString(), any())).thenAnswer{
+    whenever(wikipediaRepo.getCityInformation(anyString(), any())).thenAnswer {
       (it.arguments[1] as (Result<WikiCityInfo>) -> Unit).invoke(wikiResult)
     }
     viewModel.setCityInformationData("lagos")
@@ -76,9 +91,9 @@ class CitySearchViewModelTest{
     assertEquals(viewModel.cityInfoLiveData.getOrAwaitValue().citySummary, mockTestUtil.wikiDataSummary)
   }
   @Test
-  fun `test livedata get failure wiki info`(){
+  fun `test livedata get failure wiki info`() {
     val result = Failure(Throwable("Some Error"))
-    whenever(wikipediaRepo.getCityInformation(anyString(), any())).thenAnswer{
+    whenever(wikipediaRepo.getCityInformation(anyString(), any())).thenAnswer {
       (it.arguments[1] as (Result<WikiCityInfo>) -> Unit).invoke(result)
     }
     viewModel.setCityInformationData("lagos")
