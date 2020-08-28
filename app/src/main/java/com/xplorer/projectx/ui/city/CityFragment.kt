@@ -27,6 +27,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -47,17 +48,14 @@ import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
 import com.xplorer.projectx.utils.BrowserUtils
 import com.xplorer.projectx.utils.Constants
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener {
+class CityFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
-  @Inject
-  lateinit var viewModelFactory: ViewModelProvider.Factory
-  lateinit var viewModelCity: CitySearchViewModel
+
+  private val viewModelCity: CitySearchViewModel by viewModels()
   private lateinit var binding: FragmentCityBinding
   lateinit var place: CityModel
   private var areaName = "n/a"
@@ -77,8 +75,6 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
       inflater,
       R.layout.fragment_city, container, false
     )
-    viewModelCity = ViewModelProvider(this, viewModelFactory)
-      .get(CitySearchViewModel::class.java)
     observeViewState()
 
     areaName = place.adminArea!!
@@ -340,6 +336,3 @@ class CityFragment : DaggerFragment(), OnMapReadyCallback, View.OnClickListener 
     mapView.onSaveInstanceState(mapViewBundle)
   }
 }
-
-//
-//

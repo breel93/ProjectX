@@ -27,12 +27,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentCityDescriptionBinding
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass.
  */
-class CityDescriptionFragment : DaggerFragment() {
+@AndroidEntryPoint
+class CityDescriptionFragment : Fragment() {
 
   private lateinit var binding: FragmentCityDescriptionBinding
   private lateinit var wikiLink: String

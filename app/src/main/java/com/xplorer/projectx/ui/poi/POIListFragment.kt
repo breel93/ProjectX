@@ -26,8 +26,9 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,10 +42,11 @@ import com.xplorer.projectx.utils.snap.SnapOnScrollListener
 import com.xplorer.projectx.ui.city.CityMapViewModel
 import com.xplorer.projectx.utils.BrowserUtils
 import com.xplorer.projectx.utils.Constants
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
-class POIListFragment : DaggerFragment() {
+
+@AndroidEntryPoint
+class POIListFragment : Fragment() {
 
   private lateinit var binding: PlacesListContainerBinding
   private val venueList = ArrayList<Venue>()
@@ -57,9 +59,7 @@ class POIListFragment : DaggerFragment() {
   private val snapHelper = LinearSnapHelper()
   private lateinit var bottomNavController: NavController
 
-  @Inject
-  lateinit var viewModelFactory: ViewModelProvider.Factory
-  private lateinit var sharedCityMapViewModel: CityMapViewModel
+  private val sharedCityMapViewModel: CityMapViewModel by viewModels()
 
   private var savedView: View? = null
 
@@ -118,12 +118,12 @@ class POIListFragment : DaggerFragment() {
 
   private fun setUpSharedViewModel() {
 
-    // set the viewModel owner to the city map fragment
-    sharedCityMapViewModel = parentFragment?.let { parent ->
-      parent.parentFragment?.let { cityMapFragment ->
-        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
-      }
-    }!!
+//    // set the viewModel owner to the city map fragment
+//    sharedCityMapViewModel = parentFragment?.let { parent ->
+//      parent.parentFragment?.let { cityMapFragment ->
+//        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
+//      }
+//    }!!
 
     // show the list of places on success
     sharedCityMapViewModel

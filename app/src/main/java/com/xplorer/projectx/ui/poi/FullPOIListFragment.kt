@@ -28,7 +28,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FullPoiListLayoutBinding
 import com.xplorer.projectx.ui.adapter.poi.POISelectionAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FullPOIListFragment(private val poiListener: POISelectionListener) : BottomSheetDialogFragment() {
 
   private lateinit var binding: FullPoiListLayoutBinding

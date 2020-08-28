@@ -34,15 +34,16 @@ import com.mikhaellopez.rxanimation.translationY
 
 import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentSplashScreenBinding
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.CompositeDisposable
 
 /**
  * A simple [Fragment] subclass.
  */
-class SplashScreenFragment : DaggerFragment() {
+@AndroidEntryPoint
+class SplashScreenFragment : Fragment() {
   private lateinit var binding: FragmentSplashScreenBinding
-  var disposable = CompositeDisposable()
+  private var disposable = CompositeDisposable()
   lateinit var navController: NavController
 
   override fun onCreateView(

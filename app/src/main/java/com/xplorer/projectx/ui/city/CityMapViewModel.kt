@@ -15,6 +15,7 @@
 */
 package com.xplorer.projectx.ui.city
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,9 +24,8 @@ import com.xplorer.projectx.extentions.Result
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.repository.foursquare.FoursquareRepo
-import javax.inject.Inject
 
-class CityMapViewModel @Inject constructor(
+class CityMapViewModel @ViewModelInject constructor(
   private val foursquareRepository: FoursquareRepo
 ) : ViewModel() {
 

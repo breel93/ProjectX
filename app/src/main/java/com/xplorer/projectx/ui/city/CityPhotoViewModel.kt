@@ -16,15 +16,15 @@
 package com.xplorer.projectx.ui.city
 
 import android.app.Application
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.repository.unsplash.UnsplashDataSourceFactory
-import javax.inject.Inject
 
-class CityPhotoViewModel @Inject
+class CityPhotoViewModel @ViewModelInject
 constructor(
   private val unsplashDataSourceFactory: UnsplashDataSourceFactory,
   application: Application

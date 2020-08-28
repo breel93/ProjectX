@@ -15,12 +15,8 @@
 */
 package com.xplorer.projectx
 
-import com.xplorer.projectx.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class ProjectX : DaggerApplication() {
-  override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-    return DaggerAppComponent.builder().application(this).build()
-  }
-}
+@HiltAndroidApp
+class ProjectX : Application()
