@@ -47,10 +47,12 @@ import com.xplorer.projectx.ui.PhotoClickListener
 import com.xplorer.projectx.ui.adapter.CityPhotoRecyclerAdapter
 import com.xplorer.projectx.utils.BrowserUtils
 import com.xplorer.projectx.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass.
  */
+@AndroidEntryPoint
 class CityFragment : Fragment(), OnMapReadyCallback, View.OnClickListener {
 
   private val viewModelCity: CitySearchViewModel by viewModels()

@@ -27,8 +27,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,7 +60,7 @@ class POIListFragment : Fragment() {
   private val snapHelper = LinearSnapHelper()
   private lateinit var bottomNavController: NavController
 
-  private val sharedCityMapViewModel: CityMapViewModel by viewModels()
+  private lateinit var sharedCityMapViewModel: CityMapViewModel
 
   private var savedView: View? = null
 
@@ -117,12 +119,12 @@ class POIListFragment : Fragment() {
 
   private fun setUpSharedViewModel() {
 
-//    // set the viewModel owner to the city map fragment
-//    sharedCityMapViewModel = parentFragment?.let { parent ->
-//      parent.parentFragment?.let { cityMapFragment ->
-//        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
-//      }
-//    }!!
+    // set the viewModel owner to the city map fragment
+    sharedCityMapViewModel = parentFragment?.let { parent ->
+      parent.parentFragment?.let { cityMapFragment ->
+        ViewModelProvider(cityMapFragment).get(CityMapViewModel::class.java)
+      }
+    }!!
 
     // show the list of places on success
     sharedCityMapViewModel
