@@ -44,7 +44,6 @@ import dagger.hilt.android.AndroidEntryPoint
  * A simple [Fragment] subclass.
  */
 
-
 @AndroidEntryPoint
 class SearchStartFragment : Fragment() {
 

@@ -22,7 +22,6 @@ import androidx.lifecycle.ViewModel
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.repository.recentCities.RecentCitiesRepo
-import javax.inject.Inject
 
 /**
  *  Designed and developed by ProjectX

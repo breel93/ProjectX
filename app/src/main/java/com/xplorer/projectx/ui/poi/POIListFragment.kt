@@ -44,7 +44,6 @@ import com.xplorer.projectx.utils.BrowserUtils
 import com.xplorer.projectx.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class POIListFragment : Fragment() {
 
