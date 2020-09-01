@@ -15,13 +15,13 @@
 */
 package com.xplorer.projectx.ui.search
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xplorer.projectx.extentions.Success
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.repository.recentCities.RecentCitiesRepo
-import javax.inject.Inject
 
 /**
  *  Designed and developed by ProjectX
@@ -38,7 +38,7 @@ import javax.inject.Inject
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-class SearchStartViewModel @Inject constructor(
+class SearchStartViewModel @ViewModelInject constructor(
   private val recentCitiesRepo: RecentCitiesRepo
 ) : ViewModel() {
 

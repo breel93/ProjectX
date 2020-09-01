@@ -28,8 +28,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -45,14 +45,14 @@ import com.xplorer.projectx.databinding.FragmentCityMapBinding
 import com.xplorer.projectx.model.CityModel
 import com.xplorer.projectx.model.foursquare.Venue
 import com.xplorer.projectx.model.latLong
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
-import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
+@AndroidEntryPoint
+class CityMapFragment : Fragment(), OnMapReadyCallback {
 
   private lateinit var binding: FragmentCityMapBinding
   private lateinit var place: CityModel
@@ -67,9 +67,7 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
   private lateinit var selectedIcon: BitmapDescriptor
   private lateinit var unselectedIcon: BitmapDescriptor
 
-  @Inject
-  lateinit var viewModelFactory: ViewModelProvider.Factory
-  private lateinit var sharedCityMapViewModel: CityMapViewModel
+  private val sharedCityMapViewModel: CityMapViewModel by viewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -108,10 +106,6 @@ class CityMapFragment : DaggerFragment(), OnMapReadyCallback {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
-    // Using the city map fragment as the lifecycle owner for the viewModel provider
-    // To share its resources with the children fragment
-    sharedCityMapViewModel = ViewModelProvider(this, viewModelFactory).get(CityMapViewModel::class.java)
 
     sharedCityMapViewModel.setCurrentCoordinates(place.getLatLongString())
     sharedCityMapViewModel.successVenueLiveData.observe(viewLifecycleOwner, Observer<List<Venue>> { venues ->

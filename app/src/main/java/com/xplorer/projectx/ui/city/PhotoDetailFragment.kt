@@ -29,10 +29,12 @@ import com.xplorer.projectx.R
 import com.xplorer.projectx.databinding.FragmentPhotoDetailBinding
 import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * A simple [Fragment] subclass.
  */
+@AndroidEntryPoint
 class PhotoDetailFragment : BottomSheetDialogFragment() {
   private lateinit var binding: FragmentPhotoDetailBinding
 
@@ -55,7 +57,7 @@ class PhotoDetailFragment : BottomSheetDialogFragment() {
   }
 
   private fun showFullPhoto(photo: Photo) {
-    val circularProgressDrawable = CircularProgressDrawable(context!!)
+    val circularProgressDrawable = CircularProgressDrawable(requireContext())
     circularProgressDrawable.strokeWidth = 10f
     circularProgressDrawable.centerRadius = 40f
     circularProgressDrawable.setColorSchemeColors(R.color.colorAccent)
@@ -66,7 +68,7 @@ class PhotoDetailFragment : BottomSheetDialogFragment() {
     } else {
       photo.urls.regular
     }
-    Glide.with(context!!)
+    Glide.with(requireContext())
       .load(photoUrls)
       .apply(
         RequestOptions()

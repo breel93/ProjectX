@@ -22,8 +22,9 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
@@ -32,21 +33,19 @@ import com.xplorer.projectx.databinding.PlacesOfInterestLayoutBinding
 import com.xplorer.projectx.ui.adapter.PlacesOfInterestAdapter
 import com.xplorer.projectx.ui.city.CityMapViewModel
 import com.xplorer.projectx.utils.RecyclerViewUtils
-import dagger.android.support.DaggerFragment
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class POIStartFragment : DaggerFragment(), POISelectionListener {
+@AndroidEntryPoint
+class POIStartFragment : Fragment(), POISelectionListener {
 
   private lateinit var bottomNavController: NavController
   private lateinit var binding: PlacesOfInterestLayoutBinding
   private lateinit var poiAdapter: PlacesOfInterestAdapter
   private val poiList = ArrayList<String>()
 
-  @Inject
-  lateinit var viewModelFactory: ViewModelProvider.Factory
-  private lateinit var sharedCityMapViewModel: CityMapViewModel
+  private val sharedCityMapViewModel: CityMapViewModel by viewModels()
 
   private var savedView: View? = null
 
@@ -123,12 +122,11 @@ class POIStartFragment : DaggerFragment(), POISelectionListener {
   private fun observePOIChanges() {
 
     // Using the city map fragment as the lifecycle owner for the viewModel provider
-
-    sharedCityMapViewModel = parentFragment?.let { parent ->
-      parent.parentFragment?.let { cityMapFragment ->
-        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
-      }
-    }!!
+//    sharedCityMapViewModel = parentFragment?.let { parent ->
+//      parent.parentFragment?.let { cityMapFragment ->
+//        ViewModelProvider(cityMapFragment, viewModelFactory).get(CityMapViewModel::class.java)
+//      }
+//    }!!
 
     sharedCityMapViewModel
       .currentPOILiveData

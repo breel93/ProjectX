@@ -15,6 +15,7 @@
 */
 package com.xplorer.projectx.ui.city
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,9 +26,8 @@ import com.xplorer.projectx.model.unsplash.Photo
 import com.xplorer.projectx.model.wikipedia.WikiCityInfo
 import com.xplorer.projectx.repository.google_pictures.GooglePicturesRepo
 import com.xplorer.projectx.repository.wikipedia.WikipediaRepo
-import javax.inject.Inject
 
-class CitySearchViewModel @Inject
+class CitySearchViewModel @ViewModelInject
 constructor(
   private val googlePicturesRepo: GooglePicturesRepo,
   private val wikipediaRepository: WikipediaRepo
